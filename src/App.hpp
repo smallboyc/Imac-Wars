@@ -2,7 +2,8 @@
 
 #include <glad/glad.h>
 #include <simpletext.h>
-#include <Map.hpp>
+#include "Map.hpp"
+#include "Node.hpp"
 
 class App
 {
@@ -29,6 +30,7 @@ private:
 
     // Add your variables here
     Map map;
+    Node node;
     GLuint _texture{};
     float _angle{};
 

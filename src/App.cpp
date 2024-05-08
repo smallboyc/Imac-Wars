@@ -1,6 +1,7 @@
 #include <iostream>
 #include "App.hpp"
 #include "Map.hpp"
+#include "Node.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,8 +15,14 @@
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
+    img::Image minimap{img::load(make_absolute_path("images/minimap.png", true), 3, true)};
+    for (size_t i = 0; i < minimap.data_size(); i++)
+    {
+        std::cout << (int)*(minimap.data() + i) << std::endl;
+    }
+
     map.map_texture_ID = loadTexture({img::load(make_absolute_path("images/map-test.png", true), 3, true)});
-    // map.set_map_size(0.5);
+    node.get_nodes_from_itd();
 }
 
 void App::setup()

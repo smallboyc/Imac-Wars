@@ -1,7 +1,4 @@
 #include <glad/glad.h>
-#include <fstream>
-#include <vector>
-
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -20,38 +17,7 @@ constexpr double TARGET_TIME_FOR_FRAME{1.0 / 60.0};
 
 int main()
 {
-    std::vector<std::string> data_file{};
-    // Open the input file named "input.txt"
-    std::ifstream inputFile("../../data/map.itd");
-    if (!inputFile.is_open())
-    {
-        std::cerr << "Error opening the file!" << std::endl;
-        return 1;
-    }
-
-    std::string line;
-
-    std::cout << "File Content: " << std::endl;
-    while (getline(inputFile, line))
-    {
-        // Récupération des paramètres des nodes.
-        if (line.find("node") != std::string::npos)
-        {
-            std::string node{""};
-            for (auto c : line)
-                if (isdigit(c))
-                    node += c;
-            data_file.push_back(node);
-        }
-    }
-
-    inputFile.close();
-
-    for (auto data : data_file)
-    {
-        std::cout << data << std::endl;
-    }
-
+    
     // Set an error callback to display glfw errors
     glfwSetErrorCallback([](int error, const char *description)
                          { std::cerr << "Error " << error << ": " << description << std::endl; });
