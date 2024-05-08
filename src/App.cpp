@@ -16,13 +16,12 @@
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     img::Image minimap{img::load(make_absolute_path("images/minimap.png", true), 3, true)};
-    for (size_t i = 0; i < minimap.data_size(); i++)
-    {
-        std::cout << (int)*(minimap.data() + i) << std::endl;
-    }
-
     map.map_texture_ID = loadTexture({img::load(make_absolute_path("images/map-test.png", true), 3, true)});
     node.get_nodes_from_itd();
+    for (auto pixel : map.get_map_data(minimap))
+    {
+        std::cout << pixel.x << ":" << pixel.y << " / " << "(" << pixel.color.r << "," << pixel.color.g << "," << pixel.color.b << ")" << std::endl;
+    }
 }
 
 void App::setup()

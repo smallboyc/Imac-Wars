@@ -25,7 +25,6 @@ std::vector<Node> Node::get_nodes_from_itd()
             data_nodes.push_back(new_node);
         }
     }
-
     inputFile.close();
 
     return data_nodes;

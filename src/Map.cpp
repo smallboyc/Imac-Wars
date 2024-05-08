@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "Map.hpp"
 #include "App.hpp"
 
@@ -53,14 +54,19 @@ void Map::grid_map_show()
     }
 }
 
-void Map::set_map_size(float size)
+std::vector<Pixel> Map::get_map_data(img::Image &map_texture)
 {
-    MAP_SIZE = size;
-    SEMI_MAP_SIZE = MAP_SIZE / 2.0f;
-    PIXEL_SIZE = MAP_SIZE / NUMBER_OF_PIXELS_IN_LINE;
-    SEMI_PIXEL_SIZE = PIXEL_SIZE / 2.0f;
-}
+    std::vector<Pixel> map_pixel_colors;
+    Pixel pixel;
 
-void Map::parameters_map_show()
-{
+    for (size_t i = 0; i < map_texture.data_size(); i += 3)
+    {
+        pixel.x = i/3 % 10;
+        pixel.y = i/3 / 10;
+        // Color pixel_color{(int)*(map_texture.data() + i),(int)*(map_texture.data() + i + 1),(int)*(map_texture.data() + i + 2)};
+        // map_pixel_colors.push_back(pixel_color);
+        pixel.color = {(int)*(map_texture.data() + i), (int)*(map_texture.data() + i + 1), (int)*(map_texture.data() + i + 2)};
+        map_pixel_colors.push_back(pixel);
+    }
+    return map_pixel_colors;
 }

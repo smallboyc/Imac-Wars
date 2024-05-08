@@ -3,6 +3,7 @@
 #include <img/img.hpp>
 #include <glad/glad.h>
 #include <simpletext.h>
+#include "utils.hpp"
 
 // Tout ce qui concerne la map, l'affichage et son évolution ici :
 
@@ -13,8 +14,7 @@ public:
     GLuint map_texture_ID;
     void draw_map();
     void grid_map_show(); // dessine une grille sur la map.
-    void set_map_size(float size);
-    void parameters_map_show();
+    std::vector<Pixel> get_map_data(img::Image &map_texture);
 
     // void game_elements_show(//tower, //ennemies, //defense);
 
