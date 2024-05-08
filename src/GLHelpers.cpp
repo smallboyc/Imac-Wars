@@ -43,3 +43,4 @@ void draw_quad_with_texture(GLuint textureId) {
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
 }
+
