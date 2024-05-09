@@ -14,7 +14,9 @@ public:
     GLuint map_texture_ID;
     void draw_map();
     void grid_map_show(); // dessine une grille sur la map.
-    std::vector<Pixel> get_map_data(img::Image &map_texture);
+    void draw_quad_with_texture(GLuint textureId, Pixel pixel);
+    std::vector<Pixel> get_map_pixels(img::Image &map_texture);
+    std::vector<Tile> from_pixels_to_tiles(std::vector<Pixel> const &pixels);
 
     // void game_elements_show(//tower, //ennemies, //defense);
 

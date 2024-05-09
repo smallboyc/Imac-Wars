@@ -12,15 +12,19 @@
 #include "simpletext.h"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
+GLuint texture;
+std::vector<Tile> TILES;
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     img::Image minimap{img::load(make_absolute_path("images/minimap.png", true), 3, true)};
-    map.map_texture_ID = loadTexture({img::load(make_absolute_path("images/map-test.png", true), 3, true)});
-    node.get_nodes_from_itd();
-    for (auto pixel : map.get_map_data(minimap))
+    img::Image map_test{img::load(make_absolute_path("images/map-test.png", true), 3, true)};
+    // map.map_texture_ID = loadTexture(map_test);
+
+    TILES = map.from_pixels_to_tiles(map.get_map_pixels(minimap));
+    for (auto &tile : TILES)
     {
-        std::cout << pixel.x << ":" << pixel.y << " / " << "(" << pixel.color.r << "," << pixel.color.g << "," << pixel.color.b << ")" << std::endl;
+        tile.textureID = loadTexture(img::load(make_absolute_path(tile.path, true), 3, true));
     }
 }
 
@@ -55,9 +59,13 @@ void App::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    for (auto &tile : TILES)
+    {
+        map.draw_quad_with_texture(tile.textureID, tile.pixel);
+    }
 
-    map.draw_map();
-    map.grid_map_show();
+    // map.draw_map();
+    // map.grid_map_show();
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width / 2, 20, SimpleText::CENTER);

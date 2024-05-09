@@ -1,15 +1,15 @@
 ITD
 #NOM DE LA MAP
-map minimap.png
+map map.png
 
 #Blanc
 path 255 255 255
 
 # Bleu
-in 0 0 255
+in 77 109 243
 
 # Rouge
-out 255 0 0
+out 153 0 48
 
 graph 8
 node 0 1 1 1

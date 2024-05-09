@@ -35,6 +35,29 @@ void Map::draw_map()
     glDisable(GL_TEXTURE_2D);
 }
 
+void Map::draw_quad_with_texture(GLuint textureId, Pixel pixel)
+{
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glColor3ub(255, 255, 255);
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f((-SEMI_MAP_SIZE + pixel.x) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE, (-SEMI_MAP_SIZE + pixel.y) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 0);
+    glVertex2f((SEMI_MAP_SIZE + pixel.x) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE, (-SEMI_MAP_SIZE + pixel.y) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 1);
+    glVertex2f((SEMI_MAP_SIZE + pixel.x) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE, (SEMI_MAP_SIZE + pixel.y) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE);
+
+    glTexCoord2d(0, 1);
+    glVertex2f((-SEMI_MAP_SIZE + pixel.x) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE, (SEMI_MAP_SIZE + pixel.y) / NUMBER_OF_PIXELS_IN_LINE - SEMI_MAP_SIZE);
+
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void Map::grid_map_show()
 {
     // Draw pixels grid
@@ -54,19 +77,36 @@ void Map::grid_map_show()
     }
 }
 
-std::vector<Pixel> Map::get_map_data(img::Image &map_texture)
+std::vector<Pixel> Map::get_map_pixels(img::Image &map_texture)
 {
     std::vector<Pixel> map_pixel_colors;
     Pixel pixel;
 
     for (size_t i = 0; i < map_texture.data_size(); i += 3)
     {
-        pixel.x = i/3 % 10;
-        pixel.y = i/3 / 10;
-        // Color pixel_color{(int)*(map_texture.data() + i),(int)*(map_texture.data() + i + 1),(int)*(map_texture.data() + i + 2)};
-        // map_pixel_colors.push_back(pixel_color);
+        pixel.x = i / 3 % NUMBER_OF_PIXELS_IN_LINE;
+        pixel.y = i / 3 / NUMBER_OF_PIXELS_IN_LINE;
         pixel.color = {(int)*(map_texture.data() + i), (int)*(map_texture.data() + i + 1), (int)*(map_texture.data() + i + 2)};
         map_pixel_colors.push_back(pixel);
     }
     return map_pixel_colors;
+}
+
+std::vector<Tile> Map::from_pixels_to_tiles(std::vector<Pixel> const &pixels)
+{
+    std::filesystem::path TILE_path;
+    std::vector<Tile> TILES;
+    for (Pixel pixel : pixels)
+    {
+        if (pixel.color == get_colors_from_itd("in"))
+            TILE_path = "images/Tiles/tile_0026.png";
+        else if (pixel.color == get_colors_from_itd("out"))
+            TILE_path = "images/Tiles/tile_0117.png";
+        else if (pixel.color == get_colors_from_itd("path"))
+            TILE_path = "images/Tiles/tile_0056.png";
+        else
+            TILE_path = "images/Tiles/tile_0050.png";
+        TILES.push_back({pixel, 0, TILE_path});
+    }
+    return TILES;
 }
