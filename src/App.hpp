@@ -4,6 +4,8 @@
 #include <simpletext.h>
 #include "Map.hpp"
 #include "Node.hpp"
+#include "utils.hpp"
+#include <vector>
 
 class App
 {

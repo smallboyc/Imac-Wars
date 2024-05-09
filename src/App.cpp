@@ -12,20 +12,13 @@
 #include "simpletext.h"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
-GLuint texture;
-std::vector<Tile> TILES;
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
-    img::Image minimap{img::load(make_absolute_path("images/minimap.png", true), 3, true)};
-    img::Image map_test{img::load(make_absolute_path("images/map-test.png", true), 3, true)};
-    // map.map_texture_ID = loadTexture(map_test);
-
-    TILES = map.from_pixels_to_tiles(map.get_map_pixels(minimap));
-    for (auto &tile : TILES)
-    {
-        tile.textureID = loadTexture(img::load(make_absolute_path(tile.path, true), 3, true));
-    }
+    map.generate_SCHEMA("images/map_schema.png");
+    map.get_PIXELS_from_SCHEMA();
+    map.get_TILES_from_PIXELS();
+    map.render_TILES_texture();
 }
 
 void App::setup()
@@ -59,10 +52,7 @@ void App::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    for (auto &tile : TILES)
-    {
-        map.draw_quad_with_texture(tile.textureID, tile.pixel);
-    }
+    map.load_MAP();
 
     // map.draw_map();
     // map.grid_map_show();

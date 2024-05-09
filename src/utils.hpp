@@ -19,7 +19,7 @@ struct Pixel
 struct Tile
 {
     Pixel pixel;
-    GLuint textureID;
+    GLuint texture;
     std::filesystem::path path;
 };
 
