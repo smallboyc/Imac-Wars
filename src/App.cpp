@@ -1,24 +1,23 @@
 #include <iostream>
-#include "App.hpp"
-#include "Map.hpp"
-#include "Node.hpp"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <img/img.hpp>
-
 #include <sstream>
 
+#include "App.hpp"
+#include "Map.hpp"
+#include "Node.hpp"
 #include "simpletext.h"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
-
+GLuint test{};
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     map.generate_SCHEMA("images/map_schema.png");
     map.get_PIXELS_from_SCHEMA();
     map.get_TILES_from_PIXELS();
     map.render_TILES_texture();
+    test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0005.png", true), 4, true));
 }
 
 void App::setup()
@@ -51,11 +50,12 @@ void App::render()
     // Clear the color and depth buffers of the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glLoadIdentity();
     map.load_MAP();
-
-    // map.draw_map();
-    // map.grid_map_show();
+    map.draw_quad_with_texture(test, {0, 0});
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width / 2, 20, SimpleText::CENTER);

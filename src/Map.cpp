@@ -1,15 +1,14 @@
 #include <iostream>
 #include <vector>
-#include "Map.hpp"
-#include "App.hpp"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <img/img.hpp>
-
 #include <sstream>
 #include <fstream>
+
 #include "simpletext.h"
+#include "Map.hpp"
+#include "App.hpp"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
@@ -21,12 +20,13 @@ void Map::generate_SCHEMA(std::filesystem::path const &path)
 void Map::get_PIXELS_from_SCHEMA()
 {
     std::vector<Pixel> PIXELS;
+
     Pixel pixel;
 
-    for (size_t i = 0; i < this->SCHEMA.data_size(); i += 3)
+    for (size_t i = 0; i < this->SCHEMA.data_size(); i += SCHEMA.channels_count())
     {
-        pixel.x = i / 3 % this->NUMBER_OF_PIXELS_IN_LINE;
-        pixel.y = i / 3 / this->NUMBER_OF_PIXELS_IN_LINE;
+        pixel.x = i / SCHEMA.channels_count() % this->NUMBER_OF_PIXELS_IN_LINE;
+        pixel.y = i / SCHEMA.channels_count() / this->NUMBER_OF_PIXELS_IN_LINE;
         pixel.color = {(int)*(this->SCHEMA.data() + i), (int)*(this->SCHEMA.data() + i + 1), (int)*(this->SCHEMA.data() + i + 2)};
         PIXELS.push_back(pixel);
     }
@@ -55,7 +55,7 @@ void Map::get_TILES_from_PIXELS()
 void Map::render_TILES_texture()
 {
     for (Tile &tile : this->TILES)
-        tile.texture = loadTexture(img::load(make_absolute_path(tile.path, true), 3, true));
+        tile.texture = loadTexture(img::load(make_absolute_path(tile.path, true), 4, true));
 }
 
 void Map::load_MAP()

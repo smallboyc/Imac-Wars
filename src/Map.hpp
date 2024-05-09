@@ -8,7 +8,7 @@
 struct Map
 {
 public:
-    Map() : SCHEMA(img::load(make_absolute_path("images/map_schema.png", true))) {}
+    Map() : SCHEMA(img::load(make_absolute_path("images/map_schema.png", true), 3, true)) {}
     img::Image SCHEMA;         // image contenant le schema simplifié de la map (10x10px)
     std::vector<Tile> TILES;   // Contient toutes les tiles associées au schema
     std::vector<Pixel> PIXELS; // Contient tous les pixels du schema

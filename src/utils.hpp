@@ -9,6 +9,7 @@ struct Color
     int g;
     int b;
 };
+
 struct Pixel
 {
     int x{0};
