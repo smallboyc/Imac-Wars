@@ -1,0 +1,26 @@
+ITD
+#NOM DE LA MAP
+map map_V2.png
+
+#Blanc
+path 255 255 255
+
+#Bleu
+in 77 109 243
+
+# Rouge
+out 153 0 48
+
+graph 11
+node 0 1 1 1
+node 1 3 1 3
+node 2 7 1 
+node 3 3 3 4
+node 4 5 3 5
+node 5 5 4 
+node 6 7 4 2
+node 7 5 6 5
+node 8 1 6 6
+node 9 1 8 7  
+node 11 8 8 
+

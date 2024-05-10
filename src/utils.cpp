@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include <iostream>
+#include <vector>
 #include <fstream>
 #include <string>
 #include <iterator>
@@ -101,4 +102,44 @@ Color get_colors_from_itd(std::string const &type)
     inputFile.close();
 
     return color;
+}
+
+void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
+{
+    if (!NEIGHBOUR.top->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0112.png");
+    else if (!NEIGHBOUR.bottom->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0100.png");
+    else if (!NEIGHBOUR.left->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0113.png");
+    else
+        TILE_path_list.push_back("images/Tiles/tile_0101.png");
+}
+
+void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
+{
+    if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.right->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0075.png");
+    else if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.left->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0073.png");
+    else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.right->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0099.png");
+    else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.left->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0097.png");
+    else if (NEIGHBOUR.top->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0088.png");
+    else if (NEIGHBOUR.bottom->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0089.png");
+    else if (NEIGHBOUR.left->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0076.png");
+    else
+        TILE_path_list.push_back("images/Tiles/tile_0077.png");
+}
+
+void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
+{
+    if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.bottom->is_VOID)
+        TILE_path_list.push_back("images/Tiles/tile_0098.png");
+    else
+        TILE_path_list.push_back("images/Tiles/tile_0087.png");
 }

@@ -13,15 +13,15 @@ GLuint test{};
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     // Attention à l'ordre d'appel des méthodes => lire leurs noms et voir si l'enchainement est cohérent.
-    //  map.generate_SCHEMA("images/map_schema.png");
+    map.generate_SCHEMA("images/map_schema_10x10_V2.png");
     map.get_PIXELS_from_SCHEMA();
-    map.get_NODES_from_ITD("map.itd");
+    map.get_NODES_from_ITD("map_V2.itd");
     map.set_PIXELS_TYPE();
     map.set_PIXELS_connected();
     map.get_TILES_from_PIXELS();
     map.render_TILES_texture();
     // map.display_PIXELS_informations();
-
+  
     // test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
 

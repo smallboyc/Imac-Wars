@@ -58,9 +58,22 @@ bool operator==(Pixel const &pixel_1, Pixel const &pixel_2);
 
 Color get_colors_from_itd(std::string const &type);
 
+void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
+void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
+void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
+
+
+
+
+
 // ça c'est pour debug en cout (:
 
 // for (Node node : map.NODES)
 // {
 //     std::cout << node.id << " : (" << node.x << "," << node.y << ") -> (" << node.color.r << "," << node.color.g << "," << node.color.b << ") " << std::endl;
+// }
+
+// for (auto pixel : map.PIXELS)
+// {
+//     std::cout << "(" << pixel.x << ":" << pixel.y << ")" << " = " << "{" << pixel.color.r << "," << pixel.color.g << "," << pixel.color.b << "}" << std::endl;
 // }

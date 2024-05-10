@@ -39,39 +39,25 @@ void Map::get_TILES_from_PIXELS()
     std::vector<std::filesystem::path> TILE_path_list;
     for (Pixel pixel : this->PIXELS)
     {
-        Connections NEIGHBOUR{pixel.PIXEL_connection};
+        Connections &NEIGHBOUR{pixel.PIXEL_connection};
         if (pixel.color == get_colors_from_itd("in"))
         {
             // Point d'entrée
-            TILE_path_list.push_back("images/Tiles/tile_0101.png");
+            set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
             TILE_path_list.push_back("images/Tiles/tile_0026.png");
         }
         else if (pixel.color == get_colors_from_itd("out"))
         {
             // Point de sortie
-            TILE_path_list.push_back("images/Tiles/tile_0113.png");
+            set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
             TILE_path_list.push_back("images/Tiles/tile_0017.png");
         }
         else if (pixel.color == get_colors_from_itd("path")) // Point de chemin => route OU virage
         {
             if (pixel.is_NODE) // Virage
-            {
-                if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.right->is_VOID)
-                    TILE_path_list.push_back("images/Tiles/tile_0075.png");
-                else if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.left->is_VOID)
-                    TILE_path_list.push_back("images/Tiles/tile_0073.png");
-                else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.right->is_VOID)
-                    TILE_path_list.push_back("images/Tiles/tile_0099.png");
-                else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.left->is_VOID)
-                    TILE_path_list.push_back("images/Tiles/tile_0097.png");
-            }
+                set_NODE_orientation_texture(NEIGHBOUR, TILE_path_list);
             else // Route
-            {
-                if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.bottom->is_VOID)
-                    TILE_path_list.push_back("images/Tiles/tile_0098.png");
-                else
-                    TILE_path_list.push_back("images/Tiles/tile_0087.png");
-            }
+                set_PATH_orientation_texture(NEIGHBOUR, TILE_path_list);
         }
         else // Herbe
         {
