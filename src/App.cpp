@@ -18,7 +18,9 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     map.get_TILES_from_PIXELS();
     map.get_NODES_from_ITD("map.itd");
     map.set_TILES_as_NODES();
+    map.set_TILES_connected();
     map.render_TILES_texture();
+
     // test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
 

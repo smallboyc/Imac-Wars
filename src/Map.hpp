@@ -21,7 +21,11 @@ public:
     void get_TILES_from_PIXELS();
     void render_TILES_texture();
     void set_TILES_as_NODES();
+    void set_TILES_connected();
     void load_MAP();
+
+    // Debug
+    void display_TILES_informations();
 
 private:
     // MAP PARAMETERS (SQUARE)

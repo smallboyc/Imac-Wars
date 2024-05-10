@@ -17,6 +17,16 @@ struct Pixel
     Color color;
 };
 
+struct Tile;
+
+struct Connections
+{
+    Tile *top;
+    Tile *bottom;
+    Tile *right;
+    Tile *left;
+};
+
 struct Node
 {
     int id{0};
@@ -30,6 +40,8 @@ struct Tile
     GLuint texture;
     std::filesystem::path path;
     bool is_NODE{false};
+    bool is_VOID{false};
+    Connections TILE_connection;
 };
 
 std::filesystem::path
@@ -46,15 +58,9 @@ bool operator==(Pixel pixel_1, Pixel pixel_2);
 
 Color get_colors_from_itd(std::string const &type);
 
-// ça c'est pour debug en cout (:
 
-//   for (Tile tile : map.TILES)
-//     {
-//         std::cout << "(" << tile.pixel.x << "," << tile.pixel.y << ") -> (" << tile.pixel.color.r << "," << tile.pixel.color.g << "," << tile.pixel.color.b << ")";
-//         if (tile.is_NODE)
-//             std::cout << " = NODE";
-//         std::cout << std::endl;
-//     }
+
+// ça c'est pour debug en cout (:
 
 // for (Node node : map.NODES)
 // {
