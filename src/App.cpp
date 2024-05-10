@@ -6,18 +6,20 @@
 
 #include "App.hpp"
 #include "Map.hpp"
-#include "Node.hpp"
 #include "simpletext.h"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 GLuint test{};
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
-    map.generate_SCHEMA("images/map_schema.png");
+    // Attention à l'ordre d'appel des méthodes => lire leurs noms et voir si l'enchainement est cohérent.
+    //  map.generate_SCHEMA("images/map_schema.png");
     map.get_PIXELS_from_SCHEMA();
     map.get_TILES_from_PIXELS();
+    map.get_NODES_from_ITD("map.itd");
+    map.set_TILES_as_NODES();
     map.render_TILES_texture();
-    test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0005.png", true), 4, true));
+    // test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
 
 void App::setup()
@@ -36,11 +38,11 @@ void App::update()
 {
 
     const double currentTime{glfwGetTime()};
-    // const double elapsedTime{currentTime - _previousTime};
+    const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    // _angle += 10.0f * elapsedTime;
-    // _angle = std::fmod(_angle, 360.0f);
+    _angle += 10.0f * elapsedTime;
+    _angle = std::fmod(_angle, 360.0f);
 
     render();
 }
@@ -54,8 +56,11 @@ void App::render()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glLoadIdentity();
+    // glRotatef(_angle,0,0,1);
+    // glPushMatrix();
     map.load_MAP();
-    map.draw_quad_with_texture(test, {0, 0});
+    // map.draw_quad_with_texture(test, {0, 0, {}});
+    // glPopMatrix();
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width / 2, 20, SimpleText::CENTER);

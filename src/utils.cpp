@@ -57,8 +57,14 @@ bool operator==(Color color_1, Color color_2)
     return false;
 }
 
+bool operator==(Pixel pixel_1, Pixel pixel_2)
+{
+    if (pixel_1.x == pixel_2.x && pixel_1.y == pixel_2.y)
+        return true;
+    return false;
+}
 
-//Récupère la couleur RGB du Pixel : Path, Out, In dans ITD
+// Récupère la couleur RGB du Pixel : Path, Out, In dans ITD
 Color get_colors_from_itd(std::string const &type)
 {
     Color color;

@@ -86,3 +86,46 @@ void Map::draw_quad_with_texture(GLuint const &texture, Pixel const &pixel)
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
 }
+
+void Map::get_NODES_from_ITD(std::string const &ITD_file_name)
+{
+    std::vector<Node> NODES;
+    std::string ITD_path = {"../../data/"};
+    ITD_path += ITD_file_name;
+    std::ifstream inputFile(ITD_path);
+    std::string line;
+
+    while (getline(inputFile, line))
+    {
+        // Récupération des paramètres des nodes.
+        if (line.find("node") != std::string::npos)
+        {
+            std::string node_str{""};
+            for (char c : line)
+                if (isdigit(c))
+                    node_str += c;
+
+            Node new_node{node_str[0] - '0'};                        // On génère l'ID
+            new_node.pixel = {node_str[1] - '0', node_str[2] - '0'}; // On attribue la coordonnée du node (hérite de Pixel)
+            new_node.connected_to = node_str[3] - '0';               // On donne la connexion auquel est lié le node
+            // Pour le Node color ?
+            NODES.push_back(new_node);
+        }
+    }
+    inputFile.close();
+
+    this->NODES = NODES;
+}
+
+void Map::set_TILES_as_NODES()
+{
+    for (Tile &tile : this->TILES)
+    {
+        for (Node node : this->NODES)
+        {
+            node.pixel.y = this->SCHEMA.width() - 1 - node.pixel.y; // Conversion pour changement de repère :  f(x,y) = (x, width() - y)
+            if (tile.pixel == node.pixel)
+                tile.is_NODE = true;
+        }
+    }
+}

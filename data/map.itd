@@ -5,7 +5,7 @@ map map.png
 #Blanc
 path 255 255 255
 
-# Bleu
+#Bleu
 in 77 109 243
 
 # Rouge
