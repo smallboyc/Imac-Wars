@@ -35,55 +35,65 @@ void Map::get_PIXELS_from_SCHEMA()
 
 void Map::get_TILES_from_PIXELS()
 {
-    std::filesystem::path TILE_path;
-    std::vector<Tile> TILES;
+    std::vector<Tile> TILES_list;
+    std::vector<std::filesystem::path> TILE_path_list;
     for (Pixel pixel : this->PIXELS)
     {
         Connections NEIGHBOUR{pixel.PIXEL_connection};
-        if (pixel.color == get_colors_from_itd("in")) // Point d'entrée
-            TILE_path = "images/Tiles/tile_0026.png";
-        else if (pixel.color == get_colors_from_itd("out")) // Point de sortie
-            TILE_path = "images/Tiles/tile_0117.png";
+        if (pixel.color == get_colors_from_itd("in"))
+        {
+            // Point d'entrée
+            TILE_path_list.push_back("images/Tiles/tile_0101.png");
+            TILE_path_list.push_back("images/Tiles/tile_0026.png");
+        }
+        else if (pixel.color == get_colors_from_itd("out"))
+        {
+            // Point de sortie
+            TILE_path_list.push_back("images/Tiles/tile_0113.png");
+            TILE_path_list.push_back("images/Tiles/tile_0017.png");
+        }
         else if (pixel.color == get_colors_from_itd("path")) // Point de chemin => route OU virage
         {
-            if (pixel.is_NODE) // virage
+            if (pixel.is_NODE) // Virage
             {
                 if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.right->is_VOID)
-                    TILE_path = "images/Tiles/tile_0075.png";
+                    TILE_path_list.push_back("images/Tiles/tile_0075.png");
                 else if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.left->is_VOID)
-                    TILE_path = "images/Tiles/tile_0073.png";
+                    TILE_path_list.push_back("images/Tiles/tile_0073.png");
                 else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.right->is_VOID)
-                    TILE_path = "images/Tiles/tile_0075_bis.png";
+                    TILE_path_list.push_back("images/Tiles/tile_0099.png");
                 else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.left->is_VOID)
-                    TILE_path = "images/Tiles/tile_0073_bis.png";
+                    TILE_path_list.push_back("images/Tiles/tile_0097.png");
             }
-            else // route
+            else // Route
             {
                 if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.bottom->is_VOID)
-                    TILE_path = "images/Tiles/tile_0098.png";
+                    TILE_path_list.push_back("images/Tiles/tile_0098.png");
                 else
-                    TILE_path = "images/Tiles/tile_0087.png";
+                    TILE_path_list.push_back("images/Tiles/tile_0087.png");
             }
         }
         else // Herbe
         {
-            TILE_path = "images/Tiles/tile_0050.png";
+            TILE_path_list.push_back("images/Tiles/tile_0050.png");
         }
-        TILES.push_back({pixel, 0, TILE_path});
+        TILES_list.push_back({pixel, {}, TILE_path_list});
     }
-    this->TILES = TILES;
+    this->TILES = TILES_list;
 }
 
 void Map::render_TILES_texture()
 {
     for (Tile &tile : this->TILES)
-        tile.texture = loadTexture(img::load(make_absolute_path(tile.path, true), 4, true));
+        for (std::filesystem::path &path : tile.path_list)
+            tile.texture_list.push_back(loadTexture(img::load(make_absolute_path(path, true), 4, true)));
 }
 
 void Map::load_MAP()
 {
     for (Tile &tile : this->TILES)
-        this->draw_quad_with_texture(tile.texture, tile.pixel);
+        for (GLuint &texture : tile.texture_list)
+            this->draw_quad_with_texture(texture, tile.pixel);
 }
 
 void Map::draw_quad_with_texture(GLuint const &texture, Pixel const &pixel)

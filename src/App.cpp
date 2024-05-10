@@ -19,8 +19,6 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     map.set_PIXELS_TYPE();
     map.set_PIXELS_connected();
     map.get_TILES_from_PIXELS();
-    // map.set_TILES_as_NODES();
-    // map.set_TILES_connected();
     map.render_TILES_texture();
     // map.display_PIXELS_informations();
 

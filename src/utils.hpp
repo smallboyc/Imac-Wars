@@ -9,13 +9,7 @@ struct Color
     int g{0};
     int b{0};
 };
-// struct Connections
-// {
-//     Tile *top;
-//     Tile *bottom;
-//     Tile *right;
-//     Tile *left;
-// };
+
 struct Pixel;
 struct Connections
 {
@@ -36,8 +30,6 @@ struct Pixel
     Connections PIXEL_connection;
 };
 
-// struct Tile;
-
 struct Node
 {
     int id{0};
@@ -48,12 +40,8 @@ struct Node
 struct Tile
 {
     Pixel pixel;
-    GLuint texture;
-    std::filesystem::path path;
-    // bool is_NODE{false};
-    // bool is_VOID{false};
-    // bool is_BUSY{false};
-    // Connections TILE_connection;
+    std::vector<GLuint> texture_list;
+    std::vector<std::filesystem::path> path_list;
 };
 
 std::filesystem::path
