@@ -18,14 +18,14 @@ public:
     void draw_quad_with_texture(GLuint const &texture, Pixel const &pixel);
     void get_NODES_from_ITD(std::string const &ITD_file_name);
     void get_PIXELS_from_SCHEMA();
+    void set_PIXELS_TYPE();
+    void set_PIXELS_connected();
     void get_TILES_from_PIXELS();
     void render_TILES_texture();
-    void set_TILES_as_NODES();
-    void set_TILES_connected();
     void load_MAP();
 
     // Debug
-    void display_TILES_informations();
+    void display_PIXELS_informations();
 
 private:
     // MAP PARAMETERS (SQUARE)

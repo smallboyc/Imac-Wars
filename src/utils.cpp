@@ -50,14 +50,14 @@ std::ostream &operator<<(std::ostream &os, std::vector<T> const &vec)
     return os << vec.back() << ']';
 }
 
-bool operator==(Color color_1, Color color_2)
+bool operator==(Color const &color_1, Color const &color_2)
 {
     if (color_1.r == color_2.r && color_1.g == color_2.g && color_1.b == color_2.b)
         return true;
     return false;
 }
 
-bool operator==(Pixel pixel_1, Pixel pixel_2)
+bool operator==(Pixel const &pixel_1, Pixel const &pixel_2)
 {
     if (pixel_1.x == pixel_2.x && pixel_1.y == pixel_2.y)
         return true;

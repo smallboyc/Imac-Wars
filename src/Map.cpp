@@ -39,19 +39,37 @@ void Map::get_TILES_from_PIXELS()
     std::vector<Tile> TILES;
     for (Pixel pixel : this->PIXELS)
     {
-        bool is_VOID{false};
-        if (pixel.color == get_colors_from_itd("in"))
+        Connections NEIGHBOUR{pixel.PIXEL_connection};
+        if (pixel.color == get_colors_from_itd("in")) // Point d'entrée
             TILE_path = "images/Tiles/tile_0026.png";
-        else if (pixel.color == get_colors_from_itd("out"))
+        else if (pixel.color == get_colors_from_itd("out")) // Point de sortie
             TILE_path = "images/Tiles/tile_0117.png";
-        else if (pixel.color == get_colors_from_itd("path"))
-            TILE_path = "images/Tiles/tile_0056.png";
-        else
+        else if (pixel.color == get_colors_from_itd("path")) // Point de chemin => route OU virage
+        {
+            if (pixel.is_NODE) // virage
+            {
+                if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.right->is_VOID)
+                    TILE_path = "images/Tiles/tile_0075.png";
+                else if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.left->is_VOID)
+                    TILE_path = "images/Tiles/tile_0073.png";
+                else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.right->is_VOID)
+                    TILE_path = "images/Tiles/tile_0075_bis.png";
+                else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.left->is_VOID)
+                    TILE_path = "images/Tiles/tile_0073_bis.png";
+            }
+            else // route
+            {
+                if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.bottom->is_VOID)
+                    TILE_path = "images/Tiles/tile_0098.png";
+                else
+                    TILE_path = "images/Tiles/tile_0087.png";
+            }
+        }
+        else // Herbe
         {
             TILE_path = "images/Tiles/tile_0050.png";
-            is_VOID = true;
         }
-        TILES.push_back({pixel, 0, TILE_path, 0, is_VOID, {}});
+        TILES.push_back({pixel, 0, TILE_path});
     }
     this->TILES = TILES;
 }
@@ -121,75 +139,79 @@ void Map::get_NODES_from_ITD(std::string const &ITD_file_name)
     this->NODES = NODES;
 }
 
-void Map::set_TILES_as_NODES()
+void Map::set_PIXELS_TYPE()
 {
-    for (Tile &tile : this->TILES)
+    Color VOID{0, 0, 0};
+    for (Pixel &pixel : this->PIXELS)
     {
+        if (pixel.color == VOID)
+            pixel.is_VOID = true;
+
         for (Node node : this->NODES)
         {
             node.pixel.y = this->SCHEMA.width() - 1 - node.pixel.y; // Conversion pour changement de repère :  f(x,y) = (x, width() - y)
-            if (tile.pixel == node.pixel)
-                tile.is_NODE = true;
+            if (pixel == node.pixel)
+                pixel.is_NODE = true;
         }
     }
 }
 
-void Map::set_TILES_connected()
+void Map::set_PIXELS_connected()
 {
-    for (Tile &tile : this->TILES)
+    for (Pixel &pixel : this->PIXELS)
     {
-        tile.TILE_connection = {};
+        pixel.PIXEL_connection = {};
 
-        for (Tile &tile_neighbour : this->TILES)
+        for (Pixel &pixel_neighbour : this->PIXELS)
         {
-            if (&tile_neighbour == &tile)
+            if (&pixel_neighbour == &pixel)
                 continue;
 
-            Pixel top{tile.pixel.x, tile.pixel.y + 1};
-            Pixel bottom{tile.pixel.x, tile.pixel.y - 1};
-            Pixel right{tile.pixel.x + 1, tile.pixel.y};
-            Pixel left{tile.pixel.x - 1, tile.pixel.y};
+            Pixel top{pixel.x, pixel.y + 1};
+            Pixel bottom{pixel.x, pixel.y - 1};
+            Pixel right{pixel.x + 1, pixel.y};
+            Pixel left{pixel.x - 1, pixel.y};
 
-            if (tile_neighbour.pixel == top)
-                tile.TILE_connection.top = &tile_neighbour;
-            else if (tile_neighbour.pixel == bottom)
-                tile.TILE_connection.bottom = &tile_neighbour;
-            else if (tile_neighbour.pixel == right)
-                tile.TILE_connection.right = &tile_neighbour;
-            else if (tile_neighbour.pixel == left)
-                tile.TILE_connection.left = &tile_neighbour;
+            if (pixel_neighbour == top)
+                pixel.PIXEL_connection.top = &pixel_neighbour;
+            else if (pixel_neighbour == bottom)
+                pixel.PIXEL_connection.bottom = &pixel_neighbour;
+            else if (pixel_neighbour == right)
+                pixel.PIXEL_connection.right = &pixel_neighbour;
+            else if (pixel_neighbour == left)
+                pixel.PIXEL_connection.left = &pixel_neighbour;
         }
     }
 }
 
 // Debug
 
-void Map::display_TILES_informations()
+void Map::display_PIXELS_informations()
 {
-    for (Tile tile : this->TILES)
+    for (Pixel pixel : this->PIXELS)
     {
-        std::cout << "(" << tile.pixel.x << "," << tile.pixel.y << ") -> (" << tile.pixel.color.r << "," << tile.pixel.color.g << "," << tile.pixel.color.b << ")";
-        if (tile.is_NODE)
+        std::cout << "(" << pixel.x << "," << pixel.y << ") -> (" << pixel.color.r << "," << pixel.color.g << "," << pixel.color.b << ")";
+        if (pixel.is_NODE)
             std::cout << " = NODE";
-        if (tile.is_VOID)
+        if (pixel.is_VOID)
             std::cout << " -> VOID ";
 
-        Connections &NEIGHBOUR{tile.TILE_connection};
+        Connections &NEIGHBOUR{pixel.PIXEL_connection};
         std::cout << " & connected to => ";
         if (NEIGHBOUR.top != nullptr)
-            std::cout << "TOP : " << " (" << NEIGHBOUR.top->pixel.x << ":" << NEIGHBOUR.top->pixel.y << ") ";
+            std::cout << "TOP : " << " (" << NEIGHBOUR.top->x << ":" << NEIGHBOUR.top->y << ") ";
         else
             std::cout << "TOP : " << " ? ";
         if (NEIGHBOUR.bottom != nullptr)
-            std::cout << "BOTTOM : " << " (" << NEIGHBOUR.bottom->pixel.x << ":" << NEIGHBOUR.bottom->pixel.y << ") ";
+            std::cout << "BOTTOM : " << " (" << NEIGHBOUR.bottom->x << ":" << NEIGHBOUR.bottom->y << ") ";
         else
             std::cout << "BOTTOM : " << " ? ";
         if (NEIGHBOUR.left != nullptr)
-            std::cout << "LEFT : " << " (" << NEIGHBOUR.left->pixel.x << ":" << NEIGHBOUR.left->pixel.y << ") ";
+            std::cout << "LEFT : " << " (" << NEIGHBOUR.left->x << ":" << NEIGHBOUR.left->y << ") ";
         else
             std::cout << "LEFT : " << " ? ";
         if (NEIGHBOUR.right != nullptr)
-            std::cout << "RIGHT : " << " (" << NEIGHBOUR.right->pixel.x << ":" << NEIGHBOUR.right->pixel.y << ") ";
+            std::cout << "RIGHT : " << " (" << NEIGHBOUR.right->x << ":" << NEIGHBOUR.right->y << ") ";
         else
             std::cout << "RIGHT : " << " ? ";
 
