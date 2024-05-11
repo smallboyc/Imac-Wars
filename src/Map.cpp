@@ -91,15 +91,20 @@ void Map::get_NODES_from_ITD()
         // Récupération des paramètres des nodes.
         if (line.find("node") != std::string::npos)
         {
-            std::string node_str{""};
-            for (char c : line)
-                if (isdigit(c))
-                    node_str += c;
+            std::istringstream iss(line);
+            std::string node;
+            std::vector<int> numbers;
 
-            Node new_node{node_str[0] - '0'};                        // On génère l'ID
-            new_node.pixel = {node_str[1] - '0', node_str[2] - '0'}; // On attribue la coordonnée du node (hérite de Pixel)
-            new_node.connected_to = node_str[3] - '0';               // On donne la connexion auquel est lié le node
-            // Pour le Node color ?
+            // on zap le premier element (node)
+            iss >> node;
+
+            int number;
+            while (iss >> number)
+                numbers.push_back(number);
+
+            Node new_node{numbers[0]};                 // On génère l'ID
+            new_node.pixel = {numbers[1], numbers[2]}; // On attribue la coordonnée du node (hérite de Pixel)
+            new_node.connected_to = numbers[3];         // On donne la connexion auquel est lié le node
             NODES.push_back(new_node);
         }
     }
@@ -313,7 +318,7 @@ void Map::get_NODES_from_PIXELS_AUTO()
     // REF_PIXEL va varier sur tous les chemins pour atteindre un noeud
     Pixel &REF_PIXEL = START_PIXEL;
     // Tant que je n'ai pas récupéré tous mes noeuds, je continue
-    while (this->NODES.size() < 13)
+    while (this->NODES.size() < 25)
     {
 
         if (go_left) // Si je peux aller à gauche

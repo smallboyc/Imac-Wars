@@ -12,7 +12,6 @@ in 77 109 243
 out 153 0 48
 
 graph 13
-
 node 0 1 1 1
 node 1 4 1 2
 node 2 4 3 3
@@ -23,7 +22,7 @@ node 6 3 6 7
 node 7 6 6 8
 node 8 6 2 9
 node 9 8 2 10
-node 1 8 8 11
-node 1 1 8 12
-node 1 1 7 13
+node 10 8 8 11
+node 11 1 8 12
+node 12 1 7
 
