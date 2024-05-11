@@ -65,45 +65,6 @@ bool operator==(Pixel const &pixel_1, Pixel const &pixel_2)
     return false;
 }
 
-// Récupère la couleur RGB du Pixel : Path, Out, In dans ITD
-Color get_colors_from_itd(std::string const &type)
-{
-    Color color;
-    // Open the input file named "input.txt"
-    std::ifstream inputFile("../../data/map.itd");
-    std::vector<std::string> color_str_array{};
-    std::string line;
-
-    while (getline(inputFile, line))
-    {
-        // Récupération des paramètres des nodes.
-        if (line.find(type) != std::string::npos)
-        {
-            std::string color_str{};
-
-            for (size_t i{1}; i < line.size(); i++)
-            {
-                if (isdigit(line[i]) || line[i] == ' ')
-                    color_str += line[i];
-            }
-
-            std::istringstream iss(color_str);
-            std::vector<int> pixel_color;
-            std::string token;
-
-            while (std::getline(iss, token, ' '))
-            {
-                if (!token.empty())
-                    pixel_color.push_back(std::stoi(token));
-            }
-            color = {pixel_color[0], pixel_color[1], pixel_color[2]};
-        }
-    }
-    inputFile.close();
-
-    return color;
-}
-
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (!NEIGHBOUR.top->is_VOID)

@@ -34,7 +34,7 @@ struct Node
 {
     int id{0};
     Pixel pixel;
-    int connected_to{0};
+    int connected_to{0}; 
 };
 
 struct Tile
@@ -55,8 +55,6 @@ std::ostream &operator<<(std::ostream &os, std::vector<T> const &vec);
 
 bool operator==(Color const &color_1, Color const &color_2);
 bool operator==(Pixel const &pixel_1, Pixel const &pixel_2);
-
-Color get_colors_from_itd(std::string const &type);
 
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);

@@ -12,76 +12,7 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
-void Map::generate_SCHEMA(std::filesystem::path const &path)
-{
-    this->SCHEMA = img::load(make_absolute_path(path, true), 3, true);
-}
-
-void Map::get_PIXELS_from_SCHEMA()
-{
-    std::vector<Pixel> PIXELS;
-
-    Pixel pixel;
-
-    for (size_t i = 0; i < this->SCHEMA.data_size(); i += SCHEMA.channels_count())
-    {
-        pixel.x = i / SCHEMA.channels_count() % this->NUMBER_OF_PIXELS_IN_LINE;
-        pixel.y = i / SCHEMA.channels_count() / this->NUMBER_OF_PIXELS_IN_LINE;
-        pixel.color = {(int)*(this->SCHEMA.data() + i), (int)*(this->SCHEMA.data() + i + 1), (int)*(this->SCHEMA.data() + i + 2)};
-        PIXELS.push_back(pixel);
-    }
-    this->PIXELS = PIXELS;
-}
-
-void Map::get_TILES_from_PIXELS()
-{
-    std::vector<Tile> TILES_list;
-    std::vector<std::filesystem::path> TILE_path_list;
-    for (Pixel pixel : this->PIXELS)
-    {
-        Connections &NEIGHBOUR{pixel.PIXEL_connection};
-        if (pixel.color == get_colors_from_itd("in"))
-        {
-            // Point d'entrée
-            set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/Tiles/tile_0026.png");
-        }
-        else if (pixel.color == get_colors_from_itd("out"))
-        {
-            // Point de sortie
-            set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/Tiles/tile_0017.png");
-        }
-        else if (pixel.color == get_colors_from_itd("path")) // Point de chemin => route OU virage
-        {
-            if (pixel.is_NODE) // Virage
-                set_NODE_orientation_texture(NEIGHBOUR, TILE_path_list);
-            else // Route
-                set_PATH_orientation_texture(NEIGHBOUR, TILE_path_list);
-        }
-        else // Herbe
-        {
-            TILE_path_list.push_back("images/Tiles/tile_0050.png");
-        }
-        TILES_list.push_back({pixel, {}, TILE_path_list});
-    }
-    this->TILES = TILES_list;
-}
-
-void Map::render_TILES_texture()
-{
-    for (Tile &tile : this->TILES)
-        for (std::filesystem::path &path : tile.path_list)
-            tile.texture_list.push_back(loadTexture(img::load(make_absolute_path(path, true), 4, true)));
-}
-
-void Map::load_MAP()
-{
-    for (Tile &tile : this->TILES)
-        for (GLuint &texture : tile.texture_list)
-            this->draw_quad_with_texture(texture, tile.pixel);
-}
-
+// Dessine la TILE à la coordonnée du pixel associé.
 void Map::draw_quad_with_texture(GLuint const &texture, Pixel const &pixel)
 {
     glEnable(GL_TEXTURE_2D);
@@ -105,11 +36,53 @@ void Map::draw_quad_with_texture(GLuint const &texture, Pixel const &pixel)
     glDisable(GL_TEXTURE_2D);
 }
 
-void Map::get_NODES_from_ITD(std::string const &ITD_file_name)
+// Récupère le code couleur des types de pixel du ITD
+Color Map::get_colors_from_ITD(std::string const &type)
+{
+    Color color;
+    // Open the input file named "input.txt"
+    std::string ITD_path = {"../../data/"};
+    ITD_path += this->schema_file + ".itd";
+    std::ifstream inputFile(ITD_path);
+    std::vector<std::string> color_str_array{};
+    std::string line;
+
+    while (getline(inputFile, line))
+    {
+        // Récupération des paramètres des nodes.
+        if (line.find(type) != std::string::npos)
+        {
+            std::string color_str{};
+
+            for (size_t i{1}; i < line.size(); i++)
+            {
+                if (isdigit(line[i]) || line[i] == ' ')
+                    color_str += line[i];
+            }
+
+            std::istringstream iss(color_str);
+            std::vector<int> pixel_color;
+            std::string token;
+
+            while (std::getline(iss, token, ' '))
+            {
+                if (!token.empty())
+                    pixel_color.push_back(std::stoi(token));
+            }
+            color = {pixel_color[0], pixel_color[1], pixel_color[2]};
+        }
+    }
+    inputFile.close();
+
+    return color;
+}
+
+// 1) Récupère les informations des NODES du ITD
+void Map::get_NODES_from_ITD()
 {
     std::vector<Node> NODES;
-    std::string ITD_path = {"../../data/"};
-    ITD_path += ITD_file_name;
+    std::string ITD_path{"../../data/"};
+    ITD_path += this->schema_file + ".itd";
     std::ifstream inputFile(ITD_path);
     std::string line;
 
@@ -135,7 +108,33 @@ void Map::get_NODES_from_ITD(std::string const &ITD_file_name)
     this->NODES = NODES;
 }
 
-void Map::set_PIXELS_TYPE()
+// 2) Génère le SCHEMA référencé
+void Map::generate_SCHEMA()
+{
+    std::string IMG_path{"images/"};
+    IMG_path += this->schema_file + ".png";
+    this->SCHEMA = img::load(make_absolute_path(IMG_path, true), 3, true);
+}
+
+// 3) Récupère tous les pixels du SCHEMA dans PIXELS
+void Map::get_PIXELS_from_SCHEMA()
+{
+    std::vector<Pixel> PIXELS;
+
+    Pixel pixel;
+
+    for (size_t i = 0; i < this->SCHEMA.data_size(); i += SCHEMA.channels_count())
+    {
+        pixel.x = i / SCHEMA.channels_count() % this->NUMBER_OF_PIXELS_IN_LINE;
+        pixel.y = i / SCHEMA.channels_count() / this->NUMBER_OF_PIXELS_IN_LINE;
+        pixel.color = {(int)*(this->SCHEMA.data() + i), (int)*(this->SCHEMA.data() + i + 1), (int)*(this->SCHEMA.data() + i + 2)};
+        PIXELS.push_back(pixel);
+    }
+    this->PIXELS = PIXELS;
+}
+
+// 4) Donne un type à tous les pixels (chemin,route,noeud...)
+void Map::set_PIXELS_type()
 {
     Color VOID{0, 0, 0};
     for (Pixel &pixel : this->PIXELS)
@@ -152,6 +151,7 @@ void Map::set_PIXELS_TYPE()
     }
 }
 
+// 5) Connecte tous les pixels entre eux => Connaissance forte de l'entourage
 void Map::set_PIXELS_connected()
 {
     for (Pixel &pixel : this->PIXELS)
@@ -180,8 +180,61 @@ void Map::set_PIXELS_connected()
     }
 }
 
+// 6) Récupère la tile qui correspond au pixel (en fonction de ses informations)
+void Map::get_TILES_from_PIXELS()
+{
+    std::vector<Tile> TILES_list;
+    std::vector<std::filesystem::path> TILE_path_list;
+    for (Pixel pixel : this->PIXELS)
+    {
+        Connections &NEIGHBOUR{pixel.PIXEL_connection};
+        if (pixel.color == get_colors_from_ITD("in"))
+        {
+            // Point d'entrée
+            set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
+            TILE_path_list.push_back("images/Tiles/tile_0026.png");
+        }
+        else if (pixel.color == get_colors_from_ITD("out"))
+        {
+            // Point de sortie
+            set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
+            TILE_path_list.push_back("images/Tiles/tile_0017.png");
+        }
+        else if (pixel.color == get_colors_from_ITD("path")) // Point de chemin => route OU virage
+        {
+            if (pixel.is_NODE) // Virage
+                set_NODE_orientation_texture(NEIGHBOUR, TILE_path_list);
+            else // Route
+                set_PATH_orientation_texture(NEIGHBOUR, TILE_path_list);
+        }
+        else // Herbe
+        {
+            TILE_path_list.push_back("images/Tiles/tile_0050.png");
+        }
+        TILES_list.push_back({pixel, {}, TILE_path_list});
+    }
+    this->TILES = TILES_list;
+}
+
+// 7) Rendu des textures de la map
+void Map::render_TILES_texture()
+{
+    for (Tile &tile : this->TILES)
+        for (std::filesystem::path &path : tile.path_list)
+            tile.texture_list.push_back(loadTexture(img::load(make_absolute_path(path, true), 4, true)));
+}
+
+// 8) Génération de la map en dessinant via 'draw_quad_with_texture'
+void Map::load_MAP()
+{
+    for (Tile &tile : this->TILES)
+        for (GLuint &texture : tile.texture_list)
+            this->draw_quad_with_texture(texture, tile.pixel);
+}
+
 // Debug
 
+// Informations de tous les pixels dans PIXELS
 void Map::display_PIXELS_informations()
 {
     for (Pixel pixel : this->PIXELS)
