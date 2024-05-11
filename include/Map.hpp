@@ -23,6 +23,7 @@ public:
     void get_PIXELS_from_SCHEMA();
     void set_PIXELS_type();
     void set_PIXELS_connected();
+    void get_NODES_from_PIXELS_AUTO();
     void get_TILES_from_PIXELS();
     void render_TILES_texture();
     void load_MAP();

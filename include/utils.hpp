@@ -24,9 +24,12 @@ struct Pixel
     int x{0};
     int y{0};
     Color color;
+    // Type de pixel
     bool is_NODE{false};
     bool is_VOID{false};
-    bool is_BUSY{false};
+    bool is_PATH{false};
+    bool is_START_POINT{false};
+    bool is_END_POINT{false};
     Connections PIXEL_connection;
 };
 
@@ -34,8 +37,15 @@ struct Node
 {
     int id{0};
     Pixel pixel;
-    int connected_to{0}; 
+    int connected_to{0};
 };
+
+// struct Node
+// {
+//     int id{0};
+//     Pixel pixel;
+//     Node *connected_to;
+// };
 
 struct Tile
 {
@@ -60,16 +70,12 @@ void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<st
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 
-
-
-
-
 // ça c'est pour debug en cout (:
 
 // for (Node node : map.NODES)
-// {
-//     std::cout << node.id << " : (" << node.x << "," << node.y << ") -> (" << node.color.r << "," << node.color.g << "," << node.color.b << ") " << std::endl;
-// }
+//     {
+//         std::cout << node.id << " : (" << node.pixel.x << "," << node.pixel.y << ")" << std::endl;
+//     }
 
 // for (auto pixel : map.PIXELS)
 // {

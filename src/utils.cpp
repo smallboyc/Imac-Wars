@@ -65,6 +65,7 @@ bool operator==(Pixel const &pixel_1, Pixel const &pixel_2)
     return false;
 }
 
+
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (!NEIGHBOUR.top->is_VOID)
