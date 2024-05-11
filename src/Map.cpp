@@ -133,7 +133,7 @@ void Map::get_PIXELS_from_SCHEMA()
     this->PIXELS = PIXELS;
 }
 
-// 4) Donne un type à tous les pixels (chemin,route,noeud...)
+// 4) Donne un type à tous les pixels (chemin,herbe,noeud...)
 void Map::set_PIXELS_type()
 {
     Color VOID{0, 0, 0};

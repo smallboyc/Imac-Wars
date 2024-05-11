@@ -9,11 +9,12 @@
 #include "simpletext.h"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
+
 GLuint test{};
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     // Attention à l'ordre d'appel des méthodes => lire leurs noms et voir si l'enchainement est cohérent.
-    map.schema_file = "map_schema_10x10_V2";
+    map.schema_file = "map_schema_10x10";
     map.get_NODES_from_ITD();
     map.generate_SCHEMA();
     map.get_PIXELS_from_SCHEMA();
