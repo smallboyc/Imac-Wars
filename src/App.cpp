@@ -13,7 +13,7 @@ GLuint test{};
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     // Attention à l'ordre d'appel des méthodes => lire leurs noms et voir si l'enchainement est cohérent.
-    map.schema_file = "map_schema_10x10";
+    map.schema_file = "map_schema_10x10_V2";
     map.get_NODES_from_ITD();
     map.generate_SCHEMA();
     map.get_PIXELS_from_SCHEMA();
@@ -23,7 +23,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     map.render_TILES_texture();
 
     // Debug
-    map.display_PIXELS_informations();
+    // map.display_PIXELS_informations();
 
     // test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
