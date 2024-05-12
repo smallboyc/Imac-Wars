@@ -50,7 +50,7 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    // i += 0.1f * elapsedTime;
+    i += 0.1f * elapsedTime;
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
 
@@ -69,8 +69,9 @@ void App::render()
     // glRotatef(_angle,0,0,1);
     // glPushMatrix();
     map.load_MAP();
+
     // glTranslatef(i, 0, 0);
-    // map.draw_quad_with_texture(sprite_test, {0, 0, {}});
+    map.draw_quad_with_texture(sprite_test, {9, 0, {}});
     // glPopMatrix();
 
     // Text zone

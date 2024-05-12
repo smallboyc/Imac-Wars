@@ -104,7 +104,7 @@ void Map::get_NODES_from_ITD()
 
             Node new_node{numbers[0]};                 // On génère l'ID
             new_node.pixel = {numbers[1], numbers[2]}; // On attribue la coordonnée du node (hérite de Pixel)
-            new_node.connected_to = numbers[3];         // On donne la connexion auquel est lié le node
+            new_node.connected_to = numbers[3];        // On donne la connexion auquel est lié le node
             NODES.push_back(new_node);
         }
     }
@@ -204,19 +204,19 @@ void Map::get_TILES_from_PIXELS()
     for (Pixel pixel : this->PIXELS)
     {
         Connections &NEIGHBOUR{pixel.PIXEL_connection};
-        if (pixel.color == get_colors_from_ITD("in"))
+        if (pixel.is_START_POINT)
         {
             // Point d'entrée
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
             TILE_path_list.push_back("images/Tiles/tile_0026.png");
         }
-        else if (pixel.color == get_colors_from_ITD("out"))
+        else if (pixel.is_END_POINT)
         {
             // Point de sortie
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
             TILE_path_list.push_back("images/Tiles/tile_0017.png");
         }
-        else if (pixel.color == get_colors_from_ITD("path")) // Point de chemin => route OU virage
+        else if (pixel.is_PATH) // Point de chemin => route OU virage
         {
             if (pixel.is_NODE) // Virage
                 set_NODE_orientation_texture(NEIGHBOUR, TILE_path_list);
@@ -248,7 +248,7 @@ void Map::load_MAP()
             this->draw_quad_with_texture(texture, tile.pixel);
 }
 
-// Debug
+// DEBUUUGGGG
 
 // Informations de tous les pixels dans PIXELS
 void Map::display_PIXELS_informations()
@@ -318,7 +318,7 @@ void Map::get_NODES_from_PIXELS_AUTO()
     // REF_PIXEL va varier sur tous les chemins pour atteindre un noeud
     Pixel &REF_PIXEL = START_PIXEL;
     // Tant que je n'ai pas récupéré tous mes noeuds, je continue
-    while (this->NODES.size() < 25)
+    while (this->NODES.size() < 7)
     {
 
         if (go_left) // Si je peux aller à gauche
