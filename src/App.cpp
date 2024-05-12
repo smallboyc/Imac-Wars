@@ -10,7 +10,7 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
-// GLuint test{};
+GLuint sprite_test{};
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
@@ -28,7 +28,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     // Debug
     // map.display_PIXELS_informations();
 
-    // test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
+    sprite_test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
 
 void App::setup()
@@ -50,6 +50,7 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
+    // i += 0.1f * elapsedTime;
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
 
@@ -68,7 +69,8 @@ void App::render()
     // glRotatef(_angle,0,0,1);
     // glPushMatrix();
     map.load_MAP();
-    // map.draw_quad_with_texture(test, {0, 0, {}});
+    // glTranslatef(i, 0, 0);
+    // map.draw_quad_with_texture(sprite_test, {0, 0, {}});
     // glPopMatrix();
 
     // Text zone

@@ -33,6 +33,7 @@ private:
     Map map;
     Node node;
     GLuint _texture{};
+    float i{0};
     float _angle{};
 
     SimpleText TextRenderer{};

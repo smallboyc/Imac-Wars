@@ -15,7 +15,7 @@ public:
     std::vector<Tile> TILES;
     std::vector<Pixel> PIXELS;
     std::vector<Node> NODES;
-    
+
     void draw_quad_with_texture(GLuint const &texture, Pixel const &pixel);
     Color get_colors_from_ITD(std::string const &type);
     void get_NODES_from_ITD();
