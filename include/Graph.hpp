@@ -26,7 +26,7 @@ namespace Graph
         bool operator!=(WeightedGraph const &other) const = default;
 
         void print_BFS(int const start) const;
+        // Dijkstra
+        std::unordered_map<int, std::pair<float, int>> dijkstra(int const &start, int const end);
     };
-    // Dijkstra
-    std::unordered_map<int, std::pair<float, int>> dijkstra(WeightedGraph const &graph, int const &start, int const end);
 }

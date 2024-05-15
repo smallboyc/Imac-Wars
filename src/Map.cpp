@@ -122,9 +122,37 @@ void Map::create_GRAPH_from_NODES()
             for (Node &node_to_connect : this->NODES)
                 if (connected_node_id == node_to_connect.id)
                 {
-                    float distance{(std::abs(node.pixel.x - node_to_connect.pixel.x) + std::abs(node.pixel.y - node_to_connect.pixel.y))};
+                    float distance = (std::abs(node.pixel.x - node_to_connect.pixel.x) + std::abs(node.pixel.y - node_to_connect.pixel.y));
                     this->GRAPH.add_directed_edge(node.id, node_to_connect.id, distance);
                 }
+}
+
+void Map::get_SHORTER_PATH_from_dijkstra()
+{
+    int start{0};
+    int end{10};
+    std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(start, end)};
+    std::vector<int> SHORTER_PATH_ID;
+    auto finalEdge{DISTANCES.at(end)};
+    // std::cout << "Distance minimale : " << finalEdge.first << std::endl;
+    // std::cout << end << " -> ";
+    SHORTER_PATH_ID.push_back(end);
+    while (finalEdge.second != start)
+    {
+        SHORTER_PATH_ID.push_back(finalEdge.second);
+        // std::cout << finalEdge.second << " -> ";
+        finalEdge = DISTANCES.at(finalEdge.second);
+    }
+    SHORTER_PATH_ID.push_back(start);
+
+    // Du tableau d'id, on en déduit les nodes composants le chemin le plus court dans l'ordre.
+    for (int shorter_node_id : SHORTER_PATH_ID)
+    {
+        for (Node &node : this->NODES)
+            if (node.id == shorter_node_id)
+                this->SHORTER_PATH.push_back(node);
+    }
+    // std::cout << start << std::endl;
 }
 
 // 2) Génère le SCHEMA référencé

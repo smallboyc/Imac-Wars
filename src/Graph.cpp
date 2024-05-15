@@ -42,7 +42,6 @@ namespace Graph
         return graph;
     }
 
-
     void WeightedGraph::print_BFS(int const start) const
     {
         std::queue<int> queue;
@@ -65,7 +64,7 @@ namespace Graph
         }
     }
 
-    std::unordered_map<int, std::pair<float, int>> dijkstra(WeightedGraph const &graph, int const &start, int const end)
+    std::unordered_map<int, std::pair<float, int>> WeightedGraph::dijkstra(int const &start, int const end)
     {
         std::unordered_map<int, std::pair<float, int>> distances{};
         std::priority_queue<std::pair<float, int>, std::vector<std::pair<float, int>>, std::greater<std::pair<float, int>>> to_visit{};
@@ -85,7 +84,7 @@ namespace Graph
             if (current_node == end)
                 return distances;
             // 3. On parcourt la liste des voisins (grâce à la liste d'adjacence) du noeud courant
-            for (auto edge : graph.adjacency_list.at(current_node))
+            for (auto edge : this->adjacency_list.at(current_node))
             {
                 // 4. on regarde si le noeud existe dans le tableau associatif (si oui il a déjà été visité)
                 int current_adj_node{edge.to};

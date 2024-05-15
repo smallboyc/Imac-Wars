@@ -11,7 +11,7 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
-// GLuint sprite_test{};
+GLuint sprite_test{};
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
@@ -20,6 +20,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     map.schema_file = "map_schema_10x10_V2";
     map.get_NODES_from_ITD();
     map.create_GRAPH_from_NODES();
+    map.get_SHORTER_PATH_from_dijkstra();
     map.generate_SCHEMA();
     map.get_PIXELS_from_SCHEMA();
     map.set_PIXELS_type();
@@ -29,15 +30,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     map.render_TILES_texture();
 
     // srand((unsigned int)time(0));
-    std::cout << map.GRAPH << std::endl;
-    // for (Node node : map.NODES)
-    // {
-    //     std::cout << node.id << " : (" << node.pixel.x << "," << node.pixel.y << ")";
-    //     std::cout << " connected to -> ";
-    //     for (int connected_node : node.connected_to)
-    //         std::cout << connected_node << ", ";
-    //     std::cout << std::endl;
-    // }
+    // std::cout << map.GRAPH << std::endl;
 
     // // This program will create some sequence of random
     // // numbers on every program run within range 0 to N-1
@@ -48,7 +41,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     // Debug
     // map.display_PIXELS_informations();
 
-    // sprite_test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
+    sprite_test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
 
 void App::setup()
@@ -91,7 +84,13 @@ void App::render()
     map.load_MAP();
 
     // glTranslatef(i, 0, 0);
-    // map.draw_quad_with_texture(sprite_test, {0, 0, {}});
+    for (Node node : map.SHORTER_PATH)
+    {
+        int X = node.pixel.x;
+        int Y = (map.SCHEMA.width() - 1 - node.pixel.y);
+        map.draw_quad_with_texture(sprite_test, {X, Y, {}});
+    }
+
     // glPopMatrix();
 
     // Text zone

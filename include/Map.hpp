@@ -18,11 +18,13 @@ public:
     std::vector<Pixel> PIXELS;
     std::vector<Node> NODES;
     Graph::WeightedGraph GRAPH;
+    std::vector<Node> SHORTER_PATH;
 
     void draw_quad_with_texture(GLuint const &texture, Pixel const &pixel);
     Color get_colors_from_ITD(std::string const &type);
     void get_NODES_from_ITD();
     void create_GRAPH_from_NODES();
+    void get_SHORTER_PATH_from_dijkstra();
     void generate_SCHEMA();
     void get_PIXELS_from_SCHEMA();
     void set_PIXELS_type();
