@@ -6,17 +6,20 @@
 
 #include "App.hpp"
 #include "Map.hpp"
+#include "Graph.hpp"
 #include "simpletext.h"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
-GLuint sprite_test{};
+// GLuint sprite_test{};
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     // Attention à l'ordre d'appel des méthodes => lire leurs noms et voir si l'enchainement est cohérent.
+    map.NUMBER_OF_PIXELS_IN_LINE = 10;
     map.schema_file = "map_schema_10x10_V2";
     map.get_NODES_from_ITD();
+    map.create_GRAPH_from_NODES();
     map.generate_SCHEMA();
     map.get_PIXELS_from_SCHEMA();
     map.set_PIXELS_type();
@@ -25,10 +28,27 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     map.get_TILES_from_PIXELS();
     map.render_TILES_texture();
 
+    // srand((unsigned int)time(0));
+    std::cout << map.GRAPH << std::endl;
+    // for (Node node : map.NODES)
+    // {
+    //     std::cout << node.id << " : (" << node.pixel.x << "," << node.pixel.y << ")";
+    //     std::cout << " connected to -> ";
+    //     for (int connected_node : node.connected_to)
+    //         std::cout << connected_node << ", ";
+    //     std::cout << std::endl;
+    // }
+
+    // // This program will create some sequence of random
+    // // numbers on every program run within range 0 to N-1
+    // int factor{2};
+    // for (size_t x = 0; x < map.NUMBER_OF_PIXELS_IN_LINE * factor; x++)
+    //     std::cout << rand() % map.NUMBER_OF_PIXELS_IN_LINE << " ";
+
     // Debug
     // map.display_PIXELS_informations();
 
-    sprite_test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
+    // sprite_test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
 
 void App::setup()
@@ -71,7 +91,7 @@ void App::render()
     map.load_MAP();
 
     // glTranslatef(i, 0, 0);
-    map.draw_quad_with_texture(sprite_test, {9, 0, {}});
+    // map.draw_quad_with_texture(sprite_test, {0, 0, {}});
     // glPopMatrix();
 
     // Text zone

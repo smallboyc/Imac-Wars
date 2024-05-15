@@ -65,6 +65,14 @@ bool operator==(Pixel const &pixel_1, Pixel const &pixel_2)
     return false;
 }
 
+std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph)
+{
+    for (std::pair p : graph.adjacency_list)
+        for (Graph::WeightedGraphEdge edge : p.second)
+            os << p.first << " -> " << edge.to << " ( " << edge.weight << " )" << std::endl;
+    return os;
+}
+
 
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
