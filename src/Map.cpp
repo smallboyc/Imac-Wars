@@ -115,6 +115,7 @@ void Map::get_NODES_from_ITD()
     this->NODES = NODES;
 }
 
+// 2) Créer le GRAPH depuis le tableau de nodes
 void Map::create_GRAPH_from_NODES()
 {
     for (Node &node : this->NODES)
@@ -127,6 +128,7 @@ void Map::create_GRAPH_from_NODES()
                 }
 }
 
+// 3) Détermine le plus court chemin du GRAPH
 void Map::get_SHORTER_PATH_from_dijkstra()
 {
     int start{0};
@@ -155,7 +157,7 @@ void Map::get_SHORTER_PATH_from_dijkstra()
     // std::cout << start << std::endl;
 }
 
-// 2) Génère le SCHEMA référencé
+// 4) Génère le SCHEMA référencé
 void Map::generate_SCHEMA()
 {
     std::string IMG_path{"images/"};
@@ -163,7 +165,7 @@ void Map::generate_SCHEMA()
     this->SCHEMA = img::load(make_absolute_path(IMG_path, true), 3, true);
 }
 
-// 3) Récupère tous les pixels du SCHEMA dans PIXELS
+// 5) Récupère tous les pixels du SCHEMA dans PIXELS
 void Map::get_PIXELS_from_SCHEMA()
 {
     std::vector<Pixel> PIXELS;
@@ -180,7 +182,7 @@ void Map::get_PIXELS_from_SCHEMA()
     this->PIXELS = PIXELS;
 }
 
-// 4) Donne un type à tous les pixels (chemin,herbe,noeud...) grâce au couleurs de l'ITD
+// 6) Donne un type à tous les pixels (chemin,herbe,noeud...) grâce au couleurs de l'ITD
 void Map::set_PIXELS_type()
 {
     for (Pixel &pixel : this->PIXELS)
@@ -209,7 +211,7 @@ void Map::set_PIXELS_type()
     }
 }
 
-// 5) Connecte tous les pixels entre eux => Connaissance forte de l'entourage
+// 7) Connecte tous les pixels entre eux => Connaissance forte de l'entourage
 void Map::set_PIXELS_connected()
 {
     for (Pixel &pixel : this->PIXELS)
@@ -238,7 +240,7 @@ void Map::set_PIXELS_connected()
     }
 }
 
-// 6) Récupère la tile qui correspond au pixel (en fonction de ses informations)
+// 8) Récupère la tile qui correspond au pixel (en fonction de ses informations)
 void Map::get_TILES_from_PIXELS()
 {
     std::vector<Tile> TILES_list;
@@ -275,7 +277,7 @@ void Map::get_TILES_from_PIXELS()
     this->TILES = TILES_list;
 }
 
-// 7) Rendu des textures de la map
+// 9) Rendu des textures de la map
 void Map::render_TILES_texture()
 {
     for (Tile &tile : this->TILES)

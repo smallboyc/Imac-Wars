@@ -63,9 +63,13 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    i += 0.1f * elapsedTime;
+    if (i <= 0.5f)
+        i += 0.1f * elapsedTime;
+    else if (j <= 0.5f)
+        j += 0.1f * elapsedTime;
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
+    std::cout << i << std::endl;
 
     render();
 }
@@ -83,13 +87,14 @@ void App::render()
     // glPushMatrix();
     map.load_MAP();
 
-    // glTranslatef(i, 0, 0);
-    for (Node node : map.SHORTER_PATH)
-    {
-        int X = node.pixel.x;
-        int Y = (map.SCHEMA.width() - 1 - node.pixel.y);
-        map.draw_quad_with_texture(sprite_test, {X, Y, {}});
-    }
+    glTranslatef(i, j, 0);
+    map.draw_quad_with_texture(sprite_test, {(int)(i), (int)(j), {}});
+    // for (Node node : map.SHORTER_PATH)
+    // {
+    //     int X = node.pixel.x;
+    //     int Y = (map.SCHEMA.width() - 1 - node.pixel.y);
+    //     map.draw_quad_with_texture(sprite_test, {X, Y, {}});
+    // }
 
     // glPopMatrix();
 

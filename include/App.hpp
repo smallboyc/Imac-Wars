@@ -34,6 +34,7 @@ private:
     Node node;
     GLuint _texture{};
     float i{0};
+    float j{0};
     float _angle{};
 
     SimpleText TextRenderer{};
