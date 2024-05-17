@@ -5,6 +5,7 @@
 #include <string>
 #include <iterator>
 #include <sstream>
+#include "Map.hpp"
 
 std::filesystem::path make_absolute_path(std::filesystem::path const &path, bool check_path_exists)
 {
@@ -73,7 +74,6 @@ std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph)
     return os;
 }
 
-
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (!NEIGHBOUR.top->is_VOID)
@@ -112,4 +112,28 @@ void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
         TILE_path_list.push_back("images/Tiles/tile_0098.png");
     else
         TILE_path_list.push_back("images/Tiles/tile_0087.png");
+}
+
+// Dessin un sprite à la position (x,y) sur une map
+void draw_quad_with_texture(GLuint const &texture, int x, int y, Map &map)
+{
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3ub(255, 255, 255);
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (-map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 0);
+    glVertex2f((map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (-map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 1);
+    glVertex2f((map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(0, 1);
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 }

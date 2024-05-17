@@ -5,6 +5,7 @@
 #include "Map.hpp"
 #include "utils.hpp"
 #include <vector>
+#include "Enemy.hpp"
 
 class App
 {

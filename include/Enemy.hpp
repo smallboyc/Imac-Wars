@@ -5,9 +5,12 @@
 #include "Map.hpp"
 #include "utils.hpp"
 #include <vector>
+#include "GLHelpers.hpp"
 
 struct Enemy
 {
-    glm::vec2 pos;
-    std::vector<GLuint> texture;
-}
+    glm::vec2 pos{0, 0};
+    GLuint texture;
+    bool isDead{false};
+    void draw(Map &map);
+};

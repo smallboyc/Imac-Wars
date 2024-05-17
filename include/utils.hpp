@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include "Graph.hpp"
 
+struct Map;
 struct Color
 {
     int r{0};
@@ -70,3 +71,5 @@ void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 // {
 //     std::cout << "(" << pixel.x << ":" << pixel.y << ")" << " = " << "{" << pixel.color.r << "," << pixel.color.g << "," << pixel.color.b << "}" << std::endl;
 // }
+
+void draw_quad_with_texture(GLuint const &texture, int x, int y, Map &map);

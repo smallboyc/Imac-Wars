@@ -10,8 +10,9 @@
 #include "simpletext.h"
 #include "utils.hpp"
 #include "GLHelpers.hpp"
+#include "Enemy.hpp"
 
-GLuint sprite_test{};
+Enemy michel;
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
@@ -41,7 +42,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     // Debug
     // map.display_PIXELS_informations();
 
-    sprite_test = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
+    michel.texture = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
 }
 
 void App::setup()
@@ -63,13 +64,12 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    if (i <= 0.5f)
-        i += 0.1f * elapsedTime;
-    else if (j <= 0.5f)
-        j += 0.1f * elapsedTime;
+    if (michel.pos.x <= 0.5f)
+        michel.pos.x += 0.1f * elapsedTime;
+    else if (michel.pos.y <= 0.5f)
+        michel.pos.y += 0.1f * elapsedTime;
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
-    std::cout << i << std::endl;
 
     render();
 }
@@ -86,9 +86,10 @@ void App::render()
     // glRotatef(_angle,0,0,1);
     // glPushMatrix();
     map.load_MAP();
+    glTranslatef(michel.pos.x, michel.pos.y, 0);
+    michel.draw(map);
 
-    glTranslatef(i, j, 0);
-    map.draw_quad_with_texture(sprite_test, {(int)(i), (int)(j), {}});
+    // map.draw_quad_with_texture(sprite_test, {(int)(i), (int)(j), {}});
     // for (Node node : map.SHORTER_PATH)
     // {
     //     int X = node.pixel.x;

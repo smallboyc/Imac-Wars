@@ -20,7 +20,7 @@ public:
     Graph::WeightedGraph GRAPH;
     std::vector<Node> SHORTER_PATH;
 
-    void draw_quad_with_texture(GLuint const &texture, Pixel const &pixel);
+    // void draw_quad_with_texture(GLuint const &texture, int x, int y);
     Color get_colors_from_ITD(std::string const &type);
     void get_NODES_from_ITD();
     void create_GRAPH_from_NODES();
@@ -36,8 +36,6 @@ public:
 
     // Debug
     void display_PIXELS_informations();
-
-private:
     // MAP PARAMETERS (SQUARE)
     float MAP_SIZE{1.f}; // 1.0F <=> 1000px
     float SEMI_MAP_SIZE{MAP_SIZE / 2.0f};
