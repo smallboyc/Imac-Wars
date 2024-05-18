@@ -23,8 +23,8 @@ struct Connections
 
 struct Pixel
 {
-    int x{0};
-    int y{0};
+    float x{0};
+    float y{0};
     Color color;
     // Type de pixel
     bool is_NODE{false};
@@ -65,4 +65,6 @@ void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<st
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 
-void draw_quad_with_texture(GLuint const &texture, int x, int y, Map &map);
+void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map);
+
+void drawOrigin();

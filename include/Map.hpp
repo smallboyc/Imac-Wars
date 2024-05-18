@@ -29,13 +29,13 @@ public:
     void get_PIXELS_from_SCHEMA();
     void set_PIXELS_type();
     void set_PIXELS_connected();
-    // void get_NODES_from_PIXELS_AUTO();
     void get_TILES_from_PIXELS();
     void render_TILES_texture();
     void load_MAP();
 
     // Debug
     void display_PIXELS_informations();
+    void display_SHORTER_PATH();
     // MAP PARAMETERS (SQUARE)
     float MAP_SIZE{1.f}; // 1.0F <=> 1000px
     float SEMI_MAP_SIZE{MAP_SIZE / 2.0f};

@@ -66,7 +66,6 @@ bool operator==(Pixel const &pixel_1, Pixel const &pixel_2)
     return false;
 }
 
-
 std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph)
 {
     for (std::pair p : graph.adjacency_list)
@@ -116,11 +115,12 @@ void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 }
 
 // Dessin un sprite à la position (x,y) sur une map
-void draw_quad_with_texture(GLuint const &texture, int x, int y, Map &map)
+void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
     glColor3ub(255, 255, 255);
+    glPushMatrix();
     glBegin(GL_QUADS);
     glTexCoord2d(0, 0);
     glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (-map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
@@ -135,6 +135,20 @@ void draw_quad_with_texture(GLuint const &texture, int x, int y, Map &map)
     glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
 
     glEnd();
+    glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
+}
+
+void drawOrigin()
+{
+    glPointSize(10);
+    glBegin(GL_LINES);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2d(0, 0);
+    glVertex2d(1, 0);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex2d(0, 0);
+    glVertex2d(0, 1);
+    glEnd();
 }

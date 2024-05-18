@@ -70,18 +70,18 @@ void Map::get_NODES_from_ITD()
         {
             std::istringstream iss(line);
             std::string node;
-            std::vector<int> numbers;
+            std::vector<float> numbers;
 
             // on zap le premier element (node)
             iss >> node;
 
-            int number;
+            float number;
             while (iss >> number)
                 numbers.push_back(number);
 
             Node new_node;
-            new_node.id = numbers[0];                  // On génère l'ID
-            new_node.pixel = {numbers[1], numbers[2]}; // On attribue la coordonnée du node (hérite de Pixel) // On donne la connexion auquel est lié le node
+            new_node.id = static_cast<int>(numbers[0]); // On génère l'ID
+            new_node.pixel = {numbers[1], numbers[2]};  // On attribue la coordonnée du node (hérite de Pixel) // On donne la connexion auquel est lié le node
             for (size_t i{3}; i < numbers.size(); i++)
                 new_node.connected_to.push_back(numbers[i]); // On ajoute tous les id des nodes connectés au node courant
             NODES.push_back(new_node);
@@ -309,6 +309,12 @@ void Map::display_PIXELS_informations()
 
         std::cout << std::endl;
     }
+}
+
+void Map::display_SHORTER_PATH()
+{
+    for (Node &node : this->SHORTER_PATH)
+        std::cout << node.id << " : (" << node.pixel.x << "," << node.pixel.y << ")" << std::endl;
 }
 
 // BONUS!! (Pas terminé)

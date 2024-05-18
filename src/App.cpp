@@ -14,9 +14,9 @@
 
 Enemy michel;
 
-App::App() : _previousTime(0.0), _viewSize(1.5)
+App::App() : _previousTime(0.0), _viewSize(2.0)
 {
-    // Attention à l'ordre d'appel des méthodes => lire leurs noms et voir si l'enchainement est cohérent.
+    // MAP
     map.NUMBER_OF_PIXELS_IN_LINE = 10;
     map.schema_file = "map_schema_10x10_V4";
     map.get_NODES_from_ITD();
@@ -26,27 +26,12 @@ App::App() : _previousTime(0.0), _viewSize(1.5)
     map.get_PIXELS_from_SCHEMA();
     map.set_PIXELS_type();
     map.set_PIXELS_connected();
-    // map.get_NODES_from_PIXELS_AUTO();
     map.get_TILES_from_PIXELS();
     map.render_TILES_texture();
+    map.display_SHORTER_PATH();
 
-    // srand((unsigned int)time(0));
-    // std::cout << map.GRAPH << std::endl;
-
-    // // This program will create some sequence of random
-    // // numbers on every program run within range 0 to N-1
-    // int factor{2};
-    // for (size_t x = 0; x < map.NUMBER_OF_PIXELS_IN_LINE * factor; x++)
-    //     std::cout << rand() % map.NUMBER_OF_PIXELS_IN_LINE << " ";
-
-    // Debug
-    // map.display_PIXELS_informations();
-
-    michel.texture = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
-    // on set la position à au 1er noeud
-    michel.pos.x = map.SHORTER_PATH[0].pixel.x;
-    michel.pos.y = map.SHORTER_PATH[0].pixel.y; // Changement de repère en Y
-    michel.speed = glm::vec2(0.1f, 0.1f);                                // Définissez la vitesse selon vos besoins
+    // ENEMY
+    michel.set(map);
 }
 
 void App::setup()
@@ -68,13 +53,7 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    // Parcours avec le plus court chemin
-
-    // for (int i{1}; i < map.SHORTER_PATH.size() - 1; i++)
-    // {
-    // int target_pos_x = map.SHORTER_PATH[1].pixel.x;
-    // int target_pos_y = map.SCHEMA.width() - 1 - map.SHORTER_PATH[1].pixel.y;
-
+    i += 0.1f * elapsedTime;
 
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
@@ -91,13 +70,23 @@ void App::render()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glLoadIdentity();
-    // glRotatef(_angle,0,0,1);
-    // glPushMatrix();
-    map.load_MAP();
+
     glPushMatrix();
-    michel.draw(map);
+    map.load_MAP();
     glPopMatrix();
-    // glPopMatrix();
+    // Apply translation based on updated position
+    // if (i < 0.3f)
+    // {
+    //     glTranslatef(-i, 0, 0);
+    //     michel.pos.x -= i / 10;
+    // }
+    // else
+    // {
+    //     glTranslatef(-0.3f, 0, 0);
+    // }
+    // std::cout << (int)(michel.pos.x) << ":" << michel.pos.y << std::endl;
+    if (!michel.isDead)
+        michel.action(map, i);
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width / 2, 20, SimpleText::CENTER);

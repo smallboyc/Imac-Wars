@@ -9,10 +9,11 @@
 
 struct Enemy
 {
+    glm::vec2 spawn;
     glm::vec2 pos;
     glm::vec2 speed;
     GLuint texture;
     bool isDead{false};
-    void draw(Map &map);
-    void move(Map &map);
+    void set(Map &map);
+    void action(Map &map, float &i);
 };
