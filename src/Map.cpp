@@ -13,30 +13,6 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
-// Dessine la TILE à la coordonnée du pixel associé.
-// void Map::draw_quad_with_texture(GLuint const &texture, int x, int y)
-// {
-//     glEnable(GL_TEXTURE_2D);
-//     glBindTexture(GL_TEXTURE_2D, texture);
-//     glColor3ub(255, 255, 255);
-//     glBegin(GL_QUADS);
-//     glTexCoord2d(0, 0);
-//     glVertex2f((-this->SEMI_MAP_SIZE + x) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE, (-this->SEMI_MAP_SIZE + y) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE);
-
-//     glTexCoord2d(1, 0);
-//     glVertex2f((this->SEMI_MAP_SIZE + x) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE, (-this->SEMI_MAP_SIZE + y) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE);
-
-//     glTexCoord2d(1, 1);
-//     glVertex2f((this->SEMI_MAP_SIZE + x) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE, (this->SEMI_MAP_SIZE + y) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE);
-
-//     glTexCoord2d(0, 1);
-//     glVertex2f((-this->SEMI_MAP_SIZE + x) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE, (this->SEMI_MAP_SIZE + y) / this->NUMBER_OF_PIXELS_IN_LINE - this->SEMI_MAP_SIZE);
-
-//     glEnd();
-//     glBindTexture(GL_TEXTURE_2D, 0);
-//     glDisable(GL_TEXTURE_2D);
-// }
-
 // Récupère le code couleur des types de pixel du ITD
 Color Map::get_colors_from_ITD(std::string const &type)
 {
@@ -132,17 +108,17 @@ void Map::create_GRAPH_from_NODES()
 void Map::get_SHORTER_PATH_from_dijkstra()
 {
     int start{0};
-    int end{10};
+    int end{12};
     std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(start, end)};
     std::vector<int> SHORTER_PATH_ID;
     auto finalEdge{DISTANCES.at(end)};
-    // std::cout << "Distance minimale : " << finalEdge.first << std::endl;
-    // std::cout << end << " -> ";
+    std::cout << "Distance minimale : " << finalEdge.first << std::endl;
+    std::cout << end << " -> ";
     SHORTER_PATH_ID.push_back(end);
     while (finalEdge.second != start)
     {
         SHORTER_PATH_ID.push_back(finalEdge.second);
-        // std::cout << finalEdge.second << " -> ";
+        std::cout << finalEdge.second << " -> ";
         finalEdge = DISTANCES.at(finalEdge.second);
     }
     SHORTER_PATH_ID.push_back(start);
@@ -154,7 +130,7 @@ void Map::get_SHORTER_PATH_from_dijkstra()
             if (node.id == shorter_node_id)
                 this->SHORTER_PATH.push_back(node);
     }
-    // std::cout << start << std::endl;
+    std::cout << start << std::endl;
 }
 
 // 4) Génère le SCHEMA référencé
@@ -204,7 +180,7 @@ void Map::set_PIXELS_type()
 
         for (Node node : this->NODES)
         {
-            node.pixel.y = this->SCHEMA.width() - 1 - node.pixel.y; // Conversion pour changement de repère :  f(x,y) = (x, width() - y)
+            // node.pixel.y = this->SCHEMA.width() - 1 - node.pixel.y; // Conversion pour changement de repère :  f(x,y) = (x, width() - y)
             if (pixel == node.pixel)
                 pixel.is_NODE = true;
         }

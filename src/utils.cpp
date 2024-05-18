@@ -66,6 +66,7 @@ bool operator==(Pixel const &pixel_1, Pixel const &pixel_2)
     return false;
 }
 
+
 std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph)
 {
     for (std::pair p : graph.adjacency_list)

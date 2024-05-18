@@ -14,11 +14,11 @@
 
 Enemy michel;
 
-App::App() : _previousTime(0.0), _viewSize(2.0)
+App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     // Attention à l'ordre d'appel des méthodes => lire leurs noms et voir si l'enchainement est cohérent.
     map.NUMBER_OF_PIXELS_IN_LINE = 10;
-    map.schema_file = "map_schema_10x10_V2";
+    map.schema_file = "map_schema_10x10_V4";
     map.get_NODES_from_ITD();
     map.create_GRAPH_from_NODES();
     map.get_SHORTER_PATH_from_dijkstra();
@@ -43,6 +43,10 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     // map.display_PIXELS_informations();
 
     michel.texture = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0023.png", true), 4, true));
+    // on set la position à au 1er noeud
+    michel.pos.x = map.SHORTER_PATH[0].pixel.x;
+    michel.pos.y = map.SHORTER_PATH[0].pixel.y; // Changement de repère en Y
+    michel.speed = glm::vec2(0.1f, 0.1f);                                // Définissez la vitesse selon vos besoins
 }
 
 void App::setup()
@@ -64,10 +68,14 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    if (michel.pos.x <= 0.5f)
-        michel.pos.x += 0.1f * elapsedTime;
-    else if (michel.pos.y <= 0.5f)
-        michel.pos.y += 0.1f * elapsedTime;
+    // Parcours avec le plus court chemin
+
+    // for (int i{1}; i < map.SHORTER_PATH.size() - 1; i++)
+    // {
+    // int target_pos_x = map.SHORTER_PATH[1].pixel.x;
+    // int target_pos_y = map.SCHEMA.width() - 1 - map.SHORTER_PATH[1].pixel.y;
+
+
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
 
@@ -86,17 +94,9 @@ void App::render()
     // glRotatef(_angle,0,0,1);
     // glPushMatrix();
     map.load_MAP();
-    glTranslatef(michel.pos.x, michel.pos.y, 0);
+    glPushMatrix();
     michel.draw(map);
-
-    // map.draw_quad_with_texture(sprite_test, {(int)(i), (int)(j), {}});
-    // for (Node node : map.SHORTER_PATH)
-    // {
-    //     int X = node.pixel.x;
-    //     int Y = (map.SCHEMA.width() - 1 - node.pixel.y);
-    //     map.draw_quad_with_texture(sprite_test, {X, Y, {}});
-    // }
-
+    glPopMatrix();
     // glPopMatrix();
 
     // Text zone

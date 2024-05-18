@@ -65,11 +65,4 @@ void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<st
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 
-// ça c'est pour debug en cout (:
-
-// for (auto pixel : map.PIXELS)
-// {
-//     std::cout << "(" << pixel.x << ":" << pixel.y << ")" << " = " << "{" << pixel.color.r << "," << pixel.color.g << "," << pixel.color.b << "}" << std::endl;
-// }
-
 void draw_quad_with_texture(GLuint const &texture, int x, int y, Map &map);
