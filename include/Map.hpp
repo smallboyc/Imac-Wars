@@ -13,7 +13,7 @@ struct Map
 public:
     size_t NUMBER_OF_PIXELS_IN_LINE{10};
     std::string schema_file{"map_schema_10x10"};
-    img::Image SCHEMA{img::load(make_absolute_path("images/map_schema_10x10_V2.png", true), 3, true)};
+    img::Image SCHEMA{img::load(make_absolute_path("images/map_schema_10x10_V4.png", true), 3, true)};
     std::vector<Tile> TILES;
     std::vector<Pixel> PIXELS;
     std::vector<Node> NODES;

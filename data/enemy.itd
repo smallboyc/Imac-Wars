@@ -1,0 +1,16 @@
+ITD
+#NOMBRE DE VAGUES
+vagues 20
+
+
+#VAGUES (nombre, vitesse, type de l'ennemi)
+
+level_1 5 1 1
+level_2 10 1 1
+
+
+
+
+
+
+

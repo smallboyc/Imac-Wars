@@ -53,7 +53,7 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    i += 0.1f * elapsedTime;
+    i += michel.speed * elapsedTime;
 
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
@@ -71,20 +71,8 @@ void App::render()
 
     glLoadIdentity();
 
-    glPushMatrix();
     map.load_MAP();
-    glPopMatrix();
-    // Apply translation based on updated position
-    // if (i < 0.3f)
-    // {
-    //     glTranslatef(-i, 0, 0);
-    //     michel.pos.x -= i / 10;
-    // }
-    // else
-    // {
-    //     glTranslatef(-0.3f, 0, 0);
-    // }
-    // std::cout << (int)(michel.pos.x) << ":" << michel.pos.y << std::endl;
+
     if (!michel.isDead)
         michel.action(map, i);
 

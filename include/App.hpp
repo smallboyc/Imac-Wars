@@ -29,13 +29,12 @@ private:
     int _height{};
     double _previousTime{};
     float _viewSize{};
-
+    const double elapsedTime{};
     // Add your variables here
     Map map;
     Node node;
     GLuint _texture{};
     float i{0};
-    float j{0};
     float _angle{};
 
     SimpleText TextRenderer{};

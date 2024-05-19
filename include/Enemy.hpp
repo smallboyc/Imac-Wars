@@ -11,7 +11,7 @@ struct Enemy
 {
     glm::vec2 spawn;
     glm::vec2 pos;
-    glm::vec2 speed;
+    float speed;
     GLuint texture;
     bool isDead{false};
     void set(Map &map);
