@@ -108,7 +108,7 @@ void Map::create_GRAPH_from_NODES()
 void Map::get_SHORTER_PATH_from_dijkstra()
 {
     int start{0};
-    int end{12};
+    int end{6};
     std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(start, end)};
     std::vector<int> SHORTER_PATH_ID;
     auto finalEdge{DISTANCES.at(end)};

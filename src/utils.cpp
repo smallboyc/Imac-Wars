@@ -140,6 +140,40 @@ void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
+void draw_quad(float &x, float &y, Map &map)
+{
+    glEnable(GL_TEXTURE_2D);
+    for (Pixel &pixel : map.PIXELS)
+    {
+        // Si on trouve un pixel à la position de notre cible et que la zone est constructible, on set le G et on break
+        if (pixel.x == x && pixel.y == y && pixel.is_VOID)
+        {
+            glColor4ub(0, 255, 0, 128);
+            break;
+        } // Si la zone n'est pas constructible, on set le R
+        else
+            glColor4ub(255, 0, 0, 128);
+    }
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (-map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 0);
+    glVertex2f((map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (-map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 1);
+    glVertex2f((map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(0, 1);
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glEnd();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void drawOrigin()
 {
     glPointSize(10);

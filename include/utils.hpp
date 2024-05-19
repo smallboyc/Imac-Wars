@@ -66,5 +66,6 @@ void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map);
+void draw_quad(float &x, float &y, Map &map);
 
 void drawOrigin();

@@ -11,8 +11,10 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 #include "Enemy.hpp"
+#include "UI.hpp"
 
 Enemy michel;
+UI interface;
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
@@ -73,8 +75,13 @@ void App::render()
 
     map.load_MAP();
 
+    glPushMatrix();
     if (!michel.isDead)
         michel.action(map, i);
+    glPopMatrix();
+
+    if (interface.SHOW_TARGETED_CELL)
+        draw_quad(interface.x, interface.y, map);
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width / 2, 20, SimpleText::CENTER);
@@ -94,11 +101,35 @@ void App::render()
     TextRenderer.Render();
 }
 
-void App::key_callback(int /*key*/, int /*scancode*/, int /*action*/, int /*mods*/)
+void App::key_callback(int key, int scancode, int action, int mods)
 {
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+    {
+        interface.SHOW_TARGETED_CELL = !interface.SHOW_TARGETED_CELL;
+    }
+
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT) && interface.SHOW_TARGETED_CELL)
+    {
+        if (key == GLFW_KEY_UP)
+        {
+            interface.y++;
+        }
+        else if (key == GLFW_KEY_DOWN)
+        {
+            interface.y--;
+        }
+        else if (key == GLFW_KEY_LEFT)
+        {
+            interface.x--;
+        }
+        else if (key == GLFW_KEY_RIGHT)
+        {
+            interface.x++;
+        }
+    }
 }
 
-void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
+void App::mouse_button_callback(int button, int action, int mods)
 {
 }
 
@@ -106,7 +137,7 @@ void App::scroll_callback(double /*xoffset*/, double /*yoffset*/)
 {
 }
 
-void App::cursor_position_callback(double /*xpos*/, double /*ypos*/)
+void App::cursor_position_callback(double xpos, double ypos)
 {
 }
 
