@@ -112,13 +112,13 @@ void Map::get_SHORTER_PATH_from_dijkstra()
     std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(start, end)};
     std::vector<int> SHORTER_PATH_ID;
     auto finalEdge{DISTANCES.at(end)};
-    std::cout << "Distance minimale : " << finalEdge.first << std::endl;
-    std::cout << end << " -> ";
+    // std::cout << "Distance minimale : " << finalEdge.first << std::endl;
+    // std::cout << end << " -> ";
     SHORTER_PATH_ID.push_back(end);
     while (finalEdge.second != start)
     {
         SHORTER_PATH_ID.push_back(finalEdge.second);
-        std::cout << finalEdge.second << " -> ";
+        // std::cout << finalEdge.second << " -> ";
         finalEdge = DISTANCES.at(finalEdge.second);
     }
     SHORTER_PATH_ID.push_back(start);
@@ -130,7 +130,7 @@ void Map::get_SHORTER_PATH_from_dijkstra()
             if (node.id == shorter_node_id)
                 this->SHORTER_PATH.push_back(node);
     }
-    std::cout << start << std::endl;
+    // std::cout << start << std::endl;
 }
 
 // 4) Génère le SCHEMA référencé

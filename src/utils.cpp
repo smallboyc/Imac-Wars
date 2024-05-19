@@ -114,7 +114,7 @@ void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
         TILE_path_list.push_back("images/Tiles/tile_0087.png");
 }
 
-// Dessin un sprite à la position (x,y) sur une map
+// Dessine une texture à la position (x,y) sur une map
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
 {
     glEnable(GL_TEXTURE_2D);
@@ -140,9 +140,48 @@ void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
+void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float health)
+{
+
+    // BARRE DE VIE
+    glColor3ub(255, 0, 0); // Couleur rouge pour la barre de vie
+    glPushMatrix();
+    glLineWidth(5);
+    glBegin(GL_LINES);
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE + 0.01);          // Coin supérieur gauche
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE + health, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE + 0.01); // Coin supérieur droit
+    glEnd();
+    glPopMatrix();
+
+    // TEXTURE
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3ub(255, 255, 255);
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (-map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 0);
+    glVertex2f((map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (-map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 1);
+    glVertex2f((map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(0, 1);
+    glVertex2f((-map.SEMI_MAP_SIZE + x) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE, (map.SEMI_MAP_SIZE + y) / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE);
+
+    glEnd();
+    glPopMatrix();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void draw_quad(float &x, float &y, Map &map)
 {
     glEnable(GL_TEXTURE_2D);
+
     for (Pixel &pixel : map.PIXELS)
     {
         // Si on trouve un pixel à la position de notre cible et que la zone est constructible, on set le G et on break
@@ -174,15 +213,7 @@ void draw_quad(float &x, float &y, Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
-void drawOrigin()
+bool is_inside_MAP(float &x, float &y, Map &map)
 {
-    glPointSize(10);
-    glBegin(GL_LINES);
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2d(0, 0);
-    glVertex2d(1, 0);
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex2d(0, 0);
-    glVertex2d(0, 1);
-    glEnd();
+    return (x >= 0 && x < map.NUMBER_OF_PIXELS_IN_LINE && y >= 0 && y < map.NUMBER_OF_PIXELS_IN_LINE);
 }

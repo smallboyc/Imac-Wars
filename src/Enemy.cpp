@@ -13,12 +13,13 @@ void Enemy::set(Map &map)
     this->spawn.y = map.SHORTER_PATH[0].pixel.y;
     this->pos.x = this->spawn.x;
     this->pos.y = this->spawn.y;
+    this->health = 0.1f;
     this->speed = 0.1f;
     this->texture = loadTexture(img::load(make_absolute_path("images/Tiles/tile_0024.png", true), 4, true));
 }
 
-// Active l'ennemi
-void Enemy::action(Map &map, float &i)
+// On fait avancer l'ennemi
+void Enemy::move(Map &map, float &i)
 {
     static int target_index{1}; // on l'incrément à chaque appel => static ne le def qu'une fois.
     // target_node = le prochain noeud que l'on veut atteindre
@@ -73,9 +74,16 @@ void Enemy::action(Map &map, float &i)
         }
     }
 
+    draw_enemy(this->texture, this->spawn.x, this->spawn.y, map, this->health);
+}
+
+//Mise à jour de l'état de l'ennemi
+void Enemy::update_state(Map &map)
+{
     // Si l'ennemi atteint sa cible = sacrifice
     if (this->spawn.x == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.x && this->spawn.y == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.y)
         this->isDead = true;
-
-    draw_quad_with_texture(this->texture, this->spawn.x, this->spawn.y, map);
+    // Si l'ennemi perd toute sa barre de vie
+    if (this->health <= 0.01f)
+        this->isDead = true;
 }

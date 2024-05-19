@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <img/img.hpp>
+#include <memory>
 #include <sstream>
 
 #include "App.hpp"
@@ -30,7 +31,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
     map.set_PIXELS_connected();
     map.get_TILES_from_PIXELS();
     map.render_TILES_texture();
-    map.display_SHORTER_PATH();
+    // map.display_SHORTER_PATH();
 
     // ENEMY
     michel.set(map);
@@ -77,20 +78,22 @@ void App::render()
 
     glPushMatrix();
     if (!michel.isDead)
-        michel.action(map, i);
+    {
+        michel.move(map, i);
+        michel.update_state(map);
+    }
+
     glPopMatrix();
 
-    if (interface.SHOW_TARGETED_CELL)
-        draw_quad(interface.x, interface.y, map);
+    interface.enabled(map);
 
     // Text zone
-    // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width / 2, 20, SimpleText::CENTER);
+    // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width, 20, SimpleText::CENTER);
 
     // // Without set precision
-    // const std::string angle_label_text { "Angle: " + std::to_string(_angle) };
+    // const std::string angle_label_text{"Angle: " + std::to_string(_angle)};
 
     // // Using stringstream to format the string with fixed precision
-    // std::string angle_label_text{};
     // std::stringstream stream{};
     // stream << std::fixed << "Angle: " << std::setprecision(2) << _angle;
     // stream << std::fixed << "MAP : " << map.NUMBER_OF_PIXELS_IN_LINE << " X " << map.NUMBER_OF_PIXELS_IN_LINE << " PIXELS";
@@ -98,7 +101,7 @@ void App::render()
 
     // TextRenderer.Label(angle_label_text.c_str(), _width / 2, _height - 4, SimpleText::CENTER);
 
-    TextRenderer.Render();
+    // TextRenderer.Render();
 }
 
 void App::key_callback(int key, int scancode, int action, int mods)
@@ -107,25 +110,25 @@ void App::key_callback(int key, int scancode, int action, int mods)
     {
         interface.SHOW_TARGETED_CELL = !interface.SHOW_TARGETED_CELL;
     }
+    if (key == GLFW_KEY_W && action == GLFW_PRESS)
+    {
+        michel.health -= 0.01;
+    }
 
     if ((action == GLFW_PRESS || action == GLFW_REPEAT) && interface.SHOW_TARGETED_CELL)
     {
-        if (key == GLFW_KEY_UP)
-        {
+        float top_neighbour{interface.y + 1};
+        float bottom_neighbour{interface.y - 1};
+        float right_neighbour{interface.x + 1};
+        float left_neighbour{interface.x - 1};
+        if (key == GLFW_KEY_UP && is_inside_MAP(interface.x, top_neighbour, map))
             interface.y++;
-        }
-        else if (key == GLFW_KEY_DOWN)
-        {
+        if (key == GLFW_KEY_DOWN && is_inside_MAP(interface.x, bottom_neighbour, map))
             interface.y--;
-        }
-        else if (key == GLFW_KEY_LEFT)
-        {
+        if (key == GLFW_KEY_LEFT && is_inside_MAP(left_neighbour, interface.y, map))
             interface.x--;
-        }
-        else if (key == GLFW_KEY_RIGHT)
-        {
+        if (key == GLFW_KEY_RIGHT && is_inside_MAP(right_neighbour, interface.y, map))
             interface.x++;
-        }
     }
 }
 
@@ -145,7 +148,6 @@ void App::size_callback(int width, int height)
 {
     _width = width;
     _height = height;
-
     // make sure the viewport matches the new window dimensions
     glViewport(0, 0, _width, _height);
 
