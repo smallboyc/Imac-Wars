@@ -15,6 +15,7 @@
 #include "UI.hpp"
 
 Enemy michel;
+Enemy jean;
 UI interface;
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
@@ -35,6 +36,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
 
     // ENEMY
     michel.set(map);
+    jean.set(map);
 }
 
 void App::setup()
@@ -56,7 +58,15 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    i += michel.speed * elapsedTime;
+    // i += michel.speed * elapsedTime;
+    michel.travel += michel.speed * elapsedTime;
+    michel.update_state(map);
+
+    if (currentTime >= 2)
+    {
+        jean.travel += jean.speed * elapsedTime;
+        jean.update_state(map);
+    }
 
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
@@ -74,17 +84,22 @@ void App::render()
 
     glLoadIdentity();
 
+    // MAP
     map.load_MAP();
 
+    // Enemi michel
     glPushMatrix();
     if (!michel.isDead)
-    {
-        michel.move(map, i);
-        michel.update_state(map);
-    }
-
+        michel.move(map);
+    glPopMatrix();
+    
+    // Enemi jean
+    glPushMatrix();
+    if (!jean.isDead)
+        jean.move(map);
     glPopMatrix();
 
+    // UI
     interface.enabled(map);
 
     // Text zone

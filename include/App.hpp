@@ -29,7 +29,6 @@ private:
     int _height{};
     double _previousTime{};
     float _viewSize{};
-    const double elapsedTime{};
     // Add your variables here
     Map map;
     Node node;
