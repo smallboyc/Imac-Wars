@@ -9,16 +9,18 @@
 
 struct Enemy
 {
-    glm::vec2 spawn;
-    glm::vec2 pos;
-    float health;
-    float speed;
-    float travel;
-    int target_node_index;
+    glm::vec2 current;     // position actuel de l'ennemi
+    glm::vec2 pos;         // position relative de l'ennemi
+    float health;          // Point de vie
+    float speed;           // Vitesse
+    float travel;          // Trajet parcouru d'un noeud à l'autre => utilise elapsedTime
+    float TIME;            // elapsedTime
+    int target_node_index; // Index du prochain noeud à atteindre
     GLuint texture;
     std::unordered_map<std::string, GLuint> textures;
     bool isDead{false};
     void set(Map &map);
     void move(Map &map);
-    void update_state(Map &map);
+    void update_state(Map &map, const double &elapsedTime);
+    void display_position();
 };

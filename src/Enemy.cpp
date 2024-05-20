@@ -9,10 +9,10 @@
 // Set l'ennemi : dans App::App()
 void Enemy::set(Map &map)
 {
-    this->spawn.x = map.SHORTER_PATH[0].pixel.x;
-    this->spawn.y = map.SHORTER_PATH[0].pixel.y;
-    this->pos.x = this->spawn.x;
-    this->pos.y = this->spawn.y;
+    this->current.x = map.SHORTER_PATH[0].pixel.x;
+    this->current.y = map.SHORTER_PATH[0].pixel.y;
+    this->pos.x = this->current.x;
+    this->pos.y = this->current.y;
     this->health = 0.1f;
     this->speed = 0.1f;
     this->travel = 0.0f;
@@ -30,14 +30,14 @@ void Enemy::move(Map &map)
 {
     // target_node = le prochain noeud que l'on veut atteindre
     glm::vec2 target_node{map.SHORTER_PATH[this->target_node_index].pixel.x, map.SHORTER_PATH[this->target_node_index].pixel.y};
-    float distance_x = (target_node.x - this->spawn.x) / map.NUMBER_OF_PIXELS_IN_LINE;
-    float distance_y = (target_node.y - this->spawn.y) / map.NUMBER_OF_PIXELS_IN_LINE;
+    float distance_x = (target_node.x - this->current.x) / map.NUMBER_OF_PIXELS_IN_LINE;
+    float distance_y = (target_node.y - this->current.y) / map.NUMBER_OF_PIXELS_IN_LINE;
 
     // Mouvement positif / négatif pour x & y
-    float step_x = (target_node.x > this->spawn.x) ? 1.0f : (target_node.x < this->spawn.x) ? -1.0f
-                                                                                            : 0.0f;
-    float step_y = (target_node.y > this->spawn.y) ? 1.0f : (target_node.y < this->spawn.y) ? -1.0f
-                                                                                            : 0.0f;
+    float step_x = (target_node.x > this->current.x) ? 1.0f : (target_node.x < this->current.x) ? -1.0f
+                                                                                                : 0.0f;
+    float step_y = (target_node.y > this->current.y) ? 1.0f : (target_node.y < this->current.y) ? -1.0f
+                                                                                                : 0.0f;
 
     // Orientation des textures
     if (step_x == -1.0f)
@@ -49,47 +49,57 @@ void Enemy::move(Map &map)
     else if (step_y == 1.0f)
         this->texture = this->textures["top"];
 
-    if (abs(this->spawn.x - target_node.x) > abs(this->spawn.y - target_node.y))
+    if (abs(this->current.x - target_node.x) > abs(this->current.y - target_node.y)) // parcours selon x
     {
-        if (this->travel <= abs(distance_x))
+        if (this->travel <= abs(distance_x)) // tant que le trajet n'est pas terminé
         {
-            glTranslatef(step_x * this->travel, 0, 0);
-            this->pos.x += step_x * (this->travel / map.NUMBER_OF_PIXELS_IN_LINE);
+            glTranslatef(step_x * this->travel, 0, 0);                                       // déplacement selon des coordonnées normalisées (CN)
+            this->pos.x += step_x * this->TIME * this->speed * map.NUMBER_OF_PIXELS_IN_LINE; // Position relative x
         }
-        else
+        else // On est arrivé au noeud ciblé
         {
-            this->spawn.x = target_node.x;
-            // std::cout << this->spawn.x << ":" << this->spawn.y << std::endl;
-            this->travel = 0;
-            this->target_node_index++;
+            this->current.x = target_node.x; // la cible atteinte devient notre nouvelle référence
+            // std::cout << this->current.x << ":" << this->current.y << std::endl;
+            this->travel = 0;          // le trajet est terminé, on en recommence un nouveau
+            this->target_node_index++; // on change de cible
         }
     }
-    else
+    else // parcours selon y
     {
-        if (this->travel <= abs(distance_y))
+        if (this->travel <= abs(distance_y)) // tant que le trajet n'est pas terminé
         {
             glTranslatef(0, step_y * this->travel, 0);
-            this->pos.y += step_y * (this->travel / map.NUMBER_OF_PIXELS_IN_LINE);
+            this->pos.y += step_y * this->TIME * this->speed * map.NUMBER_OF_PIXELS_IN_LINE; // Position relative y
         }
-        else
+        else // On est arrivé au noeud ciblé
         {
-            this->spawn.y = target_node.y;
-            // std::cout << this->spawn.x << ":" << this->spawn.y << std::endl;
+            this->current.y = target_node.y;
+            // std::cout << this->current.x << ":" << this->current.y << std::endl;
             this->travel = 0;
             this->target_node_index++;
         }
     }
 
-    draw_enemy(this->texture, this->spawn.x, this->spawn.y, map, this->health);
+    draw_enemy(this->texture, this->current.x, this->current.y, map, this->health);
 }
 
 // Mise à jour de l'état de l'ennemi
-void Enemy::update_state(Map &map)
+void Enemy::update_state(Map &map, const double &elapsedTime)
 {
+    this->TIME = elapsedTime;
+    
+    // Mise à jour du trajet d'un noeud à l'autre
+    this->travel += this->speed * this->TIME;
+
     // Si l'ennemi atteint sa cible = sacrifice
-    if (this->spawn.x == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.x && this->spawn.y == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.y)
+    if (this->current.x == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.x && this->current.y == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.y)
         this->isDead = true;
     // Si l'ennemi perd toute sa barre de vie
     if (this->health <= 0.01f)
         this->isDead = true;
+}
+
+void Enemy::display_position()
+{
+    std::cout << "(" << static_cast<int>(std::round(this->pos.x)) << " : " << static_cast<int>(std::round(this->pos.y)) << ")" << std::endl;
 }
