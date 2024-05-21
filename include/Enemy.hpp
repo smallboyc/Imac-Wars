@@ -13,13 +13,14 @@ struct Enemy
     glm::vec2 pos;         // position relative de l'ennemi
     float health;          // Point de vie
     float speed;           // Vitesse
+    int path{0};           // Chemin suivi par l'ennemi = id (déterminé par le plus court chemin)
     float travel;          // Trajet parcouru d'un noeud à l'autre => utilise elapsedTime
     float TIME;            // elapsedTime
     int target_node_index; // Index du prochain noeud à atteindre
     GLuint texture;
     std::unordered_map<std::string, GLuint> textures;
     bool isDead{false};
-    void set(Map &map);
+    void set(Map &map, int const &path);
     void move(Map &map);
     void update_state(Map &map, const double &elapsedTime);
     void display_position();

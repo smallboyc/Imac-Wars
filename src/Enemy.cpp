@@ -7,10 +7,11 @@
 #include "utils.hpp"
 
 // Set l'ennemi : dans App::App()
-void Enemy::set(Map &map)
+void Enemy::set(Map &map, int const &path)
 {
-    this->current.x = map.SHORTER_PATH[0].pixel.x;
-    this->current.y = map.SHORTER_PATH[0].pixel.y;
+    this->path = path;
+    this->current.x = map.SHORTER_PATH_LIST[path][0].pixel.x;
+    this->current.y = map.SHORTER_PATH_LIST[path][0].pixel.y;
     this->pos.x = this->current.x;
     this->pos.y = this->current.y;
     this->health = 0.1f;
@@ -29,7 +30,7 @@ void Enemy::set(Map &map)
 void Enemy::move(Map &map)
 {
     // target_node = le prochain noeud que l'on veut atteindre
-    glm::vec2 target_node{map.SHORTER_PATH[this->target_node_index].pixel.x, map.SHORTER_PATH[this->target_node_index].pixel.y};
+    glm::vec2 target_node{map.SHORTER_PATH_LIST[this->path][this->target_node_index].pixel.x, map.SHORTER_PATH_LIST[this->path][this->target_node_index].pixel.y};
     float distance_x = (target_node.x - this->current.x) / map.NUMBER_OF_PIXELS_IN_LINE;
     float distance_y = (target_node.y - this->current.y) / map.NUMBER_OF_PIXELS_IN_LINE;
 
@@ -87,12 +88,12 @@ void Enemy::move(Map &map)
 void Enemy::update_state(Map &map, const double &elapsedTime)
 {
     this->TIME = elapsedTime;
-    
+
     // Mise à jour du trajet d'un noeud à l'autre
     this->travel += this->speed * this->TIME;
 
     // Si l'ennemi atteint sa cible = sacrifice
-    if (this->current.x == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.x && this->current.y == map.SHORTER_PATH[map.SHORTER_PATH.size() - 1].pixel.y)
+    if (this->current.x == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.x && this->current.y == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.y)
         this->isDead = true;
     // Si l'ennemi perd toute sa barre de vie
     if (this->health <= 0.01f)

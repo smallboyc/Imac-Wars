@@ -104,33 +104,47 @@ void Map::create_GRAPH_from_NODES()
                 }
 }
 
-// 3) Détermine le plus court chemin du GRAPH
-void Map::get_SHORTER_PATH_from_dijkstra()
+// 3) Détermine tous les plus courts chemins du GRAPH en les stockant dans un vector
+void Map::get_SHORTER_PATH_LIST()
 {
-    int start{0};
-    int end{6};
-    std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(start, end)};
-    std::vector<int> SHORTER_PATH_ID;
-    auto finalEdge{DISTANCES.at(end)};
-    // std::cout << "Distance minimale : " << finalEdge.first << std::endl;
-    // std::cout << end << " -> ";
-    SHORTER_PATH_ID.push_back(end);
-    while (finalEdge.second != start)
-    {
-        SHORTER_PATH_ID.push_back(finalEdge.second);
-        // std::cout << finalEdge.second << " -> ";
-        finalEdge = DISTANCES.at(finalEdge.second);
-    }
-    SHORTER_PATH_ID.push_back(start);
+    std::vector<int> END_POINTS;
+    int START_POINT{0};
 
-    // Du tableau d'id, on en déduit les nodes composants le chemin le plus court dans l'ordre.
-    for (int shorter_node_id : SHORTER_PATH_ID)
+    for (Node &node : this->NODES)
     {
-        for (Node &node : this->NODES)
-            if (node.id == shorter_node_id)
-                this->SHORTER_PATH.push_back(node);
+        // On va chercher les END POINTS
+        if (node.connected_to.empty())
+            END_POINTS.push_back(node.id);
     }
-    // std::cout << start << std::endl;
+
+    // Pour chaque END POINTS, on leur attribue un plus court chemin par rapport à l'entrée
+    for (int end_point : END_POINTS)
+    {
+        std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(START_POINT, end_point)};
+        std::vector<int> SHORTER_PATH_ID;
+        std::vector<Node> SHORTER_PATH;
+        auto finalEdge{DISTANCES.at(end_point)};
+        // std::cout << "Distance minimale : " << finalEdge.first << std::endl;
+        // std::cout << end << " -> ";
+        SHORTER_PATH_ID.push_back(end_point);
+        while (finalEdge.second != START_POINT)
+        {
+            SHORTER_PATH_ID.push_back(finalEdge.second);
+            // std::cout << finalEdge.second << " -> ";
+            finalEdge = DISTANCES.at(finalEdge.second);
+        }
+        SHORTER_PATH_ID.push_back(START_POINT);
+
+        // Du tableau d'id, on en déduit les nodes composants le chemin le plus court dans l'ordre.
+        for (int shorter_node_id : SHORTER_PATH_ID)
+        {
+            for (Node &node : this->NODES)
+                if (node.id == shorter_node_id)
+                    SHORTER_PATH.push_back(node);
+        }
+        this->SHORTER_PATH_LIST.push_back(SHORTER_PATH);
+        // std::cout << start << std::endl;
+    }
 }
 
 // 4) Génère le SCHEMA référencé
@@ -311,10 +325,12 @@ void Map::display_PIXELS_informations()
     }
 }
 
+// Affiche tous les plus courts chemins
 void Map::display_SHORTER_PATH()
 {
-    for (Node &node : this->SHORTER_PATH)
-        std::cout << node.id << " : (" << node.pixel.x << "," << node.pixel.y << ")" << std::endl;
+    for (auto &shorter_path : this->SHORTER_PATH_LIST)
+        for (Node &node : shorter_path)
+            std::cout << node.id << " : (" << node.pixel.x << "," << node.pixel.y << ")" << std::endl;
 }
 
 // BONUS!! (Pas terminé)

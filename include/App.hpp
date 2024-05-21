@@ -6,6 +6,7 @@
 #include "utils.hpp"
 #include <vector>
 #include "Enemy.hpp"
+#include "Game.hpp"
 
 class App
 {
@@ -29,11 +30,8 @@ private:
     int _height{};
     double _previousTime{};
     float _viewSize{};
-    // Add your variables here
-    Map map;
-    Node node;
-    GLuint _texture{};
-    float i{0};
+
+    Game::TowerDefense TD;
     float _angle{};
 
     SimpleText TextRenderer{};

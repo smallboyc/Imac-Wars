@@ -1,16 +1,9 @@
 ITD
-#NOMBRE DE VAGUES
-vagues 20
+#NOMBRE D'ENNEMIS
+Enemies 3
 
 
-#VAGUES (nombre, vitesse, type de l'ennemi)
-
-level_1 5 1 1
-level_2 10 1 1
-
-
-
-
-
-
-
+#ENEMIES (id, health, speed, damage)
+type 0 10 1 5
+type 1 14 1 3
+type 2 12 2 4

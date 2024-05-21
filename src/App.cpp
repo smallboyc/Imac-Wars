@@ -15,28 +15,18 @@
 #include "UI.hpp"
 
 Enemy michel;
-// Enemy jean;
-UI interface;
+Enemy jean;
 
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
-    // MAP
-    map.NUMBER_OF_PIXELS_IN_LINE = 10;
-    map.schema_file = "map_schema_10x10_V4";
-    map.get_NODES_from_ITD();
-    map.create_GRAPH_from_NODES();
-    map.get_SHORTER_PATH_from_dijkstra();
-    map.generate_SCHEMA();
-    map.get_PIXELS_from_SCHEMA();
-    map.set_PIXELS_type();
-    map.set_PIXELS_connected();
-    map.get_TILES_from_PIXELS();
-    map.render_TILES_texture();
-    // map.display_SHORTER_PATH();
+    TD.setup_MAP();
 
-    // ENEMY
-    michel.set(map);
-    // jean.set(map);
+    // ENEMY MICHEL
+    michel.set(TD.map, 0);
+
+    // ENEMY JEAN
+    jean.set(TD.map, 1);
+    jean.speed = 0.2f;
 }
 
 void App::setup()
@@ -58,14 +48,14 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    michel.update_state(map, elapsedTime);
-    michel.display_position();
+    michel.update_state(TD.map, elapsedTime);
+    // michel.display_position();
 
-    // if (currentTime >= 2)
-    // {
-    //     jean.update_state(map, elapsedTime);
-    //     jean.display_position();
-    // }
+    if (currentTime >= 2)
+    {
+        jean.update_state(TD.map, elapsedTime);
+        // jean.display_position();
+    }
 
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
@@ -83,23 +73,21 @@ void App::render()
 
     glLoadIdentity();
 
-    // MAP
-    map.load_MAP();
+    TD.render_MAP();
+    TD.active_UI();
 
     // Enemy michel
     glPushMatrix();
     if (!michel.isDead)
-        michel.move(map);
+        michel.move(TD.map);
     glPopMatrix();
 
     // Enemy jean
-    // glPushMatrix();
-    // if (!jean.isDead)
-    //     jean.move(map);
-    // glPopMatrix();
+    glPushMatrix();
+    if (!jean.isDead)
+        jean.move(TD.map);
+    glPopMatrix();
 
-    // UI
-    interface.enabled(map);
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width, 20, SimpleText::CENTER);
@@ -122,27 +110,27 @@ void App::key_callback(int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_Q && action == GLFW_PRESS)
     {
-        interface.SHOW_TARGETED_CELL = !interface.SHOW_TARGETED_CELL;
+        TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
     }
     if (key == GLFW_KEY_W && action == GLFW_PRESS)
     {
         michel.health -= 0.01;
     }
 
-    if ((action == GLFW_PRESS || action == GLFW_REPEAT) && interface.SHOW_TARGETED_CELL)
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT) && TD.ui.SHOW_TARGETED_CELL)
     {
-        float top_neighbour{interface.y + 1};
-        float bottom_neighbour{interface.y - 1};
-        float right_neighbour{interface.x + 1};
-        float left_neighbour{interface.x - 1};
-        if (key == GLFW_KEY_UP && is_inside_MAP(interface.x, top_neighbour, map))
-            interface.y++;
-        if (key == GLFW_KEY_DOWN && is_inside_MAP(interface.x, bottom_neighbour, map))
-            interface.y--;
-        if (key == GLFW_KEY_LEFT && is_inside_MAP(left_neighbour, interface.y, map))
-            interface.x--;
-        if (key == GLFW_KEY_RIGHT && is_inside_MAP(right_neighbour, interface.y, map))
-            interface.x++;
+        float top_neighbour{TD.ui.y + 1};
+        float bottom_neighbour{TD.ui.y - 1};
+        float right_neighbour{TD.ui.x + 1};
+        float left_neighbour{TD.ui.x - 1};
+        if (key == GLFW_KEY_UP && is_inside_MAP(TD.ui.x, top_neighbour, TD.map))
+            TD.ui.y++;
+        if (key == GLFW_KEY_DOWN && is_inside_MAP(TD.ui.x, bottom_neighbour, TD.map))
+            TD.ui.y--;
+        if (key == GLFW_KEY_LEFT && is_inside_MAP(left_neighbour, TD.ui.y, TD.map))
+            TD.ui.x--;
+        if (key == GLFW_KEY_RIGHT && is_inside_MAP(right_neighbour, TD.ui.y, TD.map))
+            TD.ui.x++;
     }
 }
 
