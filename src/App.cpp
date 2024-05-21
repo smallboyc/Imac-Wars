@@ -21,7 +21,8 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     TD.setup_MAP();
     TD.get_ENEMIES_from_ITD();
-    std::cout << TD.Enemies.size() << std::endl;
+    TD.get_WAVES_from_ITD();
+    TD.set_WAVE();
 
     // ENEMY MICHEL
     michel.set(TD.map, 0);

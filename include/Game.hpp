@@ -18,6 +18,7 @@ namespace Game
     {
         Map map;
         UI ui;
+        int current_wave_id{0};
         std::vector<Wave> Waves;
         std::vector<Enemy> Enemies;
         void setup_MAP();
@@ -25,5 +26,6 @@ namespace Game
         void active_UI();
         void get_WAVES_from_ITD();
         void get_ENEMIES_from_ITD();
+        void set_WAVE();
     };
 }

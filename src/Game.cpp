@@ -66,3 +66,52 @@ void Game::TowerDefense::get_ENEMIES_from_ITD()
     }
     inputFile.close();
 }
+
+void Game::TowerDefense::get_WAVES_from_ITD()
+{
+    std::ifstream inputFile("../../data/wave.itd");
+    std::string line;
+
+    while (getline(inputFile, line))
+    {
+        if (line.find("level") != std::string::npos)
+        {
+            std::istringstream iss(line);
+            std::string level;
+            std::vector<float> numbers;
+
+            iss >> level;
+
+            float number;
+            while (iss >> number)
+                numbers.push_back(number);
+
+            Wave new_wave;
+            new_wave.level = static_cast<int>(numbers[0]);
+            new_wave.number_of_ENDPOINTS = numbers[1];
+            new_wave.number_of_ENEMIES = numbers[2];
+            for (size_t i{3}; i < numbers.size(); i++)
+                new_wave.ENEMIES_type.push_back(numbers[i]);
+            this->Waves.push_back(new_wave);
+        }
+    }
+    inputFile.close();
+}
+
+void Game::TowerDefense::set_WAVE()
+{
+    Wave current_wave;
+    for (Wave &wave : this->Waves)
+    {
+        if (this->current_wave_id == wave.level)
+        {
+            current_wave = wave;
+            break;
+        }
+    }
+
+    // for (int i{0}; i < current_wave.ENEMIES_number; i++)
+    // {
+
+    // }
+}
