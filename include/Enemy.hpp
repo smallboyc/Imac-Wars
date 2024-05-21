@@ -9,10 +9,12 @@
 
 struct Enemy
 {
+    int type{0};
     glm::vec2 current;     // position actuel de l'ennemi
     glm::vec2 pos;         // position relative de l'ennemi
     float health;          // Point de vie
     float speed;           // Vitesse
+    float damage;          // Dégats
     int path{0};           // Chemin suivi par l'ennemi = id (déterminé par le plus court chemin)
     float travel;          // Trajet parcouru d'un noeud à l'autre => utilise elapsedTime
     float TIME;            // elapsedTime

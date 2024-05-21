@@ -20,6 +20,8 @@ Enemy jean;
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     TD.setup_MAP();
+    TD.get_ENEMIES_from_ITD();
+    std::cout << TD.Enemies.size() << std::endl;
 
     // ENEMY MICHEL
     michel.set(TD.map, 0);
@@ -32,7 +34,7 @@ App::App() : _previousTime(0.0), _viewSize(2.0)
 void App::setup()
 {
     // Set the clear color to a nice blue
-    glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.24f, 1.0f);
 
     // Setup the text renderer with blending enabled and white text color
     TextRenderer.ResetFont();
@@ -87,7 +89,6 @@ void App::render()
     if (!jean.isDead)
         jean.move(TD.map);
     glPopMatrix();
-
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width, 20, SimpleText::CENTER);

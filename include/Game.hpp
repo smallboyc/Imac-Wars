@@ -23,5 +23,7 @@ namespace Game
         void setup_MAP();
         void render_MAP();
         void active_UI();
+        void get_WAVES_from_ITD();
+        void get_ENEMIES_from_ITD();
     };
 }

@@ -34,3 +34,35 @@ void Game::TowerDefense::active_UI()
 {
     this->ui.enabled(this->map);
 }
+
+void Game::TowerDefense::get_ENEMIES_from_ITD()
+{
+    std::ifstream inputFile("../../data/enemy.itd");
+    std::string line;
+
+    while (getline(inputFile, line))
+    {
+        // Récupération des paramètres des ennemis.
+        if (line.find("type") != std::string::npos)
+        {
+            std::istringstream iss(line);
+            std::string level;
+            std::vector<float> numbers;
+
+            // on zap le premier element (type)
+            iss >> level;
+
+            float number;
+            while (iss >> number)
+                numbers.push_back(number);
+
+            Enemy enemy;
+            enemy.type = static_cast<int>(numbers[0]);
+            enemy.health = numbers[1];
+            enemy.speed = numbers[2];
+            enemy.damage = numbers[3];
+            this->Enemies.push_back(enemy);
+        }
+    }
+    inputFile.close();
+}

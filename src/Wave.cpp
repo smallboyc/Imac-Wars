@@ -18,4 +18,3 @@ void Wave::set_difficulty_from_ITD(int &level)
 {
     this->level = level;
 }
-
