@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <img/img.hpp>
+#include <cstdlib>
+#include <ctime>
 #include <sstream>
 #include <fstream>
 #include <cmath>
@@ -10,6 +12,7 @@
 // include
 #include "Game.hpp"
 
+// Génère la map
 void Game::TowerDefense::setup_MAP()
 {
     this->map.NUMBER_OF_PIXELS_IN_LINE = 10;
@@ -25,16 +28,19 @@ void Game::TowerDefense::setup_MAP()
     this->map.render_TILES_texture();
 }
 
+// Render la map
 void Game::TowerDefense::render_MAP()
 {
     this->map.load_MAP();
 }
 
+// Active l'interface utilisateurs et les infos
 void Game::TowerDefense::active_UI()
 {
     this->ui.enabled(this->map);
 }
 
+// Récupère les données des ennemis depuis l'ITD
 void Game::TowerDefense::get_ENEMIES_from_ITD()
 {
     std::ifstream inputFile("../../data/enemy.itd");
@@ -57,16 +63,16 @@ void Game::TowerDefense::get_ENEMIES_from_ITD()
                 numbers.push_back(number);
 
             Enemy enemy;
-            enemy.type = static_cast<int>(numbers[0]);
-            enemy.health = numbers[1];
-            enemy.speed = numbers[2];
+            enemy.health = numbers[1] / 100;
+            enemy.speed = numbers[2] / 10;
             enemy.damage = numbers[3];
-            this->Enemies.push_back(enemy);
+            this->ENEMIES_ITD.insert({static_cast<int>(numbers[0]), enemy});
         }
     }
     inputFile.close();
 }
 
+// Récupère les données des vagues depuis l'ITD
 void Game::TowerDefense::get_WAVES_from_ITD()
 {
     std::ifstream inputFile("../../data/wave.itd");
@@ -86,32 +92,89 @@ void Game::TowerDefense::get_WAVES_from_ITD()
             while (iss >> number)
                 numbers.push_back(number);
 
-            Wave new_wave;
-            new_wave.level = static_cast<int>(numbers[0]);
-            new_wave.number_of_ENDPOINTS = numbers[1];
-            new_wave.number_of_ENEMIES = numbers[2];
+            Wave wave;
+            wave.number_of_ENDPOINTS = numbers[1];
+            wave.number_of_ENEMIES = numbers[2];
             for (size_t i{3}; i < numbers.size(); i++)
-                new_wave.ENEMIES_type.push_back(numbers[i]);
-            this->Waves.push_back(new_wave);
+                wave.ENEMIES_type.push_back(numbers[i]);
+            this->WAVES_ITD.insert({static_cast<int>(numbers[0]), wave});
         }
     }
     inputFile.close();
 }
 
-void Game::TowerDefense::set_WAVE()
+// Setup la vague
+void Game::TowerDefense::setup_WAVE()
 {
-    Wave current_wave;
-    for (Wave &wave : this->Waves)
+    this->current_WAVE = this->WAVES_ITD.at(this->current_WAVE_id);
+    this->WAVES_checked.push_back(this->current_WAVE_id);
+    std::cout << "Vague " << this->current_WAVE_id << " => " << this->current_WAVE.number_of_ENDPOINTS << " spawns avec " << this->current_WAVE.number_of_ENEMIES << " ennemis " << std::endl;
+}
+
+// Récupère les ennemis de la vague ciblés
+void Game::TowerDefense::get_ENEMIES_into_WAVE()
+{
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    int ENEMY_id{0};
+    for (int i{0}; i < this->current_WAVE.number_of_ENEMIES; i++)
     {
-        if (this->current_wave_id == wave.level)
+        int ENEMY_type;
+        if (this->current_WAVE.ENEMIES_type.size() != 1)
         {
-            current_wave = wave;
-            break;
+            auto min = std::min_element(this->current_WAVE.ENEMIES_type.begin(), this->current_WAVE.ENEMIES_type.end());
+            auto max = std::max_element(this->current_WAVE.ENEMIES_type.begin(), this->current_WAVE.ENEMIES_type.end());
+            ENEMY_type = *min + (std::rand() % (*max - *min + 1));
         }
+        else
+            ENEMY_type = this->current_WAVE.ENEMIES_type[0];
+
+        this->current_ENEMIES.insert({ENEMY_id, this->ENEMIES_ITD.at(ENEMY_type)});
+        ENEMY_id++;
+    }
+}
+
+// Setup des ennemis (textures et attributs)
+void Game::TowerDefense::setup_ENEMIES()
+{
+    for (auto &enemy : this->current_ENEMIES)
+        enemy.second.set(this->map, 1);
+}
+
+// Update la position de l'ennemi en temps réel
+void Game::TowerDefense::update_ENEMIES(const double &elapsedTime)
+{
+    for (auto &enemy : this->current_ENEMIES)
+        enemy.second.update_state(this->map, elapsedTime);
+}
+
+// Affichage de l'ennemi
+void Game::TowerDefense::render_ENEMIES()
+{
+    for (auto &enemy : this->current_ENEMIES)
+    {
+        glPushMatrix();
+        if (!enemy.second.isDead)
+            enemy.second.move(this->map);
+        glPopMatrix();
+    }
+}
+
+// Update des vagues en fonction de l'avancée du jeu
+void Game::TowerDefense::update_WAVE()
+{
+    if (std::find(this->WAVES_checked.begin(), this->WAVES_checked.end(), this->current_WAVE_id) == this->WAVES_checked.end())
+    {
+        setup_WAVE();
+        get_ENEMIES_into_WAVE();
+        setup_ENEMIES();
     }
 
-    // for (int i{0}; i < current_wave.ENEMIES_number; i++)
-    // {
+    // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
+    for (auto &enemy : this->current_ENEMIES)
+        if (enemy.second.isDead)
+            this->current_ENEMIES.erase(enemy.first);
 
-    // }
+    // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
+    if (this->current_ENEMIES.empty())
+        this->current_WAVE_id++;
 }

@@ -13,8 +13,3 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 #include "Wave.hpp"
-
-void Wave::set_difficulty_from_ITD(int &level)
-{
-    this->level = level;
-}

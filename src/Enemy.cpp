@@ -14,8 +14,6 @@ void Enemy::set(Map &map, int const &path)
     this->current.y = map.SHORTER_PATH_LIST[path][0].pixel.y;
     this->pos.x = this->current.x;
     this->pos.y = this->current.y;
-    this->health = 0.1f;
-    this->speed = 0.1f;
     this->travel = 0.0f;
     this->target_node_index = 1;
     // Chargement des textures au set

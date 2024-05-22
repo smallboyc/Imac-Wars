@@ -14,22 +14,14 @@
 #include "Enemy.hpp"
 #include "UI.hpp"
 
-Enemy michel;
-Enemy jean;
-
 App::App() : _previousTime(0.0), _viewSize(2.0)
 {
     TD.setup_MAP();
     TD.get_ENEMIES_from_ITD();
     TD.get_WAVES_from_ITD();
-    TD.set_WAVE();
-
-    // ENEMY MICHEL
-    michel.set(TD.map, 0);
-
-    // ENEMY JEAN
-    jean.set(TD.map, 1);
-    jean.speed = 0.2f;
+    TD.setup_WAVE();
+    TD.get_ENEMIES_into_WAVE();
+    TD.setup_ENEMIES();
 }
 
 void App::setup()
@@ -51,14 +43,8 @@ void App::update()
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
 
-    michel.update_state(TD.map, elapsedTime);
-    // michel.display_position();
-
-    if (currentTime >= 2)
-    {
-        jean.update_state(TD.map, elapsedTime);
-        // jean.display_position();
-    }
+    TD.update_WAVE();
+    TD.update_ENEMIES(elapsedTime);
 
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
@@ -77,19 +63,8 @@ void App::render()
     glLoadIdentity();
 
     TD.render_MAP();
+    TD.render_ENEMIES();
     TD.active_UI();
-
-    // Enemy michel
-    glPushMatrix();
-    if (!michel.isDead)
-        michel.move(TD.map);
-    glPopMatrix();
-
-    // Enemy jean
-    glPushMatrix();
-    if (!jean.isDead)
-        jean.move(TD.map);
-    glPopMatrix();
 
     // Text zone
     // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width, 20, SimpleText::CENTER);
@@ -114,10 +89,10 @@ void App::key_callback(int key, int scancode, int action, int mods)
     {
         TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
     }
-    if (key == GLFW_KEY_W && action == GLFW_PRESS)
-    {
-        michel.health -= 0.01;
-    }
+    // if (key == GLFW_KEY_W && action == GLFW_PRESS)
+    // {
+    //     michel.health -= 0.01;
+    // }
 
     if ((action == GLFW_PRESS || action == GLFW_REPEAT) && TD.ui.SHOW_TARGETED_CELL)
     {
