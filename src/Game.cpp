@@ -136,8 +136,9 @@ void Game::TowerDefense::get_ENEMIES_into_WAVE()
 // Setup des ennemis (textures et attributs)
 void Game::TowerDefense::setup_ENEMIES()
 {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
     for (auto &enemy : this->current_ENEMIES)
-        enemy.second.set(this->map, 1);
+        enemy.second.set(this->map, (std::rand() % this->current_WAVE.number_of_ENDPOINTS));
 }
 
 // Update la position de l'ennemi en temps réel

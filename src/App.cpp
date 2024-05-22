@@ -46,6 +46,7 @@ void App::update()
     TD.update_WAVE();
     TD.update_ENEMIES(elapsedTime);
 
+
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);
 
