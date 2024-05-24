@@ -14,7 +14,7 @@
 #include "Enemy.hpp"
 #include "UI.hpp"
 
-App::App() : _previousTime(0.0), _viewSize(2.0)
+App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     TD.setup_MAP();
     TD.get_ENEMIES_from_ITD();
@@ -45,7 +45,6 @@ void App::update()
 
     TD.update_WAVE();
     TD.update_ENEMIES(elapsedTime);
-
 
     _angle += 10.0f * elapsedTime;
     _angle = std::fmod(_angle, 360.0f);

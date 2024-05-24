@@ -10,9 +10,9 @@
 
 struct Map
 {
-    size_t NUMBER_OF_PIXELS_IN_LINE{10};
-    std::string schema_file{"map_schema_10x10"};
-    img::Image SCHEMA{img::load(make_absolute_path("images/map_schema_10x10_V4.png", true), 3, true)};
+    size_t NUMBER_OF_PIXELS_IN_LINE{15};
+    std::string schema_file{"map_schema_15x15"};
+    img::Image SCHEMA{img::load(make_absolute_path("images/map_schema_15x15.png", true), 3, true)};
     std::vector<Tile> TILES;
     std::vector<Pixel> PIXELS;
     std::vector<Node> NODES;
@@ -35,7 +35,7 @@ struct Map
     // Debug
     void display_PIXELS_informations();
     void display_SHORTER_PATH();
-    
+
     // MAP PARAMETERS (SQUARE)
     float MAP_SIZE{1.f}; // 1.0F <=> 1000px
     float SEMI_MAP_SIZE{MAP_SIZE / 2.0f};

@@ -3,7 +3,9 @@ ITD
 Enemies 3
 
 
-#ENEMIES (id, health, speed, damage)
-type 0 10 1 5
-type 1 14 2 3
-type 2 12 3 4
+#ENEMIES (name, id, health, speed, damage)
+type X-Wing 0 10 1 5
+type Y-Wing 1 14 2 3
+type A-Wing 2 12 1 2
+type Falcon 3 12 3 4
+

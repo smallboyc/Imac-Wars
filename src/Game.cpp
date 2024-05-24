@@ -15,8 +15,8 @@
 // Génère la map
 void Game::TowerDefense::setup_MAP()
 {
-    this->map.NUMBER_OF_PIXELS_IN_LINE = 10;
-    this->map.schema_file = "map_schema_10x10_V4";
+    this->map.NUMBER_OF_PIXELS_IN_LINE = 15;
+    this->map.schema_file = "map_schema_15x15";
     this->map.get_NODES_from_ITD();
     this->map.create_GRAPH_from_NODES();
     this->map.get_SHORTER_PATH_LIST();
@@ -53,16 +53,21 @@ void Game::TowerDefense::get_ENEMIES_from_ITD()
         {
             std::istringstream iss(line);
             std::string level;
+            std::string name;
             std::vector<float> numbers;
 
             // on zap le premier element (type)
             iss >> level;
+
+            // On récupère le nom de l'ennemi
+            iss >> name;
 
             float number;
             while (iss >> number)
                 numbers.push_back(number);
 
             Enemy enemy;
+            enemy.name = name;
             enemy.health = numbers[1] / 100;
             enemy.speed = numbers[2] / 10;
             enemy.damage = numbers[3];

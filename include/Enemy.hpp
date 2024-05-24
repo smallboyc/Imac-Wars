@@ -10,6 +10,7 @@
 struct Enemy
 {
     int type{0};
+    std::string name;
     glm::vec2 current;     // position actuel de l'ennemi
     glm::vec2 pos;         // position relative de l'ennemi
     float health;          // Point de vie

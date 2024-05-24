@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <simpletext.h>
 #include <vector>
+#include <array>
 #include <GLFW/glfw3.h>
 #include "Enemy.hpp"
 #include "Map.hpp"
@@ -17,11 +18,12 @@ void Enemy::set(Map &map, int const &path)
     this->travel = 0.0f;
     this->target_node_index = 1;
     // Chargement des textures au set
-    this->textures["left"] = loadTexture(img::load(make_absolute_path("images/Enemy/enemy_left.png", true), 4, true));
-    this->textures["right"] = loadTexture(img::load(make_absolute_path("images/Enemy/enemy_right.png", true), 4, true));
-    this->textures["bottom"] = loadTexture(img::load(make_absolute_path("images/Enemy/enemy_bottom.png", true), 4, true));
-    this->textures["top"] = loadTexture(img::load(make_absolute_path("images/Enemy/enemy_top.png", true), 4, true));
-    this->texture = this->textures["right"]; // par défaut
+    std::array<std::string, 4> coordinates = {"Left", "Right", "Bottom", "Top"};
+    for (std::string coordinate : coordinates)
+    {
+        std::string path = "images/Enemy/" + this->name + "/" + this->name + "_" + coordinate + ".png";
+        this->textures[coordinate] = loadTexture(img::load(make_absolute_path(path, true), 4, true));
+    }
 }
 
 // On fait avancer l'ennemi
@@ -40,13 +42,13 @@ void Enemy::move(Map &map)
 
     // Orientation des textures
     if (step_x == -1.0f)
-        this->texture = this->textures["left"];
+        this->texture = this->textures["Left"];
     else if (step_x == 1.0f)
-        this->texture = this->textures["right"];
+        this->texture = this->textures["Right"];
     else if (step_y == -1.0f)
-        this->texture = this->textures["bottom"];
+        this->texture = this->textures["Bottom"];
     else if (step_y == 1.0f)
-        this->texture = this->textures["top"];
+        this->texture = this->textures["Top"];
 
     if (abs(this->current.x - target_node.x) > abs(this->current.y - target_node.y)) // parcours selon x
     {
