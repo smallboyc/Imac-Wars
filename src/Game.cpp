@@ -16,11 +16,12 @@
 void Game::TowerDefense::setup_MAP()
 {
     this->map.NUMBER_OF_PIXELS_IN_LINE = 15;
-    this->map.schema_file = "map_schema_15x15";
+    this->map.schema_ITD_file = "map_schema_15x15.itd";
+    this->map.check_order_elements_ITD();
+    this->map.get_SCHEMA_from_ITD();
     this->map.get_NODES_from_ITD();
     this->map.create_GRAPH_from_NODES();
     this->map.get_SHORTER_PATH_LIST();
-    this->map.generate_SCHEMA();
     this->map.get_PIXELS_from_SCHEMA();
     this->map.set_PIXELS_type();
     this->map.set_PIXELS_connected();

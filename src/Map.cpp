@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <array>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <img/img.hpp>
@@ -13,15 +14,94 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
+// #CHECK : Vérifie si les éléments "map", "path", "in", "out", "graph", "node" sont dans l'ordre.
+void Map::check_order_elements_ITD()
+{
+    std::array<std::string, 6> elements{"map", "path", "in", "out", "graph", "node"};
+    // Construct the path to the ITD file
+    std::string ITD_path = "../../data/" + this->schema_ITD_file;
+    std::ifstream inputFile(ITD_path);
+
+    if (!inputFile.is_open())
+    {
+        std::cerr << "ERREUR : Impossible d'ouvrir le fichier : " << ITD_path << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    std::string line;
+    std::vector<std::string> elements_to_check;
+    size_t i = 0;
+
+    while (getline(inputFile, line))
+    {
+        if (i >= elements.size())
+            break;
+
+        if (line.find(elements[i]) != std::string::npos)
+        {
+            std::istringstream iss(line);
+            std::string _type;
+            iss >> _type;
+
+            elements_to_check.push_back(_type);
+            i++;
+        }
+    }
+
+    inputFile.close();
+
+    for (size_t i = 0; i < elements_to_check.size(); i++)
+        if (elements_to_check[i] != elements[i])
+        {
+            std::cerr << "ERREUR - ITD : Les paramètres ne sont pas appelés dans le bon ordre." << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+
+    if (elements_to_check.size() != elements.size())
+    {
+        std::cerr << "ERREUR - ITD : Il manque des paramètres." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}
+
+// Récupère l'image en pixel de la map depuis l'itd
+void Map::get_SCHEMA_from_ITD()
+{
+    std::string ITD_path{"../../data/"};
+    ITD_path += this->schema_ITD_file;
+    std::string IMG_path{"images/"};
+    std::ifstream inputFile(ITD_path);
+    std::string line;
+
+    while (getline(inputFile, line))
+    {
+        // Récupération des paramètres des nodes.
+        if (line.find("map") != std::string::npos)
+        {
+            std::istringstream iss(line);
+            std::string _type;
+            std::filesystem::path path;
+
+            // on zap le premier element (node)
+            iss >> _type;
+
+            iss >> path;
+            IMG_path += path;
+        }
+    }
+    inputFile.close();
+
+    this->SCHEMA = img::load(make_absolute_path(IMG_path, true), 3, true);
+}
+
 // Récupère le code couleur des types de pixel du ITD
 Color Map::get_colors_from_ITD(std::string const &type)
 {
     Color color;
     // Open the input file named "input.txt"
     std::string ITD_path = {"../../data/"};
-    ITD_path += this->schema_file + ".itd";
+    ITD_path += this->schema_ITD_file;
     std::ifstream inputFile(ITD_path);
-    std::vector<std::string> color_str_array{};
     std::string line;
 
     while (getline(inputFile, line))
@@ -29,24 +109,24 @@ Color Map::get_colors_from_ITD(std::string const &type)
         // Récupération des paramètres des nodes.
         if (line.find(type) != std::string::npos)
         {
-            std::string color_str{};
+            std::istringstream iss(line);
+            std::string _type;
+            std::vector<int> color_numbers;
 
-            for (size_t i{1}; i < line.size(); i++)
+            iss >> _type;
+
+            int number;
+            while (iss >> number)
             {
-                if (isdigit(line[i]) || line[i] == ' ')
-                    color_str += line[i];
+                if (number < 0 || number > 255)
+                {
+                    std::cerr << "ERREUR - ITD : " << type << " invalide : " << number << " n'est pas entre 0 et 255." << std::endl;
+                    std::exit(EXIT_FAILURE);
+                }
+                color_numbers.push_back(number);
             }
 
-            std::istringstream iss(color_str);
-            std::vector<int> pixel_color;
-            std::string token;
-
-            while (std::getline(iss, token, ' '))
-            {
-                if (!token.empty())
-                    pixel_color.push_back(std::stoi(token));
-            }
-            color = {pixel_color[0], pixel_color[1], pixel_color[2]};
+            color = {color_numbers[0], color_numbers[1], color_numbers[2]};
         }
     }
     inputFile.close();
@@ -59,7 +139,7 @@ void Map::get_NODES_from_ITD()
 {
     std::vector<Node> NODES;
     std::string ITD_path{"../../data/"};
-    ITD_path += this->schema_file + ".itd";
+    ITD_path += this->schema_ITD_file;
     std::ifstream inputFile(ITD_path);
     std::string line;
 
@@ -145,14 +225,6 @@ void Map::get_SHORTER_PATH_LIST()
         this->SHORTER_PATH_LIST.push_back(SHORTER_PATH);
         // std::cout << start << std::endl;
     }
-}
-
-// 4) Génère le SCHEMA référencé
-void Map::generate_SCHEMA()
-{
-    std::string IMG_path{"images/"};
-    IMG_path += this->schema_file + ".png";
-    this->SCHEMA = img::load(make_absolute_path(IMG_path, true), 3, true);
 }
 
 // 5) Récupère tous les pixels du SCHEMA dans PIXELS

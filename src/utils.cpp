@@ -14,9 +14,9 @@ std::filesystem::path make_absolute_path(std::filesystem::path const &path, bool
     if (check_path_exists && !std::filesystem::exists(res))
     {
         using namespace std::literals;
-        auto const msg{"Path \""s + res.string() + "\" does not exist. Make sure you didn't misspell it or made it relative to the wrong folder. All relative paths will be relative to the directory containing your CMakeLists.txt file."};
+        auto const msg{"ERREUR : Le chemin \""s + path.string() + "\" n'existe pas !"};
         std::cerr << msg << '\n';
-        throw std::runtime_error{msg};
+        exit(EXIT_FAILURE);
     }
 
     return res;

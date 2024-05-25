@@ -11,7 +11,7 @@
 struct Map
 {
     size_t NUMBER_OF_PIXELS_IN_LINE{15};
-    std::string schema_file{"map_schema_15x15"};
+    std::string schema_ITD_file;
     img::Image SCHEMA{img::load(make_absolute_path("images/map_schema_15x15.png", true), 3, true)};
     std::vector<Tile> TILES;
     std::vector<Pixel> PIXELS;
@@ -19,17 +19,17 @@ struct Map
     Graph::WeightedGraph GRAPH;
     std::vector<std::vector<Node>> SHORTER_PATH_LIST;
 
+    void check_order_elements_ITD();
+    void get_SCHEMA_from_ITD();
     Color get_colors_from_ITD(std::string const &type);
     void get_NODES_from_ITD();
     void create_GRAPH_from_NODES();
     void get_SHORTER_PATH_LIST();
-    void generate_SCHEMA();
     void get_PIXELS_from_SCHEMA();
     void set_PIXELS_type();
     void set_PIXELS_connected();
     void get_TILES_from_PIXELS();
     void render_TILES_texture();
-    // GRAPH
     void load_MAP();
 
     // Debug

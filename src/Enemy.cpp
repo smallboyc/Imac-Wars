@@ -11,6 +11,7 @@
 void Enemy::set(Map &map, int const &path)
 {
     this->path = path;
+    this->health = 0.07f;
     this->current.x = map.SHORTER_PATH_LIST[path][0].pixel.x;
     this->current.y = map.SHORTER_PATH_LIST[path][0].pixel.y;
     this->pos.x = this->current.x;

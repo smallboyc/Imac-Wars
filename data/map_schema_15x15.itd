@@ -1,6 +1,6 @@
 ITD
 #NOM DE LA MAP
-map map_schema_15x15_V3.png
+map map_schema_15x15.png
 
 #Blanc
 path 255 255 255
@@ -12,7 +12,7 @@ in 77 109 243
 out 153 0 48
 
 
-#graph 31
+graph 31
 
 #START
 node 0 9 1 1
