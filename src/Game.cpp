@@ -176,7 +176,7 @@ void Game::TowerDefense::update_WAVE()
         setup_ENEMIES();
     }
 
-    // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
+    // Si l'ennemi meurt, on l'enlève de notre liste dans la vague //A REVOIR
     for (auto &enemy : this->current_ENEMIES)
         if (enemy.second.isDead)
             this->current_ENEMIES.erase(enemy.first);
