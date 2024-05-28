@@ -186,4 +186,15 @@ void Game::TowerDefense::update_WAVE()
         this->current_WAVE_id++;
 }
 
+// Debug
 
+std::string Game::TowerDefense::display_real_time_ENEMY_pos(int const id)
+{
+
+    if (this->current_ENEMIES_in_WAVE.contains(id))
+    {
+        glm::vec2 enemy_pos = this->current_ENEMIES_in_WAVE.at(id).pos;
+        return "Enemy " + std::to_string(id) + " > " + "X = " + std::to_string(static_cast<int>(std::round(enemy_pos.x))) + " / Y = " + std::to_string(static_cast<int>(std::round(enemy_pos.y)));
+    }
+    return "Nothing to show about Enemy " + std::to_string(id);
+}

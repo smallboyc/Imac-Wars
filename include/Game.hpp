@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <simpletext.h>
 #include <vector>
+#include <string>
 
 // include
 #include "GLHelpers.hpp"
@@ -44,6 +45,9 @@ namespace Game
         void setup_ENEMIES();
         void update_ENEMIES(const double &elapsedTime);
         void render_ENEMIES();
+
+        // Debug
+        std::string display_real_time_ENEMY_pos(int id);
     };
 
 }

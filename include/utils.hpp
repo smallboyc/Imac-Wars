@@ -68,5 +68,8 @@ void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map);
 void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float health);
 void draw_quad(float &x, float &y, Map &map);
+void draw_BREAK_MENU(Map &map);
+
+void drawOrigin();
 
 bool is_inside_MAP(float &x, float &y, Map &map);

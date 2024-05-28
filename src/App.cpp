@@ -14,6 +14,8 @@
 #include "Enemy.hpp"
 #include "UI.hpp"
 
+bool PLAY = false;
+
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     TD.setup_MAP();
@@ -33,22 +35,20 @@ void App::setup()
     TextRenderer.ResetFont();
     TextRenderer.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::WHITE);
     TextRenderer.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
+    TextRenderer.SetTextSize(SimpleText::FontSize::SIZE_32);
     TextRenderer.EnableBlending(true);
 }
 
 void App::update()
 {
-
     const double currentTime{glfwGetTime()};
     const double elapsedTime{currentTime - _previousTime};
     _previousTime = currentTime;
-
-    TD.update_WAVE();
-    TD.update_ENEMIES(elapsedTime);
-
-    _angle += 10.0f * elapsedTime;
-    _angle = std::fmod(_angle, 360.0f);
-
+    if (PLAY)
+    {
+        TD.update_WAVE();
+        TD.update_ENEMIES(elapsedTime);
+    }
     render();
 }
 
@@ -59,28 +59,27 @@ void App::render()
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     glLoadIdentity();
 
     TD.render_MAP();
-    TD.render_ENEMIES();
-    TD.active_UI();
 
-    // Text zone
-    // TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width, 20, SimpleText::CENTER);
+    if (PLAY)
+    {
+        TextRenderer.Label("PRESS -SPACE- TO PAUSE", _width, _height / 4, SimpleText::CENTER);
+        TD.render_ENEMIES();
+        TD.active_UI();
+    }
+    else
+    {
+        TextRenderer.Label("> PAUSE <", _width, _height / 4, SimpleText::CENTER);
+        TextRenderer.Label("PRESS -SPACE- TO PLAY", _width, _height / 3, SimpleText::CENTER);
+        draw_BREAK_MENU(TD.map);
+    }
 
-    // // Without set precision
-    // const std::string angle_label_text{"Angle: " + std::to_string(_angle)};
+    TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width, _height / 6, SimpleText::CENTER);
+    TextRenderer.Label(TD.display_real_time_ENEMY_pos(0).c_str(), _width / 6, _height - 4, SimpleText::LEFT);
 
-    // // Using stringstream to format the string with fixed precision
-    // std::stringstream stream{};
-    // stream << std::fixed << "Angle: " << std::setprecision(2) << _angle;
-    // stream << std::fixed << "MAP : " << map.NUMBER_OF_PIXELS_IN_LINE << " X " << map.NUMBER_OF_PIXELS_IN_LINE << " PIXELS";
-    // // angle_label_text = stream.str();
-
-    // TextRenderer.Label(angle_label_text.c_str(), _width / 2, _height - 4, SimpleText::CENTER);
-
-    // TextRenderer.Render();
+    TextRenderer.Render();
 }
 
 void App::key_callback(int key, int scancode, int action, int mods)
@@ -89,10 +88,11 @@ void App::key_callback(int key, int scancode, int action, int mods)
     {
         TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
     }
-    // if (key == GLFW_KEY_W && action == GLFW_PRESS)
-    // {
-    //     michel.health -= 0.01;
-    // }
+
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        PLAY = !PLAY;
+    }
 
     if ((action == GLFW_PRESS || action == GLFW_REPEAT) && TD.ui.SHOW_TARGETED_CELL)
     {

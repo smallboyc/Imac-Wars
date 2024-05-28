@@ -83,7 +83,6 @@ void Enemy::move(Map &map)
             this->target_node_index++;
         }
     }
-
     draw_enemy(this->texture, this->current.x, this->current.y, map, this->health);
 }
 

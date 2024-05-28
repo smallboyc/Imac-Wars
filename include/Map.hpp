@@ -39,4 +39,5 @@ struct Map
     // MAP PARAMETERS (SQUARE)
     float MAP_SIZE{1.f}; // 1.0F <=> 1000px
     float SEMI_MAP_SIZE{MAP_SIZE / 2.0f};
+    float PIXEL_SIZE{MAP_SIZE / NUMBER_OF_PIXELS_IN_LINE};
 };
