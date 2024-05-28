@@ -29,7 +29,7 @@ struct Map
     void set_PIXELS_type();
     void set_PIXELS_connected();
     void get_TILES_from_PIXELS();
-    void render_TILES_texture();
+    void render_TILES_texture(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void load_MAP();
 
     // Debug

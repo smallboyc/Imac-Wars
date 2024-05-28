@@ -26,7 +26,7 @@ void Game::TowerDefense::setup_MAP()
     this->map.set_PIXELS_type();
     this->map.set_PIXELS_connected();
     this->map.get_TILES_from_PIXELS();
-    this->map.render_TILES_texture();
+    this->map.render_TILES_texture(this->LoadedTextures);
 }
 
 // Render la map
@@ -134,7 +134,7 @@ void Game::TowerDefense::get_ENEMIES_into_WAVE()
         else
             ENEMY_type = this->current_WAVE.ENEMIES_type[0];
 
-        this->current_ENEMIES.insert({ENEMY_id, this->ENEMIES_ITD.at(ENEMY_type)});
+        this->current_ENEMIES_in_WAVE.insert({ENEMY_id, this->ENEMIES_ITD.at(ENEMY_type)});
         ENEMY_id++;
     }
 }
@@ -143,21 +143,21 @@ void Game::TowerDefense::get_ENEMIES_into_WAVE()
 void Game::TowerDefense::setup_ENEMIES()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    for (auto &enemy : this->current_ENEMIES)
-        enemy.second.set(this->map, (std::rand() % this->current_WAVE.number_of_ENDPOINTS));
+    for (auto &enemy : this->current_ENEMIES_in_WAVE)
+        enemy.second.set(this->map, (std::rand() % this->current_WAVE.number_of_ENDPOINTS), this->LoadedTextures);
 }
 
 // Update la position de l'ennemi en temps réel
 void Game::TowerDefense::update_ENEMIES(const double &elapsedTime)
 {
-    for (auto &enemy : this->current_ENEMIES)
+    for (auto &enemy : this->current_ENEMIES_in_WAVE)
         enemy.second.update_state(this->map, elapsedTime);
 }
 
 // Affichage de l'ennemi
 void Game::TowerDefense::render_ENEMIES()
 {
-    for (auto &enemy : this->current_ENEMIES)
+    for (auto &enemy : this->current_ENEMIES_in_WAVE)
     {
         glPushMatrix();
         if (!enemy.second.isDead)
@@ -176,12 +176,14 @@ void Game::TowerDefense::update_WAVE()
         setup_ENEMIES();
     }
 
-    // Si l'ennemi meurt, on l'enlève de notre liste dans la vague //A REVOIR
-    for (auto &enemy : this->current_ENEMIES)
+    // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
+    for (auto &enemy : this->current_ENEMIES_in_WAVE)
         if (enemy.second.isDead)
-            this->current_ENEMIES.erase(enemy.first);
+            this->current_ENEMIES_in_WAVE.erase(enemy.first);
 
     // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
-    if (this->current_ENEMIES.empty())
+    if (this->current_ENEMIES_in_WAVE.empty())
         this->current_WAVE_id++;
 }
+
+

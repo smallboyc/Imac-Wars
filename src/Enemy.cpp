@@ -7,8 +7,8 @@
 #include "Map.hpp"
 #include "utils.hpp"
 
-// Set l'ennemi : dans App::App()
-void Enemy::set(Map &map, int const &path)
+// Set l'ennemi : Sur une map précise, avec un type de chemin à parcourir, et un tableau de textures loadées
+void Enemy::set(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     this->path = path;
     this->health = 0.07f;
@@ -23,7 +23,9 @@ void Enemy::set(Map &map, int const &path)
     for (std::string coordinate : coordinates)
     {
         std::string path = "images/Enemy/" + this->name + "/" + this->name + "_" + coordinate + ".png";
-        this->textures[coordinate] = loadTexture(img::load(make_absolute_path(path, true), 4, true));
+        if (!LoadedTextures.contains(path))
+            LoadedTextures[path] = loadTexture(img::load(make_absolute_path(path, true), 4, true));
+        this->textures[coordinate] = LoadedTextures[path];
     }
 }
 

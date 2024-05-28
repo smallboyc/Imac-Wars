@@ -18,16 +18,16 @@ namespace Game
     {
         Map map;
         UI ui;
-        int current_WAVE_id{0};
-        Wave current_WAVE;                              // Vague actuelle
-        std::vector<int> WAVES_checked;                 // Permet de vérifier si une vague a été réalisée
-        std::unordered_map<int, Enemy> current_ENEMIES; // stock les ennemis d'une vague
+        std::unordered_map<std::filesystem::path, GLuint> LoadedTextures; // stock toutes les instances de textures load (1 fois)
+        // Vagues
+        int current_WAVE_id{0};                  // ID de la vague actuelle
+        Wave current_WAVE;                       // Vague actuelle
+        std::vector<int> WAVES_checked;          // Permet de vérifier si une vague a été réalisée
+        std::unordered_map<int, Wave> WAVES_ITD; // récupère toutes les vagues (depuis l'ITD)
+        // Enemis
+        std::unordered_map<int, Enemy> current_ENEMIES_in_WAVE; // stock les ennemis d'une vague
+        std::unordered_map<int, Enemy> ENEMIES_ITD;             // récupère tous les types d'ennemis (depuis l)
 
-        // ITD
-        std::unordered_map<int, Wave> WAVES_ITD;    // stock toutes les vagues
-        std::unordered_map<int, Enemy> ENEMIES_ITD; // stock tous les types d'ennemis
-
-        // METHODS //
         // MAP
         void setup_MAP();
         void render_MAP();
@@ -45,4 +45,5 @@ namespace Game
         void update_ENEMIES(const double &elapsedTime);
         void render_ENEMIES();
     };
+
 }

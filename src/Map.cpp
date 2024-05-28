@@ -340,20 +340,15 @@ void Map::get_TILES_from_PIXELS()
 }
 
 // 9) Rendu des textures de la map
-void Map::render_TILES_texture()
+void Map::render_TILES_texture(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-
-    std::unordered_map<std::filesystem::path, GLuint> mappingTextures;
-
     for (Tile &tile : this->TILES)
     {
         for (std::filesystem::path &path : tile.path_list)
         {
-            if (!mappingTextures.contains(path))
-            {
-                mappingTextures[path] = loadTexture(img::load(make_absolute_path(path, true), 4, true));
-            }
-            tile.texture_list.push_back(mappingTextures[path]);
+            if (!LoadedTextures.contains(path))
+                LoadedTextures[path] = loadTexture(img::load(make_absolute_path(path, true), 4, true));
+            tile.texture_list.push_back(LoadedTextures[path]);
         }
     }
 }
