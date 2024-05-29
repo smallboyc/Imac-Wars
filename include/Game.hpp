@@ -17,11 +17,13 @@ namespace Game
 {
     struct TowerDefense
     {
+        bool GAME_IS_PLAYING{false};
+        bool PAUSE{false};
         Map map;
         UI ui;
         std::unordered_map<std::filesystem::path, GLuint> LoadedTextures; // stock toutes les instances de textures load (1 fois)
         // Vagues
-        int current_WAVE_id{0};                  // ID de la vague actuelle
+        size_t current_WAVE_id{0};               // ID de la vague actuelle
         Wave current_WAVE;                       // Vague actuelle
         std::vector<int> WAVES_checked;          // Permet de vérifier si une vague a été réalisée
         std::unordered_map<int, Wave> WAVES_ITD; // récupère toutes les vagues (depuis l'ITD)
@@ -45,9 +47,6 @@ namespace Game
         void setup_ENEMIES();
         void update_ENEMIES(const double &elapsedTime);
         void render_ENEMIES();
-
-        // Debug
-        std::string display_real_time_ENEMY_pos(int id);
     };
 
 }

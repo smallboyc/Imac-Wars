@@ -77,13 +77,13 @@ std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph)
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (!NEIGHBOUR.top->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0112.png");
+        TILE_path_list.push_back("images/Map/Path_Vertical.png");
     else if (!NEIGHBOUR.bottom->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0100.png");
+        TILE_path_list.push_back("images/Map/Path_Vertical.png");
     else if (!NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0113.png");
+        TILE_path_list.push_back("images/Map/Path_Horizontal.png");
     else
-        TILE_path_list.push_back("images/Tiles/tile_0101.png");
+        TILE_path_list.push_back("images/Map/Path_Horizontal.png");
 }
 
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)

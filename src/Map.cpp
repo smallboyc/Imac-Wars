@@ -332,9 +332,10 @@ void Map::get_TILES_from_PIXELS()
         }
         // else // Herbe
         // {
-        //     TILE_path_list.push_back("images/Map/Void.png");
+        //     TILE_path_list.push_back("images/Tiles/tile_0110.png");
         //     // set ici la végétation aléatoire
         // }
+
         if (!TILE_path_list.empty())
             TILES_list.push_back({pixel, {}, TILE_path_list});
     }

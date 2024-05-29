@@ -39,7 +39,7 @@ void Game::TowerDefense::render_MAP()
 void Game::TowerDefense::active_UI()
 {
     this->ui.show_CELLS(this->map);
-    this->ui.show_ENEMY_VITALS(this->current_ENEMIES_in_WAVE, this->map);
+    this->ui.show_ENEMY_PROPERTIES(this->current_ENEMIES_in_WAVE);
 }
 
 // Récupère les données des ennemis depuis l'ITD
@@ -113,6 +113,7 @@ void Game::TowerDefense::get_WAVES_from_ITD()
 // Setup la vague
 void Game::TowerDefense::setup_WAVE()
 {
+
     this->current_WAVE = this->WAVES_ITD.at(this->current_WAVE_id);
     this->WAVES_checked.push_back(this->current_WAVE_id);
     std::cout << "Vague " << this->current_WAVE_id << " => " << this->current_WAVE.number_of_ENDPOINTS << " spawns avec " << this->current_WAVE.number_of_ENEMIES << " ennemis " << std::endl;
@@ -170,32 +171,25 @@ void Game::TowerDefense::render_ENEMIES()
 // Update des vagues en fonction de l'avancée du jeu
 void Game::TowerDefense::update_WAVE()
 {
-    if (std::find(this->WAVES_checked.begin(), this->WAVES_checked.end(), this->current_WAVE_id) == this->WAVES_checked.end())
+    // Le jeu se termine quand on a effectué toutes les vagues de l'ITD.
+    if (this->current_WAVE_id != this->WAVES_ITD.size())
     {
-        setup_WAVE();
-        get_ENEMIES_into_WAVE();
-        setup_ENEMIES();
+        if (std::find(this->WAVES_checked.begin(), this->WAVES_checked.end(), this->current_WAVE_id) == this->WAVES_checked.end())
+        {
+            setup_WAVE();
+            get_ENEMIES_into_WAVE();
+            setup_ENEMIES();
+        }
+
+        // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
+        for (auto &enemy : this->current_ENEMIES_in_WAVE)
+            if (enemy.second.isDead)
+                this->current_ENEMIES_in_WAVE.erase(enemy.first);
+
+        // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
+        if (this->current_ENEMIES_in_WAVE.empty())
+            this->current_WAVE_id++;
     }
-
-    // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
-    for (auto &enemy : this->current_ENEMIES_in_WAVE)
-        if (enemy.second.isDead)
-            this->current_ENEMIES_in_WAVE.erase(enemy.first);
-
-    // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
-    if (this->current_ENEMIES_in_WAVE.empty())
-        this->current_WAVE_id++;
-}
-
-// Debug
-
-std::string Game::TowerDefense::display_real_time_ENEMY_pos(int const id)
-{
-
-    if (this->current_ENEMIES_in_WAVE.contains(id))
-    {
-        glm::vec2 enemy_pos = this->current_ENEMIES_in_WAVE.at(id).pos;
-        return "Enemy " + std::to_string(id) + " > " + "X = " + std::to_string(static_cast<int>(std::round(enemy_pos.x))) + " / Y = " + std::to_string(static_cast<int>(std::round(enemy_pos.y)));
-    }
-    return "Nothing to show about Enemy " + std::to_string(id);
+    else
+        std::cout << "fin de la game" << std::endl;
 }
