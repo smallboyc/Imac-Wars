@@ -306,10 +306,11 @@ void Map::set_PIXELS_connected()
 void Map::get_TILES_from_PIXELS()
 {
     std::vector<Tile> TILES_list;
-    std::vector<std::filesystem::path> TILE_path_list;
-    for (Pixel pixel : this->PIXELS)
+    for (Pixel &pixel : this->PIXELS)
     {
+        std::vector<std::filesystem::path> TILE_path_list;
         Connections &NEIGHBOUR{pixel.PIXEL_connection};
+
         if (pixel.is_START_POINT)
         {
             // Point d'entrée
@@ -329,12 +330,13 @@ void Map::get_TILES_from_PIXELS()
             else // Route
                 set_PATH_orientation_texture(NEIGHBOUR, TILE_path_list);
         }
-        else // Herbe
-        {
-            TILE_path_list.push_back("images/Tiles/tile_0050.png");
-            // set ici la végétation aléatoire
-        }
-        TILES_list.push_back({pixel, {}, TILE_path_list});
+        // else // Herbe
+        // {
+        //     TILE_path_list.push_back("images/Map/Void.png");
+        //     // set ici la végétation aléatoire
+        // }
+        if (!TILE_path_list.empty())
+            TILES_list.push_back({pixel, {}, TILE_path_list});
     }
     this->TILES = TILES_list;
 }

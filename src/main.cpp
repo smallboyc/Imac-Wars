@@ -17,7 +17,7 @@ constexpr double TARGET_TIME_FOR_FRAME{1.0 / 60.0};
 
 int main()
 {
-   
+
     // Set an error callback to display glfw errors
     glfwSetErrorCallback([](int error, const char *description)
                          { std::cerr << "Error " << error << ": " << description << std::endl; });
@@ -61,13 +61,13 @@ int main()
     glfwSetCursorPosCallback(window, [](GLFWwindow *window, double xpos, double ypos)
                              { window_as_app(window).cursor_position_callback(xpos, ypos); });
     glfwSetWindowSizeCallback(window, [](GLFWwindow *window, int width, int height)
-                              { window_as_app(window).size_callback(width, height); });
+                              { window_as_app(window).size_callback(window, width, height); });
 
     // Force calling the size_callback of the game to set the right viewport and projection matrix
     {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
-        app.size_callback(width, height);
+        app.size_callback(window, width, height);
     }
 
     app.setup();

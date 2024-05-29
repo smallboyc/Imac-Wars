@@ -38,7 +38,8 @@ void Game::TowerDefense::render_MAP()
 // Active l'interface utilisateurs et les infos
 void Game::TowerDefense::active_UI()
 {
-    this->ui.enabled(this->map);
+    this->ui.show_CELLS(this->map);
+    this->ui.show_ENEMY_VITALS(this->current_ENEMIES_in_WAVE, this->map);
 }
 
 // Récupère les données des ennemis depuis l'ITD

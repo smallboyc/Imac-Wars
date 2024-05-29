@@ -7,11 +7,13 @@
 #include <simpletext.h>
 #include "utils.hpp"
 #include "Map.hpp"
+#include "Enemy.hpp"
 
 struct UI
 {
-    float x{0};
-    float y{0};
+    glm::vec2 CELL_pos{0, 0};
     bool SHOW_TARGETED_CELL{false};
-    void enabled(Map &map);
+    float WALLET{100};
+    void show_CELLS(Map &map);
+    void show_ENEMY_VITALS(std::unordered_map<int, Enemy>  &current_ENEMIES_in_WAVE, Map &map);
 };

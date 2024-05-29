@@ -89,35 +89,35 @@ void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<st
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.right->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0075.png");
+        TILE_path_list.push_back("images/Map/Angle_LB.png");
     else if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0073.png");
+        TILE_path_list.push_back("images/Map/Angle_RB.png");
     else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.right->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0099.png");
+        TILE_path_list.push_back("images/Map/Angle_LT.png");
     else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0097.png");
+        TILE_path_list.push_back("images/Map/Angle_RT.png");
     else if (NEIGHBOUR.top->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0088.png");
+        TILE_path_list.push_back("images/Map/Inter_Bottom.png");
     else if (NEIGHBOUR.bottom->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0089.png");
+        TILE_path_list.push_back("images/Map/Inter_Top.png");
     else if (NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0076.png");
+        TILE_path_list.push_back("images/Map/Inter_Right.png");
     else
-        TILE_path_list.push_back("images/Tiles/tile_0077.png");
+        TILE_path_list.push_back("images/Map/Inter_Left.png");
 }
 
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.bottom->is_VOID)
-        TILE_path_list.push_back("images/Tiles/tile_0098.png");
+        TILE_path_list.push_back("images/Map/Path_Horizontal.png");
     else
-        TILE_path_list.push_back("images/Tiles/tile_0087.png");
+        TILE_path_list.push_back("images/Map/Path_Vertical.png");
 }
 
 // Dessine une texture à la position (x,y) sur une map
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
 {
-    float centerOffset = map.SEMI_MAP_SIZE -  map.PIXEL_SIZE / 2; // Par défaut la case est centrée en (0,0), on doit donc l'ajuster.
+    float centerOffset = map.SEMI_MAP_SIZE - map.PIXEL_SIZE / 2; // Par défaut la case est centrée en (0,0), on doit donc l'ajuster.
     float X0 = (x - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
     float X1 = (x + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
     float Y0 = (y - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
@@ -166,7 +166,7 @@ void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float healt
 
 void draw_quad(float &x, float &y, Map &map)
 {
-    float centerOffset = map.SEMI_MAP_SIZE -  map.PIXEL_SIZE / 2;
+    float centerOffset = map.SEMI_MAP_SIZE - map.PIXEL_SIZE / 2;
     float X0 = (x - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
     float X1 = (x + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
     float Y0 = (y - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;

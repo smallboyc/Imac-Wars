@@ -14,8 +14,6 @@
 #include "Enemy.hpp"
 #include "UI.hpp"
 
-bool PLAY = false;
-
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     TD.setup_MAP();
@@ -24,6 +22,7 @@ App::App() : _previousTime(0.0), _viewSize(1.5)
     TD.setup_WAVE();
     TD.get_ENEMIES_into_WAVE();
     TD.setup_ENEMIES();
+    // TD.map.display_PIXELS_informations();
 }
 
 void App::setup()
@@ -65,49 +64,47 @@ void App::render()
 
     if (PLAY)
     {
-        TextRenderer.Label("PRESS -SPACE- TO PAUSE", _width, _height / 4, SimpleText::CENTER);
+        TextRenderer.Label("PRESS -SPACE- TO PAUSE", _width / 2, 200, SimpleText::CENTER);
         TD.render_ENEMIES();
         TD.active_UI();
     }
     else
     {
-        TextRenderer.Label("> PAUSE <", _width, _height / 4, SimpleText::CENTER);
-        TextRenderer.Label("PRESS -SPACE- TO PLAY", _width, _height / 3, SimpleText::CENTER);
+        TextRenderer.Label("> PAUSE <", _width / 2, 200, SimpleText::CENTER);
+        TextRenderer.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
         draw_BREAK_MENU(TD.map);
     }
 
-    TextRenderer.Label("- IMAC TOWER DEFENSE - ", _width, _height / 6, SimpleText::CENTER);
-    TextRenderer.Label(TD.display_real_time_ENEMY_pos(0).c_str(), _width / 6, _height - 4, SimpleText::LEFT);
-
+    TextRenderer.Label("- IMAC TOWER DEFENSE -", _width / 2, 100, SimpleText::CENTER);
+    // TextRenderer.Label(TD.display_real_time_ENEMY_pos(0).c_str(), _width / 8, _height /2, SimpleText::LEFT);
     TextRenderer.Render();
 }
 
 void App::key_callback(int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS)
-    {
-        TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
-    }
-
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-    {
         PLAY = !PLAY;
-    }
 
-    if ((action == GLFW_PRESS || action == GLFW_REPEAT) && TD.ui.SHOW_TARGETED_CELL)
+    if (PLAY)
     {
-        float top_neighbour{TD.ui.y + 1};
-        float bottom_neighbour{TD.ui.y - 1};
-        float right_neighbour{TD.ui.x + 1};
-        float left_neighbour{TD.ui.x - 1};
-        if (key == GLFW_KEY_UP && is_inside_MAP(TD.ui.x, top_neighbour, TD.map))
-            TD.ui.y++;
-        if (key == GLFW_KEY_DOWN && is_inside_MAP(TD.ui.x, bottom_neighbour, TD.map))
-            TD.ui.y--;
-        if (key == GLFW_KEY_LEFT && is_inside_MAP(left_neighbour, TD.ui.y, TD.map))
-            TD.ui.x--;
-        if (key == GLFW_KEY_RIGHT && is_inside_MAP(right_neighbour, TD.ui.y, TD.map))
-            TD.ui.x++;
+        if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+            TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
+
+        if ((action == GLFW_PRESS || action == GLFW_REPEAT) && TD.ui.SHOW_TARGETED_CELL)
+        {
+            float top_neighbour{TD.ui.CELL_pos.y + 1};
+            float bottom_neighbour{TD.ui.CELL_pos.y - 1};
+            float right_neighbour{TD.ui.CELL_pos.x + 1};
+            float left_neighbour{TD.ui.CELL_pos.x - 1};
+            if (key == GLFW_KEY_UP && is_inside_MAP(TD.ui.CELL_pos.x, top_neighbour, TD.map))
+                TD.ui.CELL_pos.y++;
+            if (key == GLFW_KEY_DOWN && is_inside_MAP(TD.ui.CELL_pos.x, bottom_neighbour, TD.map))
+                TD.ui.CELL_pos.y--;
+            if (key == GLFW_KEY_LEFT && is_inside_MAP(left_neighbour, TD.ui.CELL_pos.y, TD.map))
+                TD.ui.CELL_pos.x--;
+            if (key == GLFW_KEY_RIGHT && is_inside_MAP(right_neighbour, TD.ui.CELL_pos.y, TD.map))
+                TD.ui.CELL_pos.x++;
+        }
     }
 }
 
@@ -121,14 +118,21 @@ void App::scroll_callback(double /*xoffset*/, double /*yoffset*/)
 
 void App::cursor_position_callback(double xpos, double ypos)
 {
+    // double normalizedX = (2 * xpos / _width - 1);
+    // double normalizedY = -(2 * ypos / _height - 1);
+    // std::cout << normalizedX << " : " << normalizedY << std::endl;
 }
 
-void App::size_callback(int width, int height)
+void App::size_callback(GLFWwindow *window, int width, int height)
 {
     _width = width;
     _height = height;
-    // make sure the viewport matches the new window dimensions
-    glViewport(0, 0, _width, _height);
+
+    int veiwport_width{};
+    int veiwport_height{};
+
+    glfwGetFramebufferSize(window, &_width, &_height);
+    glViewport(0, 0, veiwport_width, veiwport_height);
 
     const float aspectRatio{_width / (float)_height};
 
