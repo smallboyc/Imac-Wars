@@ -230,6 +230,7 @@ void draw_BREAK_MENU(Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
+
 void drawOrigin()
 {
     glPointSize(10);

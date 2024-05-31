@@ -13,15 +13,18 @@
 #include "GLHelpers.hpp"
 #include "Enemy.hpp"
 #include "UI.hpp"
+#include "SpriteSheet.hpp"
 
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     TD.setup_MAP();
     TD.get_ENEMIES_from_ITD();
     TD.get_WAVES_from_ITD();
+    TD.get_PARTICLES_from_ITD();
     TD.setup_WAVE();
     TD.get_ENEMIES_into_WAVE();
-    TD.setup_ENEMIES();
+    TD.setup_ENEMIES_in_WAVE();
+    TD.setup_PARTICLES();
 }
 
 void App::setup()
@@ -45,7 +48,7 @@ void App::update()
     if (TD.GAME_IS_PLAYING && !TD.PAUSE) // Si le jeu est lancé et on est pas en pause
     {
         TD.update_WAVE();
-        TD.update_ENEMIES(elapsedTime);
+        TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
     }
     render();
 }
@@ -64,14 +67,14 @@ void App::render()
 
         if (!TD.PAUSE)
         {
-            TextRenderer.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
-            TD.render_ENEMIES();
+            TextRenderer.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
+            TD.render_ENEMIES_in_WAVE();
             TD.active_UI();
         }
         else
         {
             TextRenderer.Label("> PAUSE <", _width / 2, _height / 2, SimpleText::CENTER);
-            TextRenderer.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
+            TextRenderer.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
             draw_BREAK_MENU(TD.map);
         }
     }
@@ -95,6 +98,12 @@ void App::key_callback(int key, int scancode, int action, int mods)
 
         if (!TD.PAUSE)
         {
+            if (key == GLFW_KEY_F && action == GLFW_PRESS)
+            {
+                for (auto &enemy : TD.current_ENEMIES_in_WAVE)
+                    enemy.second.is_burning = !enemy.second.is_burning;
+            }
+
             if (key == GLFW_KEY_Q && action == GLFW_PRESS)
                 TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
 

@@ -6,6 +6,7 @@
 #include "Enemy.hpp"
 #include "Map.hpp"
 #include "utils.hpp"
+#include "SpriteSheet.hpp"
 
 // Set l'ennemi : Sur une map précise, avec un type de chemin à parcourir, et un tableau de textures loadées
 void Enemy::set(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)

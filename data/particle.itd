@@ -1,0 +1,10 @@
+ITD
+#PARTICULES
+Particles 2
+
+
+#PARTICLES (key, frame in line, frame in column, path)
+type FIRE_BLUE 8 1 burning_loop_1.png 
+type FIRE_ORANGE 8 1 burning_loop_2.png
+
+

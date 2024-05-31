@@ -42,78 +42,9 @@ void Game::TowerDefense::active_UI()
     this->ui.show_ENEMY_PROPERTIES(this->current_ENEMIES_in_WAVE);
 }
 
-// Récupère les données des ennemis depuis l'ITD
-void Game::TowerDefense::get_ENEMIES_from_ITD()
-{
-    std::ifstream inputFile("../../data/enemy.itd");
-    std::string line;
-
-    while (getline(inputFile, line))
-    {
-        // Récupération des paramètres des ennemis.
-        if (line.find("type") != std::string::npos)
-        {
-            std::istringstream iss(line);
-            std::string level;
-            std::string name;
-            std::vector<float> numbers;
-
-            // on zap le premier element (type)
-            iss >> level;
-
-            // On récupère le nom de l'ennemi
-            iss >> name;
-
-            float number;
-            while (iss >> number)
-                numbers.push_back(number);
-
-            Enemy enemy;
-            enemy.name = name;
-            enemy.health = numbers[1] / 100;
-            enemy.speed = numbers[2] / 10;
-            enemy.damage = numbers[3];
-            this->ENEMIES_ITD.insert({static_cast<int>(numbers[0]), enemy});
-        }
-    }
-    inputFile.close();
-}
-
-// Récupère les données des vagues depuis l'ITD
-void Game::TowerDefense::get_WAVES_from_ITD()
-{
-    std::ifstream inputFile("../../data/wave.itd");
-    std::string line;
-
-    while (getline(inputFile, line))
-    {
-        if (line.find("level") != std::string::npos)
-        {
-            std::istringstream iss(line);
-            std::string level;
-            std::vector<float> numbers;
-
-            iss >> level;
-
-            float number;
-            while (iss >> number)
-                numbers.push_back(number);
-
-            Wave wave;
-            wave.number_of_ENDPOINTS = numbers[1];
-            wave.number_of_ENEMIES = numbers[2];
-            for (size_t i{3}; i < numbers.size(); i++)
-                wave.ENEMIES_type.push_back(numbers[i]);
-            this->WAVES_ITD.insert({static_cast<int>(numbers[0]), wave});
-        }
-    }
-    inputFile.close();
-}
-
 // Setup la vague
 void Game::TowerDefense::setup_WAVE()
 {
-
     this->current_WAVE = this->WAVES_ITD.at(this->current_WAVE_id);
     this->WAVES_checked.push_back(this->current_WAVE_id);
     std::cout << "Vague " << this->current_WAVE_id << " => " << this->current_WAVE.number_of_ENDPOINTS << " spawns avec " << this->current_WAVE.number_of_ENEMIES << " ennemis " << std::endl;
@@ -142,7 +73,7 @@ void Game::TowerDefense::get_ENEMIES_into_WAVE()
 }
 
 // Setup des ennemis (textures et attributs)
-void Game::TowerDefense::setup_ENEMIES()
+void Game::TowerDefense::setup_ENEMIES_in_WAVE()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
@@ -150,21 +81,36 @@ void Game::TowerDefense::setup_ENEMIES()
 }
 
 // Update la position de l'ennemi en temps réel
-void Game::TowerDefense::update_ENEMIES(const double &elapsedTime)
-{
-    for (auto &enemy : this->current_ENEMIES_in_WAVE)
-        enemy.second.update_state(this->map, elapsedTime);
-}
-
-// Affichage de l'ennemi
-void Game::TowerDefense::render_ENEMIES()
+void Game::TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const double &currentTime)
 {
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
     {
-        glPushMatrix();
+        enemy.second.update_state(this->map, elapsedTime);
+        if (enemy.second.is_burning)
+            this->PARTICLES.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
+    }
+}
+
+// Affichage de l'ennemi
+void Game::TowerDefense::render_ENEMIES_in_WAVE()
+{
+    for (auto &enemy : this->current_ENEMIES_in_WAVE)
+    {
+
         if (!enemy.second.isDead)
+        {
+            glPushMatrix();
             enemy.second.move(this->map);
-        glPopMatrix();
+            glPopMatrix();
+
+            if (enemy.second.is_burning)
+            {
+                glPushMatrix();
+                glTranslatef(0, 0.01, 0);
+                this->PARTICLES.at("FIRE_ORANGE").renderSpriteSheet(enemy.second.pos.x, enemy.second.pos.y, this->map);
+                glPopMatrix();
+            }
+        }
     }
 }
 
@@ -178,7 +124,7 @@ void Game::TowerDefense::update_WAVE()
         {
             setup_WAVE();
             get_ENEMIES_into_WAVE();
-            setup_ENEMIES();
+            setup_ENEMIES_in_WAVE();
         }
 
         // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
@@ -192,4 +138,11 @@ void Game::TowerDefense::update_WAVE()
     }
     else
         std::cout << "fin de la game" << std::endl;
+}
+
+// PARTICLE
+void Game::TowerDefense::setup_PARTICLES()
+{
+    for (auto &particle : this->PARTICLES)
+        particle.second.loadSpriteSheet(this->LoadedTextures);
 }

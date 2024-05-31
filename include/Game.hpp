@@ -12,6 +12,7 @@
 #include "Wave.hpp"
 #include "UI.hpp"
 #include "utils.hpp"
+#include "SpriteSheet.hpp"
 
 namespace Game
 {
@@ -30,7 +31,8 @@ namespace Game
         // Enemis
         std::unordered_map<int, Enemy> current_ENEMIES_in_WAVE; // stock les ennemis d'une vague
         std::unordered_map<int, Enemy> ENEMIES_ITD;             // récupère tous les types d'ennemis (depuis l)
-
+        // Particules
+        std::unordered_map<std::string, SpriteSheet> PARTICLES; // stock toutes les particules
         // MAP
         void setup_MAP();
         void render_MAP();
@@ -39,14 +41,17 @@ namespace Game
         // ITD
         void get_WAVES_from_ITD();
         void get_ENEMIES_from_ITD();
+        void get_PARTICLES_from_ITD();
         // WAVE
         void setup_WAVE();
         void get_ENEMIES_into_WAVE();
         void update_WAVE();
         // ENEMY
-        void setup_ENEMIES();
-        void update_ENEMIES(const double &elapsedTime);
-        void render_ENEMIES();
+        void setup_ENEMIES_in_WAVE();
+        void update_ENEMIES_in_WAVE(const double &elapsedTime, const double &currentTime);
+        void render_ENEMIES_in_WAVE();
+        // PARTICLE
+        void setup_PARTICLES();
     };
 
 }

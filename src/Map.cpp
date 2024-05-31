@@ -234,10 +234,10 @@ void Map::get_PIXELS_from_SCHEMA()
 
     Pixel pixel;
 
-    for (size_t i = 0; i < this->SCHEMA.data_size(); i += SCHEMA.channels_count())
+    for (size_t i = 0; i < this->SCHEMA.data_size(); i += this->SCHEMA.channels_count())
     {
-        pixel.x = i / SCHEMA.channels_count() % this->NUMBER_OF_PIXELS_IN_LINE;
-        pixel.y = i / SCHEMA.channels_count() / this->NUMBER_OF_PIXELS_IN_LINE;
+        pixel.x = i / this->SCHEMA.channels_count() % this->NUMBER_OF_PIXELS_IN_LINE;
+        pixel.y = i / this->SCHEMA.channels_count() / this->NUMBER_OF_PIXELS_IN_LINE;
         pixel.color = {(int)*(this->SCHEMA.data() + i), (int)*(this->SCHEMA.data() + i + 1), (int)*(this->SCHEMA.data() + i + 2)};
         PIXELS.push_back(pixel);
     }
