@@ -12,6 +12,7 @@ struct SpriteSheet
     float frames_in_COL;
     float frame_width;
     float frame_height;
+    float frame_rate;
     double lastUpdateTime;
     float next_frame_in_LINE{0};
     float next_frame_in_COL{0};

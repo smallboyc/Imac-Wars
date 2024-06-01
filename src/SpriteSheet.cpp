@@ -16,7 +16,7 @@ void SpriteSheet::loadSpriteSheet(std::unordered_map<std::filesystem::path, GLui
 
 void SpriteSheet::updateSpriteSheet(const double &currentTime)
 {
-    if (currentTime - this->lastUpdateTime >= 0.07)
+    if (currentTime - this->lastUpdateTime >= this->frame_rate)
     {
         this->lastUpdateTime = currentTime;
 

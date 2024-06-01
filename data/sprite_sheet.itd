@@ -1,0 +1,11 @@
+ITD
+#SPRITESHEETS
+SpriteSheet 3
+
+
+#SPRITESHEETS(key, frame in line, frame in column, frame rate, path)
+type FIRE_BLUE 8 1 0.07 burning_loop_1.png 
+type FIRE_ORANGE 8 1 0.07 burning_loop_2.png
+type COINS 8 1 0.08 coins.png
+
+

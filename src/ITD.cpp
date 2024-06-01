@@ -74,10 +74,10 @@ void Game::TowerDefense::get_WAVES_from_ITD()
     inputFile.close();
 }
 
-// Récupère les données des particules depuis l'ITD : this->PARTICLES
-void Game::TowerDefense::get_PARTICLES_from_ITD()
+// Récupère les données des particules depuis l'ITD : this->SPRITE_SHEETS_ITD
+void Game::TowerDefense::get_SPRITE_SHEETS_from_ITD()
 {
-    std::ifstream inputFile("../../data/particle.itd");
+    std::ifstream inputFile("../../data/sprite_sheet.itd");
     std::string line;
 
     while (getline(inputFile, line))
@@ -89,6 +89,7 @@ void Game::TowerDefense::get_PARTICLES_from_ITD()
             std::string key;
             float frames_in_LINE;
             float frames_in_COL;
+            float frame_rate;
             std::string path;
 
             iss >> type;
@@ -97,13 +98,15 @@ void Game::TowerDefense::get_PARTICLES_from_ITD()
             iss >> key;
             iss >> frames_in_LINE;
             iss >> frames_in_COL;
+            iss >> frame_rate;
             iss >> path;
 
             SpriteSheet sprite;
             sprite.frames_in_LINE = frames_in_LINE;
             sprite.frames_in_COL = frames_in_COL;
+            sprite.frame_rate = frame_rate;
             sprite.path = "images/SpriteSheets/" + path;
-            this->PARTICLES.insert({key, sprite});
+            this->SPRITE_SHEETS_ITD.insert({key, sprite});
         }
     }
     inputFile.close();
@@ -229,7 +232,7 @@ Color Map::get_colors_from_ITD(std::string const &type)
     return color;
 }
 
-//Récupère les informations des NODES du ITD
+// Récupère les informations des NODES du ITD
 void Map::get_NODES_from_ITD()
 {
     std::vector<Node> NODES;

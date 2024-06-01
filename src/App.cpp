@@ -7,16 +7,19 @@
 
 #include "App.hpp"
 
+// SpriteSheet test;
+
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     TD.setup_MAP("map_schema_15x15.itd", 15);
     TD.get_ENEMIES_from_ITD();
     TD.get_WAVES_from_ITD();
-    TD.get_PARTICLES_from_ITD();
+    TD.get_SPRITE_SHEETS_from_ITD();
     TD.setup_WAVE();
     TD.get_ENEMIES_into_WAVE();
     TD.setup_ENEMIES_in_WAVE();
-    TD.setup_PARTICLES();
+    TD.setup_SPRITE_SHEETS();
+    // test = TD.SPRITE_SHEETS_ITD["COINS"];
 }
 
 void App::setup()
@@ -41,6 +44,7 @@ void App::update()
     {
         TD.update_WAVE();
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
+        // test.updateSpriteSheet(currentTime);
     }
     render();
 }
@@ -56,6 +60,8 @@ void App::render()
     if (TD.GAME_IS_PLAYING)
     {
         TD.render_MAP();
+
+        // test.renderSpriteSheet(0, 0, TD.map);
 
         if (!TD.PAUSE)
         {

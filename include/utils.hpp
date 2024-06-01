@@ -3,51 +3,9 @@
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 #include "Graph.hpp"
+#include "Cell.hpp"
 
 struct Map;
-struct Color
-{
-    int r{0};
-    int g{0};
-    int b{0};
-};
-
-struct Pixel;
-struct Connections
-{
-    Pixel *top;
-    Pixel *bottom;
-    Pixel *right;
-    Pixel *left;
-};
-
-struct Pixel
-{
-    float x{0};
-    float y{0};
-    Color color;
-    // Type de pixel
-    bool is_NODE{false};
-    bool is_VOID{false};
-    bool is_PATH{false};
-    bool is_START_POINT{false};
-    bool is_END_POINT{false};
-    Connections PIXEL_connection;
-};
-
-struct Node
-{
-    int id{0};
-    Pixel pixel;
-    std::vector<int> connected_to;
-};
-struct Tile
-{
-    Pixel pixel;
-    std::vector<GLuint> texture_list;
-    std::vector<std::filesystem::path> path_list;
-};
-
 
 std::filesystem::path
 make_absolute_path(std::filesystem::path const &path, bool check_path_exists = true);
@@ -65,12 +23,5 @@ std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph);
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
-
-void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map);
-void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float health);
-void draw_quad(float &x, float &y, Map &map);
-void draw_BREAK_MENU(Map &map);
-
-void drawOrigin();
 
 bool is_inside_MAP(float &x, float &y, Map &map);

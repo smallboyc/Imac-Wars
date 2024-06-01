@@ -12,6 +12,7 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 #include "UI.hpp"
+#include "Draw.hpp"
 #include "Enemy.hpp"
 
 void UI::show_CELLS(Map &map)
@@ -27,9 +28,9 @@ void UI::show_ENEMY_PROPERTIES(std::unordered_map<int, Enemy> &current_ENEMIES_i
     enemy_property.SetTextSize(SimpleText::FontSize::SIZE_32);
     enemy_property.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 1.f, 1.f);
     enemy_property.Label("> ENEMY PROPERTIES <", 175, 300, SimpleText::LEFT);
-    
+
     enemy_property.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 1.f);
-    
+
     enemy_property.EnableBlending(true);
 
     std::string text{};

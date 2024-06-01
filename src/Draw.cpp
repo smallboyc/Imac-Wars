@@ -5,7 +5,7 @@
 #include <iterator>
 #include <sstream>
 #include "Map.hpp"
-#include "utils.hpp"
+#include "Draw.hpp"
 
 // Dessine une texture à la position (x,y) sur une map
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)

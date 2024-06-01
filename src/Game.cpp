@@ -86,7 +86,7 @@ void Game::TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const
     {
         enemy.second.update_state(this->map, elapsedTime);
         if (enemy.second.is_burning)
-            this->PARTICLES.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
+            this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
     }
 }
 
@@ -105,7 +105,7 @@ void Game::TowerDefense::render_ENEMIES_in_WAVE()
             {
                 glPushMatrix();
                 glTranslatef(0, 0.01, 0);
-                this->PARTICLES.at("FIRE_ORANGE").renderSpriteSheet(enemy.second.pos.x, enemy.second.pos.y, this->map);
+                this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").renderSpriteSheet(enemy.second.pos.x, enemy.second.pos.y, this->map);
                 glPopMatrix();
             }
         }
@@ -143,8 +143,8 @@ void Game::TowerDefense::update_WAVE()
 }
 
 // PARTICLE
-void Game::TowerDefense::setup_PARTICLES()
+void Game::TowerDefense::setup_SPRITE_SHEETS()
 {
-    for (auto &particle : this->PARTICLES)
+    for (auto &particle : this->SPRITE_SHEETS_ITD)
         particle.second.loadSpriteSheet(this->LoadedTextures);
 }

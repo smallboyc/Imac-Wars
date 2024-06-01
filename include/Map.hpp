@@ -41,3 +41,5 @@ struct Map
     float SEMI_MAP_SIZE{MAP_SIZE / 2.0f};
     float PIXEL_SIZE{MAP_SIZE / NUMBER_OF_PIXELS_IN_LINE};
 };
+
+
