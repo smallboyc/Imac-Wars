@@ -102,8 +102,3 @@ void Enemy::update_state(Map &map, const double &elapsedTime)
     if (this->health <= 0.01f)
         this->isDead = true;
 }
-
-void Enemy::display_position()
-{
-    std::cout << "(" << static_cast<int>(std::round(this->pos.x)) << " : " << static_cast<int>(std::round(this->pos.y)) << ")" << std::endl;
-}

@@ -27,7 +27,4 @@ struct Enemy
     void set(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void move(Map &map);
     void update_state(Map &map, const double &elapsedTime);
-
-    // Debug
-    void display_position();
 };

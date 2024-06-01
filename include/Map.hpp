@@ -10,7 +10,6 @@
 
 struct Map
 {
-
     size_t NUMBER_OF_PIXELS_IN_LINE{15};
     std::string schema_ITD_file;
     img::Image SCHEMA{img::load(make_absolute_path("images/map_schema_15x15.png", true), 3, true)};
@@ -30,7 +29,7 @@ struct Map
     void set_PIXELS_type();
     void set_PIXELS_connected();
     void get_TILES_from_PIXELS();
-    void render_TILES_texture(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
+    void load_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void load_MAP();
 
     // Debug

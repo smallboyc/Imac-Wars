@@ -2,10 +2,8 @@
 
 #include <glad/glad.h>
 #include <simpletext.h>
-#include "Map.hpp"
-#include "utils.hpp"
 #include <vector>
-#include "Enemy.hpp"
+
 #include "Game.hpp"
 
 class App
@@ -32,7 +30,5 @@ private:
     float _viewSize{};
 
     Game::TowerDefense TD;
-    bool PLAY{false};
-
     SimpleText TextRenderer{};
 };

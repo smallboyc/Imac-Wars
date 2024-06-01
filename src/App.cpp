@@ -6,18 +6,10 @@
 #include <sstream>
 
 #include "App.hpp"
-#include "Map.hpp"
-#include "Graph.hpp"
-#include "simpletext.h"
-#include "utils.hpp"
-#include "GLHelpers.hpp"
-#include "Enemy.hpp"
-#include "UI.hpp"
-#include "SpriteSheet.hpp"
 
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
-    TD.setup_MAP();
+    TD.setup_MAP("map_schema_15x15.itd", 15);
     TD.get_ENEMIES_from_ITD();
     TD.get_WAVES_from_ITD();
     TD.get_PARTICLES_from_ITD();

@@ -12,11 +12,11 @@
 // include
 #include "Game.hpp"
 
-// Génère la map
-void Game::TowerDefense::setup_MAP()
+// MAP
+void Game::TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LINE)
 {
-    this->map.NUMBER_OF_PIXELS_IN_LINE = 15;
-    this->map.schema_ITD_file = "map_schema_15x15.itd";
+    this->map.NUMBER_OF_PIXELS_IN_LINE = pixels_in_LINE;
+    this->map.schema_ITD_file = path_itd;
     this->map.check_order_elements_ITD();
     this->map.get_SCHEMA_from_ITD();
     this->map.get_NODES_from_ITD();
@@ -26,10 +26,9 @@ void Game::TowerDefense::setup_MAP()
     this->map.set_PIXELS_type();
     this->map.set_PIXELS_connected();
     this->map.get_TILES_from_PIXELS();
-    this->map.render_TILES_texture(this->LoadedTextures);
+    this->map.load_TILES_MAP(this->LoadedTextures);
 }
 
-// Render la map
 void Game::TowerDefense::render_MAP()
 {
     this->map.load_MAP();
@@ -42,7 +41,7 @@ void Game::TowerDefense::active_UI()
     this->ui.show_ENEMY_PROPERTIES(this->current_ENEMIES_in_WAVE);
 }
 
-// Setup la vague
+// Récupère la current_WAVE depuis l'ITD avec un id.
 void Game::TowerDefense::setup_WAVE()
 {
     this->current_WAVE = this->WAVES_ITD.at(this->current_WAVE_id);
@@ -50,7 +49,7 @@ void Game::TowerDefense::setup_WAVE()
     std::cout << "Vague " << this->current_WAVE_id << " => " << this->current_WAVE.number_of_ENDPOINTS << " spawns avec " << this->current_WAVE.number_of_ENEMIES << " ennemis " << std::endl;
 }
 
-// Récupère les ennemis de la vague ciblés
+// Récupère les ennemis de la vague (aléatoirement en fonction des types référencés)
 void Game::TowerDefense::get_ENEMIES_into_WAVE()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -96,7 +95,6 @@ void Game::TowerDefense::render_ENEMIES_in_WAVE()
 {
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
     {
-
         if (!enemy.second.isDead)
         {
             glPushMatrix();
@@ -137,7 +135,11 @@ void Game::TowerDefense::update_WAVE()
             this->current_WAVE_id++;
     }
     else
-        std::cout << "fin de la game" << std::endl;
+    {
+        std::cout << "FIN DU JEU" << std::endl;
+        // écran de fin au lieu d'exit après.
+        exit(0);
+    }
 }
 
 // PARTICLE
