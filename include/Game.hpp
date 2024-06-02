@@ -32,6 +32,8 @@ namespace Game
         // Enemis
         std::unordered_map<int, Enemy> current_ENEMIES_in_WAVE; // stock les ennemis d'une vague
         std::unordered_map<int, Enemy> ENEMIES_ITD;             // récupère tous les types d'ennemis (depuis l'ITD)
+        int ENEMIES_id_to_launch{0};                            // Cible l'ennemi à afficher en premier
+        double TIME_since_last_ENEMY_launched;                  // Temps écoulé entre chaque spawn d'ennemi
         // Particules
         std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets
         // MAP
@@ -39,7 +41,6 @@ namespace Game
         void render_MAP();
         // UI
         void active_UI();
-
         // ITD
         void get_WAVES_from_ITD();
         void get_ENEMIES_from_ITD();

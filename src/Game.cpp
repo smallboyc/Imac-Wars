@@ -38,7 +38,7 @@ void Game::TowerDefense::render_MAP()
 void Game::TowerDefense::active_UI()
 {
     this->ui.show_CELLS(this->map);
-    this->ui.show_ENEMY_PROPERTIES(this->current_ENEMIES_in_WAVE);
+    this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
 }
 
 // Récupère la current_WAVE depuis l'ITD avec un id.
@@ -77,6 +77,7 @@ void Game::TowerDefense::setup_ENEMIES_in_WAVE()
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
         enemy.second.set(this->map, (std::rand() % this->current_WAVE.number_of_ENDPOINTS), this->LoadedTextures);
+    this->TIME_since_last_ENEMY_launched = 0.0f;
 }
 
 // Update la position de l'ennemi en temps réel
@@ -84,9 +85,19 @@ void Game::TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const
 {
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
     {
-        enemy.second.update_state(this->map, elapsedTime);
-        if (enemy.second.is_burning)
-            this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
+        if (ENEMIES_id_to_launch == enemy.first && currentTime - this->TIME_since_last_ENEMY_launched >= this->current_WAVE.TIME_btw_SPAWN)
+        {
+            enemy.second.isMoving = true;
+            ENEMIES_id_to_launch++;
+            this->TIME_since_last_ENEMY_launched = currentTime;
+        }
+
+        if (enemy.second.isMoving)
+        {
+            enemy.second.update_state(this->map, elapsedTime);
+            if (enemy.second.is_burning)
+                this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
+        }
     }
 }
 
@@ -95,7 +106,7 @@ void Game::TowerDefense::render_ENEMIES_in_WAVE()
 {
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
     {
-        if (!enemy.second.isDead)
+        if (!enemy.second.isDead && enemy.second.isMoving)
         {
             glPushMatrix();
             enemy.second.move(this->map);
@@ -132,7 +143,10 @@ void Game::TowerDefense::update_WAVE()
 
         // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
         if (this->current_ENEMIES_in_WAVE.empty())
+        {
+            this->ENEMIES_id_to_launch = 0;
             this->current_WAVE_id++;
+        }
     }
     else
     {

@@ -15,5 +15,5 @@ struct UI
     bool SHOW_TARGETED_CELL{false};
     float WALLET{100};
     void show_CELLS(Map &map);
-    void show_ENEMY_PROPERTIES(std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
+    void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
 };

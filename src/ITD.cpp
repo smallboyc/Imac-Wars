@@ -64,9 +64,11 @@ void Game::TowerDefense::get_WAVES_from_ITD()
                 numbers.push_back(number);
 
             Wave wave;
+            wave.wave_id = numbers[0];
             wave.number_of_ENDPOINTS = numbers[1];
             wave.number_of_ENEMIES = numbers[2];
-            for (size_t i{3}; i < numbers.size(); i++)
+            wave.TIME_btw_SPAWN = numbers[3];
+            for (size_t i{4}; i < numbers.size(); i++)
                 wave.ENEMIES_type.push_back(numbers[i]);
             this->WAVES_ITD.insert({static_cast<int>(numbers[0]), wave});
         }
