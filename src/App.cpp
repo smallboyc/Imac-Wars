@@ -138,16 +138,18 @@ void App::cursor_position_callback(double xpos, double ypos)
     // double normalizedX = (2.0 * xpos / _width) - 1.0;
 
     // // Calcul des coordonnées Y normalisées sur la plage [-1, 1]
-    // double normalizedY = (2.0 * ypos / _height) - 1.0;
+    // double normalizedY = 1 - (2.0 * ypos / _height);
 
     // // Affichage des coordonnées normalisées
     // std::cout << normalizedX << " : " << normalizedY << std::endl;
+    // // // std::cout << xpos << " : " << ypos << std::endl;
 }
 
 void App::size_callback(GLFWwindow *window, int width, int height)
 {
     _width = width;
     _height = height;
+    // /width * 2 - 1 * map.NUMBER_OF_PIXELS_IN_LINE - centerOffset
 
     int veiwport_width{};
     int veiwport_height{};

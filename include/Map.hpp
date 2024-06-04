@@ -37,7 +37,7 @@ struct Map
     void display_SHORTER_PATH();
 
     // MAP PARAMETERS (SQUARE)
-    float MAP_SIZE{1.f}; // 1.0F <=> 1000px
+    float MAP_SIZE{1.f}; // 1.0F
     float SEMI_MAP_SIZE{MAP_SIZE / 2.0f};
     float PIXEL_SIZE{MAP_SIZE / NUMBER_OF_PIXELS_IN_LINE};
 };

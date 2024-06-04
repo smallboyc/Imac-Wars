@@ -80,11 +80,12 @@ void Game::TowerDefense::setup_ENEMIES_in_WAVE()
     this->TIME_since_last_ENEMY_launched = 0.0f;
 }
 
-// Update la position de l'ennemi en temps réel
+// Met à jour le comportement des ennemis : Apparition / Blessures / Point de vie
 void Game::TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const double &currentTime)
 {
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
     {
+        // On active les ennemis un à un avec un délai. (this->current_WAVE.TIME_btw_SPAWN = délai en seconde)
         if (ENEMIES_id_to_launch == enemy.first && currentTime - this->TIME_since_last_ENEMY_launched >= this->current_WAVE.TIME_btw_SPAWN)
         {
             enemy.second.isMoving = true;
@@ -101,7 +102,7 @@ void Game::TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const
     }
 }
 
-// Affichage de l'ennemi
+// Met à jour et affiche les états de l'ennemi : Position des sprites / Autres sprites liés à l'ennemi.
 void Game::TowerDefense::render_ENEMIES_in_WAVE()
 {
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
