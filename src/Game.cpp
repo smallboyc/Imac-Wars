@@ -136,9 +136,9 @@ void Game::TowerDefense::update_WAVE()
             get_ENEMIES_into_WAVE();
             setup_ENEMIES_in_WAVE();
         }
-
+        std::unordered_map<int, Enemy> current_ENEMIES_in_WAVE_copy{this->current_ENEMIES_in_WAVE}; // copy pour pas boucler sur des éléments que l'on delete
         // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
-        for (auto &enemy : this->current_ENEMIES_in_WAVE)
+        for (auto &enemy : current_ENEMIES_in_WAVE_copy)
             if (enemy.second.isDead)
                 this->current_ENEMIES_in_WAVE.erase(enemy.first);
 
