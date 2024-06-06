@@ -3,9 +3,16 @@
 #include <GLFW/glfw3.h>
 #include <img/img.hpp>
 #include <memory>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <img/img.hpp>
+
 #include <sstream>
 
 #include "App.hpp"
+#include "simpletext.h"
+#include "utils.hpp"
+#include "GLHelpers.hpp"
 
 // SpriteSheet test;
 
@@ -19,6 +26,7 @@ App::App() : _previousTime(0.0), _viewSize(1.5)
     TD.get_ENEMIES_into_WAVE();
     TD.setup_ENEMIES_in_WAVE();
     TD.setup_SPRITE_SHEETS();
+    map_texture = loadTexture(img::load(make_absolute_path("Images/Map/BACKGROUND.png", true), 4, true));
     // test = TD.SPRITE_SHEETS_ITD["COINS"];
 }
 
@@ -59,6 +67,7 @@ void App::render()
     glLoadIdentity();
     if (TD.GAME_IS_PLAYING)
     {
+        draw_MAP_background(map_texture, TD.map);
         TD.render_MAP();
 
         // test.renderSpriteSheet(0, 0, TD.map);
@@ -149,13 +158,9 @@ void App::size_callback(GLFWwindow *window, int width, int height)
 {
     _width = width;
     _height = height;
-    // /width * 2 - 1 * map.NUMBER_OF_PIXELS_IN_LINE - centerOffset
-
-    int veiwport_width{};
-    int veiwport_height{};
 
     glfwGetFramebufferSize(window, &_width, &_height);
-    glViewport(0, 0, veiwport_width, veiwport_height);
+    glViewport(0, 0, _width, _height);
 
     const float aspectRatio{_width / (float)_height};
 

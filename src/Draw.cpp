@@ -7,6 +7,32 @@
 #include "Map.hpp"
 #include "Draw.hpp"
 
+void draw_MAP_background(GLuint const &texture, Map &map)
+{
+    glEnable(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3ub(255, 255, 255);
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f(-map.SEMI_MAP_SIZE, -map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 0);
+    glVertex2f(map.SEMI_MAP_SIZE, -map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(1, 1);
+    glVertex2f(map.SEMI_MAP_SIZE, map.SEMI_MAP_SIZE);
+
+    glTexCoord2d(0, 1);
+    glVertex2f(-map.SEMI_MAP_SIZE, map.SEMI_MAP_SIZE);
+
+    glEnd();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
 // Dessine une texture à la position (x,y) sur une map
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
 {

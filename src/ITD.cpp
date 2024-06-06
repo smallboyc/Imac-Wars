@@ -2,6 +2,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <array>
 
 // include
 #include "Game.hpp"
@@ -242,12 +243,22 @@ void Map::get_NODES_from_ITD()
     ITD_path += this->schema_ITD_file;
     std::ifstream inputFile(ITD_path);
     std::string line;
+    int graph_nodes;    // graph : graph_nodes
+    int nodes_count{0}; // compte le nombre de nodes référencés
 
     while (getline(inputFile, line))
     {
+        if (line.find("graph") != std::string::npos)
+        {
+            std::istringstream iss(line);
+            std::string graph;
+            iss >> graph;
+            iss >> graph_nodes;
+        }
         // Récupération des paramètres des nodes.
         if (line.find("node") != std::string::npos)
         {
+            nodes_count++;
             std::istringstream iss(line);
             std::string node;
             std::vector<float> numbers;
@@ -268,5 +279,11 @@ void Map::get_NODES_from_ITD()
         }
     }
     inputFile.close();
+
+    if (graph_nodes != nodes_count)
+    {
+        std::cerr << "ERREUR - ITD : Le nombre de nodes est mal référencé." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     this->NODES = NODES;
 }

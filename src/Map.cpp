@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "Map.hpp"
+#include "Cell.hpp"
 
 // Créer le GRAPH depuis le tableau de nodes
 void Map::create_GRAPH_from_NODES()
@@ -25,6 +26,13 @@ void Map::get_SHORTER_PATH_LIST()
         // On va chercher les END POINTS
         if (node.connected_to.empty())
             END_POINTS.push_back(node.id);
+    }
+
+    // On check s'il existe des END_POINTS. Sinon : erreur
+    if (END_POINTS.empty())
+    {
+        std::cout << "ERREUR : Aucun spawn d'ennemi (End points) trouvé..." << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     // Pour chaque END POINTS, on leur attribue un plus court chemin par rapport à l'entrée

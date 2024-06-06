@@ -30,5 +30,6 @@ private:
     float _viewSize{};
 
     Game::TowerDefense TD;
+    GLuint map_texture;
     SimpleText TextRenderer{};
 };
