@@ -22,7 +22,7 @@ struct UI
     SimpleText ENEMY_property{};
     void setup_UI_Text();
     void show_MAIN_TITLE(int &_width, int &_height);
-    void show_CELLS(Map &map);
+    void show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_WALLET(int &_width, int &_height);
     void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
 };

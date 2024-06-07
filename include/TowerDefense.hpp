@@ -41,6 +41,8 @@ struct TowerDefense
     void render_MAP();
     // UI
     void active_UI(int &_width, int &_height);
+    // Tower
+    void TOWER_CELLS_pos();
     // ITD
     void get_WAVES_from_ITD();
     void get_ENEMIES_from_ITD();

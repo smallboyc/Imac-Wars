@@ -155,9 +155,9 @@ void drawOrigin()
     glBegin(GL_LINES);
     glColor3f(1.0f, 0.0f, 0.0f);
     glVertex2d(0, 0);
-    glVertex2d(1, 0);
+    glVertex2d(0.5, 0);
     glColor3f(0.0f, 1.0f, 0.0f);
     glVertex2d(0, 0);
-    glVertex2d(0, 1);
+    glVertex2d(0, 0.5);
     glEnd();
 }

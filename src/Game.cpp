@@ -53,6 +53,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
             TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
             TD.render_ENEMIES_in_WAVE();
             TD.active_UI(_width, _height);
+            TD.TOWER_CELLS_pos();
         }
         else
         {
