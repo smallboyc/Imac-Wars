@@ -6,6 +6,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <img/img.hpp>
+#include <filesystem>
 
 #include <sstream>
 
@@ -14,9 +15,12 @@
 #include "utils.hpp"
 #include "GLHelpers.hpp"
 
-// SpriteSheet test;
-
 App::App() : _previousTime(0.0), _viewSize(1.5)
+{
+    TD.Load_All_Textures();
+}
+
+void App::setup()
 {
     TD.setup_MAP("map_schema_15x15.itd", 15);
     TD.get_ENEMIES_from_ITD();
@@ -26,16 +30,12 @@ App::App() : _previousTime(0.0), _viewSize(1.5)
     TD.get_ENEMIES_into_WAVE();
     TD.setup_ENEMIES_in_WAVE();
     TD.setup_SPRITE_SHEETS();
-    map_texture = loadTexture(img::load(make_absolute_path("Images/Map/BACKGROUND.png", true), 4, true));
-    // test = TD.SPRITE_SHEETS_ITD["COINS"];
-}
+    TD.ui.setup_UI_Text();
 
-void App::setup()
-{
     // Set the clear color to a nice blue
     glClearColor(0.0f, 0.0f, 0.24f, 1.0f);
 
-    // Setup the text renderer with blending enabled and white text color
+    // MAIN TITLE
     TextRenderer.ResetFont();
     TextRenderer.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
     TextRenderer.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
@@ -52,7 +52,6 @@ void App::update()
     {
         TD.update_WAVE();
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
-        // test.updateSpriteSheet(currentTime);
     }
     render();
 }
@@ -67,16 +66,14 @@ void App::render()
     glLoadIdentity();
     if (TD.GAME_IS_PLAYING)
     {
-        draw_MAP_background(map_texture, TD.map);
+        draw_MAP_background(TD.LoadedTextures["images/textures/Map/BACKGROUND.png"], TD.map);
         TD.render_MAP();
-
-        // test.renderSpriteSheet(0, 0, TD.map);
 
         if (!TD.PAUSE)
         {
             TextRenderer.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
             TD.render_ENEMIES_in_WAVE();
-            TD.active_UI();
+            TD.active_UI(_width, _height);
         }
         else
         {
@@ -141,28 +138,29 @@ void App::scroll_callback(double /*xoffset*/, double /*yoffset*/)
 {
 }
 
-void App::cursor_position_callback(double xpos, double ypos)
+void App::cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
 {
-    // // Calcul des coordonnées X normalisées sur la plage [-1, 1]
-    // double normalizedX = (2.0 * xpos / _width) - 1.0;
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
 
-    // // Calcul des coordonnées Y normalisées sur la plage [-1, 1]
-    // double normalizedY = 1 - (2.0 * ypos / _height);
+    // Calcul des coordonnées X et Y normalisées sur la plage [-1, 1]
+    double normalizedX = (2.0 * xpos / static_cast<float>(windowWidth)) - 1.0;
+    double normalizedY = 1.0 - (2.0 * ypos / static_cast<float>(windowHeight));
 
-    // // Affichage des coordonnées normalisées
-    // std::cout << normalizedX << " : " << normalizedY << std::endl;
-    // // // std::cout << xpos << " : " << ypos << std::endl;
+    // Coordonnées de souris normalisées!
+    // std::cout << "X: " << normalizedX << ", Y: " << normalizedY << std::endl;
 }
 
 void App::size_callback(GLFWwindow *window, int width, int height)
 {
+    //(écran rétina) On associe les dimensions de la fenêtre au FrameBuffer
     _width = width;
     _height = height;
 
     glfwGetFramebufferSize(window, &_width, &_height);
     glViewport(0, 0, _width, _height);
 
-    const float aspectRatio{_width / (float)_height};
+    const float aspectRatio{_width / static_cast<float>(_height)};
 
     // Change the projection matrix
     glMatrixMode(GL_PROJECTION);

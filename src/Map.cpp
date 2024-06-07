@@ -153,13 +153,13 @@ void Map::get_TILES_from_PIXELS()
         {
             // Point d'entrée
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/Tiles/tile_0026.png");
+            TILE_path_list.push_back("images/textures/Tiles/tile_0026.png");
         }
         else if (pixel.is_END_POINT)
         {
             // Point de sortie
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/Tiles/tile_0017.png");
+            TILE_path_list.push_back("images/textures/Tiles/tile_0017.png");
         }
         else if (pixel.is_PATH) // Point de chemin => route OU virage
         {
@@ -187,8 +187,6 @@ void Map::load_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &Load
     {
         for (std::filesystem::path &path : tile.path_list)
         {
-            if (!LoadedTextures.contains(path))
-                LoadedTextures[path] = loadTexture(img::load(make_absolute_path(path, true), 4, true));
             tile.texture_list.push_back(LoadedTextures[path]);
         }
     }

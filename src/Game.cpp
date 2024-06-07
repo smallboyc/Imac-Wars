@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 #include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -11,6 +12,18 @@
 
 // include
 #include "Game.hpp"
+
+// Load toutes les textures.
+void Game::TowerDefense::Load_All_Textures()
+{
+    std::string path = "../../images/textures";
+    for (const auto &folder : std::filesystem::directory_iterator(path))
+        for (const auto &texture : std::filesystem::directory_iterator(folder.path()))
+        {
+            std::string texture_path{std::filesystem::relative(texture.path(), "../../").string()};
+            this->LoadedTextures[texture_path] = loadTexture(img::load(make_absolute_path(texture_path, true), 4, true));
+        }
+}
 
 // MAP
 void Game::TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LINE)
@@ -35,9 +48,10 @@ void Game::TowerDefense::render_MAP()
 }
 
 // Active l'interface utilisateurs et les infos
-void Game::TowerDefense::active_UI()
+void Game::TowerDefense::active_UI(int &_width, int &_height)
 {
     this->ui.show_CELLS(this->map);
+    this->ui.show_WALLET(_width, _height);
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
 }
 
@@ -140,7 +154,10 @@ void Game::TowerDefense::update_WAVE()
         // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
         for (auto &enemy : current_ENEMIES_in_WAVE_copy)
             if (enemy.second.isDead)
+            {
                 this->current_ENEMIES_in_WAVE.erase(enemy.first);
+                this->ui.WALLET -= 5;
+            }
 
         // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
         if (this->current_ENEMIES_in_WAVE.empty())

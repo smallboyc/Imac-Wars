@@ -6,8 +6,6 @@
 
 void SpriteSheet::loadSpriteSheet(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    if (!LoadedTextures.contains(this->path))
-        LoadedTextures[this->path] = loadTexture(img::load(make_absolute_path(this->path, true), 4, true));
     this->texture = LoadedTextures[this->path];
     this->frame_width = 1 / this->frames_in_LINE;
     this->frame_height = 1 / this->frames_in_COL;

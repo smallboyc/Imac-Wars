@@ -108,7 +108,7 @@ void Game::TowerDefense::get_SPRITE_SHEETS_from_ITD()
             sprite.frames_in_LINE = frames_in_LINE;
             sprite.frames_in_COL = frames_in_COL;
             sprite.frame_rate = frame_rate;
-            sprite.path = "images/SpriteSheets/" + path;
+            sprite.path = "images/textures/SpriteSheets/" + path;
             this->SPRITE_SHEETS_ITD.insert({key, sprite});
         }
     }

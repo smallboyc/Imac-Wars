@@ -77,41 +77,41 @@ std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph)
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (!NEIGHBOUR.top->is_VOID)
-        TILE_path_list.push_back("images/Map/Tip_Bottom.png");
+        TILE_path_list.push_back("images/textures/Map/Tip_Bottom.png");
     else if (!NEIGHBOUR.bottom->is_VOID)
-        TILE_path_list.push_back("images/Map/Tip_Top.png");
+        TILE_path_list.push_back("images/textures/Map/Tip_Top.png");
     else if (!NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Map/Tip_Right.png");
+        TILE_path_list.push_back("images/textures/Map/Tip_Right.png");
     else
-        TILE_path_list.push_back("images/Map/Tip_Left.png");
+        TILE_path_list.push_back("images/textures/Map/Tip_Left.png");
 }
 
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.right->is_VOID)
-        TILE_path_list.push_back("images/Map/Angle_LB.png");
+        TILE_path_list.push_back("images/textures/Map/Angle_LB.png");
     else if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Map/Angle_RB.png");
+        TILE_path_list.push_back("images/textures/Map/Angle_RB.png");
     else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.right->is_VOID)
-        TILE_path_list.push_back("images/Map/Angle_LT.png");
+        TILE_path_list.push_back("images/textures/Map/Angle_LT.png");
     else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Map/Angle_RT.png");
+        TILE_path_list.push_back("images/textures/Map/Angle_RT.png");
     else if (NEIGHBOUR.top->is_VOID)
-        TILE_path_list.push_back("images/Map/Inter_Bottom.png");
+        TILE_path_list.push_back("images/textures/Map/Inter_Bottom.png");
     else if (NEIGHBOUR.bottom->is_VOID)
-        TILE_path_list.push_back("images/Map/Inter_Top.png");
+        TILE_path_list.push_back("images/textures/Map/Inter_Top.png");
     else if (NEIGHBOUR.left->is_VOID)
-        TILE_path_list.push_back("images/Map/Inter_Right.png");
+        TILE_path_list.push_back("images/textures/Map/Inter_Right.png");
     else
-        TILE_path_list.push_back("images/Map/Inter_Left.png");
+        TILE_path_list.push_back("images/textures/Map/Inter_Left.png");
 }
 
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
     if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.bottom->is_VOID)
-        TILE_path_list.push_back("images/Map/Path_Horizontal.png");
+        TILE_path_list.push_back("images/textures/Map/Path_Horizontal.png");
     else
-        TILE_path_list.push_back("images/Map/Path_Vertical.png");
+        TILE_path_list.push_back("images/textures/Map/Path_Vertical.png");
 }
 
 bool is_inside_MAP(float &x, float &y, Map &map)

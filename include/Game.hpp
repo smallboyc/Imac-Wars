@@ -36,11 +36,13 @@ namespace Game
         double TIME_since_last_ENEMY_launched;                  // Temps écoulé entre chaque spawn d'ennemi
         // Particules
         std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets
+        //TEXTURES
+        void Load_All_Textures();
         // MAP
         void setup_MAP(std::string const path, int const pixels_in_LINE);
         void render_MAP();
         // UI
-        void active_UI();
+        void active_UI(int &_width, int &_height);
         // ITD
         void get_WAVES_from_ITD();
         void get_ENEMIES_from_ITD();

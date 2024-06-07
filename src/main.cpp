@@ -59,7 +59,7 @@ int main()
     glfwSetScrollCallback(window, [](GLFWwindow *window, double xoffset, double yoffset)
                           { window_as_app(window).scroll_callback(xoffset, yoffset); });
     glfwSetCursorPosCallback(window, [](GLFWwindow *window, double xpos, double ypos)
-                             { window_as_app(window).cursor_position_callback(xpos, ypos); });
+                             { window_as_app(window).cursor_position_callback(window, xpos, ypos); });
     glfwSetWindowSizeCallback(window, [](GLFWwindow *window, int width, int height)
                               { window_as_app(window).size_callback(window, width, height); });
 

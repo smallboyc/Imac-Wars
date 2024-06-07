@@ -24,9 +24,7 @@ void Enemy::set(Map &map, int const &path, std::unordered_map<std::filesystem::p
     std::array<std::string, 4> coordinates = {"Left", "Right", "Bottom", "Top"};
     for (std::string coordinate : coordinates)
     {
-        std::string path = "images/Enemy/" + this->name + "/" + this->name + "_" + coordinate + ".png";
-        if (!LoadedTextures.contains(path))
-            LoadedTextures[path] = loadTexture(img::load(make_absolute_path(path, true), 4, true));
+        std::string path = "images/textures/Enemy/" + this->name + "_" + coordinate + ".png";
         this->textures[coordinate] = LoadedTextures[path];
     }
 }
