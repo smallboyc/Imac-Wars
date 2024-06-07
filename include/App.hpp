@@ -28,8 +28,5 @@ private:
     int _height{};
     double _previousTime{};
     float _viewSize{};
-
-    Game::TowerDefense TD;
-    GLuint map_texture;
-    SimpleText TextRenderer{};
+    TowerDefense TD;
 };

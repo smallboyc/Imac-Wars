@@ -8,7 +8,7 @@
 #include "Game.hpp"
 
 // Récupère les données des ennemis depuis l'ITD : this->ENEMIES_ITD
-void Game::TowerDefense::get_ENEMIES_from_ITD()
+void TowerDefense::get_ENEMIES_from_ITD()
 {
     std::ifstream inputFile("../../data/enemy.itd");
     std::string line;
@@ -45,7 +45,7 @@ void Game::TowerDefense::get_ENEMIES_from_ITD()
 }
 
 // Récupère les données des vagues depuis l'ITD : this->WAVES_ITD
-void Game::TowerDefense::get_WAVES_from_ITD()
+void TowerDefense::get_WAVES_from_ITD()
 {
     std::ifstream inputFile("../../data/wave.itd");
     std::string line;
@@ -78,7 +78,7 @@ void Game::TowerDefense::get_WAVES_from_ITD()
 }
 
 // Récupère les données des particules depuis l'ITD : this->SPRITE_SHEETS_ITD
-void Game::TowerDefense::get_SPRITE_SHEETS_from_ITD()
+void TowerDefense::get_SPRITE_SHEETS_from_ITD()
 {
     std::ifstream inputFile("../../data/sprite_sheet.itd");
     std::string line;

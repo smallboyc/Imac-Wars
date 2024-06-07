@@ -153,13 +153,13 @@ void Map::get_TILES_from_PIXELS()
         {
             // Point d'entrée
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/textures/Tiles/tile_0026.png");
+            TILE_path_list.push_back("images/textures/Map/Start_Point.png");
         }
         else if (pixel.is_END_POINT)
         {
             // Point de sortie
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/textures/Tiles/tile_0017.png");
+            TILE_path_list.push_back("images/textures/Map/End_Point.png");
         }
         else if (pixel.is_PATH) // Point de chemin => route OU virage
         {

@@ -17,6 +17,20 @@
 
 void UI::setup_UI_Text()
 {
+
+    // MAIN
+    this->MAIN_TITLE.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
+    this->MAIN_TITLE.SetTextSize(SimpleText::FontSize::SIZE_32);
+    this->MAIN_TITLE.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
+    this->MAIN_TITLE.EnableBlending(true);
+
+    //PLAY & PAUSE
+    // MAIN
+    this->PLAY_PAUSE.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
+    this->PLAY_PAUSE.SetTextSize(SimpleText::FontSize::SIZE_32);
+    this->PLAY_PAUSE.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
+    this->PLAY_PAUSE.EnableBlending(true);
+
     // WALLET
     this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::MAGENTA);
     this->WALLET_indicator.SetTextSize(SimpleText::FontSize::SIZE_32);
@@ -39,6 +53,12 @@ void UI::setup_UI_Text()
     this->ENEMY_property.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::WHITE);
     this->ENEMY_property.SetTextSize(SimpleText::FontSize::SIZE_16);
     this->ENEMY_property.EnableBlending(true);
+}
+
+void UI::show_MAIN_TITLE(int &_width, int &_height)
+{
+    this->MAIN_TITLE.Label("- IMAC TOWER DEFENSE -", _width / 2, 100, SimpleText::CENTER);
+    this->MAIN_TITLE.Render();
 }
 
 void UI::show_CELLS(Map &map)
