@@ -12,6 +12,9 @@
 
 #include "App.hpp"
 
+float x = 1;
+float y = 0;
+
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     Game::LOAD(TD, "map_schema_15x15.itd", 15);
@@ -49,8 +52,32 @@ void App::key_callback(int key, int scancode, int action, int mods)
     Game::active_KEY_CALLBACK(TD, key, scancode, action, mods);
 }
 
-void App::mouse_button_callback(int button, int action, int mods)
+void App::mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        int windowWidth, windowHeight;
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+        float aspectRatio = windowWidth / static_cast<float>(windowHeight);
+
+        double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
+        double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
+
+        int mapX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+        int mapY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+
+        std::cout << "MOUSE : " << "X = " << mapX << ", Y = " << mapY << std::endl;
+        for (Pixel &pixel : TD.map.PIXELS)
+        {
+            if (pixel.x == mapX && pixel.y == mapY && pixel.is_VOID)
+                std::cout << "OK !" << std::endl;
+            // drawTower(pixel.x,pixel.y);
+        }
+    }
 }
 
 void App::scroll_callback(double /*xoffset*/, double /*yoffset*/)
@@ -62,12 +89,27 @@ void App::cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
     int windowWidth, windowHeight;
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
 
-    // Calcul des coordonnées X et Y normalisées sur la plage [-1, 1]
-    double normalizedX = (2.0 * xpos / static_cast<float>(windowWidth)) - 1.0;
-    double normalizedY = 1.0 - (2.0 * ypos / static_cast<float>(windowHeight));
+    // Calculer l'aspect ratio pour x
+    float aspectRatio = windowWidth / static_cast<float>(windowHeight);
 
-    // Coordonnées de souris normalisées!
-    // std::cout << "X: " << normalizedX << ", Y: " << normalizedY << std::endl;
+    // Coordonnées normalisées [-1, 1]
+    double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
+    double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
+
+    float centerOffset = TD.map.SEMI_MAP_SIZE - TD.map.PIXEL_SIZE / 2;
+
+    // Coordonnées sur la map
+    int mapX = (normalizedX * 0.5 * _viewSize + centerOffset) * TD.map.NUMBER_OF_PIXELS_IN_LINE + TD.map.SEMI_MAP_SIZE;
+    int mapY = (normalizedY * 0.5 * _viewSize + centerOffset) * TD.map.NUMBER_OF_PIXELS_IN_LINE + TD.map.SEMI_MAP_SIZE;
+
+    // std::cout << "MOUSE : " << "X = " << mapX << ", Y = " << mapY << std::endl;
+    for (Pixel &pixel : TD.map.PIXELS)
+    {
+        if (pixel.x == mapX && pixel.y == mapY)
+            pixel.on_Mouse_Over = true;
+        else
+            pixel.on_Mouse_Over = false;
+    }
 }
 
 void App::size_callback(GLFWwindow *window, int width, int height)

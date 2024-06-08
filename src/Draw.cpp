@@ -36,11 +36,10 @@ void draw_MAP_background(GLuint const &texture, Map &map)
 // Dessine une texture à la position (x,y) sur une map
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
 {
-    float centerOffset = map.SEMI_MAP_SIZE - map.PIXEL_SIZE / 2; // Par défaut la case est centrée en (0,0), on doit donc l'ajuster.
-    float X0 = (x - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float X1 = (x + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float Y0 = (y - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float Y1 = (y + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
+    float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float X1 = X0 + map.PIXEL_SIZE;
+    float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float Y1 = Y0 + map.PIXEL_SIZE;
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -68,10 +67,11 @@ void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
 void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float health)
 {
     // BARRE DE VIE
-    float centerOffset = map.SEMI_MAP_SIZE - map.PIXEL_SIZE / 2; // Par défaut la case est centrée en (0,0), on doit donc l'ajuster.
-    float X0 = (x - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float X1 = (x + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float Y1 = (y + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
+    float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float X1 = X0 + map.PIXEL_SIZE;
+    float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float Y1 = Y0 + map.PIXEL_SIZE;
+
     glColor3ub(255, 0, 0); // Couleur rouge pour la barre de vie
     glPushMatrix();
     glLineWidth(5);
@@ -90,11 +90,10 @@ void draw_tower(GLuint const &texture, float &x, float &y, Map &map)
 
 void draw_quad(float &x, float &y, Map &map)
 {
-    float centerOffset = map.SEMI_MAP_SIZE - map.PIXEL_SIZE / 2;
-    float X0 = (x - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float X1 = (x + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float Y0 = (y - map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
-    float Y1 = (y + map.SEMI_MAP_SIZE) / map.NUMBER_OF_PIXELS_IN_LINE - centerOffset;
+    float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float X1 = X0 + map.PIXEL_SIZE;
+    float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float Y1 = Y0 + map.PIXEL_SIZE;
 
     glEnable(GL_TEXTURE_2D);
 
@@ -160,9 +159,9 @@ void drawOrigin()
     glBegin(GL_LINES);
     glColor3f(1.0f, 0.0f, 0.0f);
     glVertex2d(0, 0);
-    glVertex2d(1, 0);
+    glVertex2d(0.5, 0);
     glColor3f(0.0f, 1.0f, 0.0f);
     glVertex2d(0, 0);
-    glVertex2d(0, 1);
+    glVertex2d(0, 0.5);
     glEnd();
 }

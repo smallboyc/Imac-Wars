@@ -24,8 +24,8 @@ void UI::setup_UI_Text()
     this->MAIN_TITLE.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
     this->MAIN_TITLE.EnableBlending(true);
 
-    //PLAY & PAUSE
-    // MAIN
+    // PLAY & PAUSE
+    //  MAIN
     this->PLAY_PAUSE.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
     this->PLAY_PAUSE.SetTextSize(SimpleText::FontSize::SIZE_32);
     this->PLAY_PAUSE.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
@@ -61,10 +61,19 @@ void UI::show_MAIN_TITLE(int &_width, int &_height)
     this->MAIN_TITLE.Render();
 }
 
-void UI::show_CELLS(Map &map)
+void UI::show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     if (this->SHOW_TARGETED_CELL)
-        draw_quad(this->CELL_pos.x, this->CELL_pos.y, map);
+    {
+        for (Pixel &pixel : map.PIXELS)
+        {
+            if (pixel.on_Mouse_Over && pixel.is_VOID)
+                draw_quad_with_texture(LoadedTextures["images/textures/Tower/Target_Tower_Cell.png"], pixel.x, pixel.y, map);
+            else if (pixel.on_Mouse_Over && pixel.is_PATH)
+                draw_quad_with_texture(LoadedTextures["images/textures/Tower/Target_Tower_Cell_Disabled.png"], pixel.x, pixel.y, map);
+        }
+        // draw_quad(this->CELL_pos.x, this->CELL_pos.y, map);
+    }
 }
 
 void UI::show_WALLET(int &_width, int &_height)
