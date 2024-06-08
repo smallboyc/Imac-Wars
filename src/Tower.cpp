@@ -1,17 +1,24 @@
 #include <Tower.hpp>
 #include <Draw.hpp>
+#include "TowerDefense.hpp"
 
 void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    pos.x = 7;
-    pos.y = 7;
     std::string texturePath = "images/textures/Tower/tower.png";
     texture = LoadedTextures[texturePath];
 }
 
-void Tower::update()
+void Tower::update(const double &elapsedTime, const double &currentTime, TowerDefense* TD)
 {
-    
+    for(auto& enemy : TD->current_ENEMIES_in_WAVE)
+    {
+        
+
+        if(glm::distance(pos, enemy.second.pos) < 1)
+        {
+            std::cout << "Enemy nearby!\n";
+        }
+    }
 }
 
 void Tower::draw(Map& map)

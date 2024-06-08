@@ -16,6 +16,8 @@
 #include "SpriteSheet.hpp"
 #include "Tower.hpp"
 
+struct Tower;
+
 struct TowerDefense
 {
     bool GAME_IS_PLAYING{false};
@@ -35,6 +37,7 @@ struct TowerDefense
     double TIME_since_last_ENEMY_launched;                  // Temps écoulé entre chaque spawn d'ennemi
     // Towers
     std::unordered_map<int, Tower> Towers; // stock les tours
+    int towerID{0};
     // Particules
     std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets
     // TEXTURES

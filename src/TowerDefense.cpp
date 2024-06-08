@@ -142,9 +142,6 @@ void TowerDefense::render_ENEMIES_in_WAVE()
 // Setup des tours (textures et attributs)
 void TowerDefense::setup_TOWERS()
 {
-    Tower tower;
-    Towers.insert({0, tower});
-
     for (auto &tower : this->Towers)
         tower.second.setup(this->LoadedTextures);
 }
@@ -152,7 +149,8 @@ void TowerDefense::setup_TOWERS()
 // Met à jour le comportement des tours
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
-    
+    for (auto &tower : this->Towers)
+        tower.second.update(elapsedTime, currentTime, this);
 }
 
 // Met à jour et affiche les états des tours

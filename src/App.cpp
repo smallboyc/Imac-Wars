@@ -11,6 +11,7 @@
 #include <sstream>
 
 #include "App.hpp"
+#include "Tower.hpp"
 
 float x = 1;
 float y = 0;
@@ -74,8 +75,19 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
         for (Pixel &pixel : TD.map.PIXELS)
         {
             if (pixel.x == mapX && pixel.y == mapY && pixel.is_VOID)
+            {
                 std::cout << "OK !" << std::endl;
-            // drawTower(pixel.x,pixel.y);
+
+                Tower tower;
+                tower.pos.x = pixel.x;
+                tower.pos.y = pixel.y;
+                tower.setup(TD.LoadedTextures);
+                TD.Towers.insert({TD.towerID, tower});
+                TD.towerID++;
+
+                pixel.is_VOID = false;
+                pixel.is_TOWER = true;
+            }
         }
     }
 }

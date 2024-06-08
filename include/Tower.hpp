@@ -6,13 +6,18 @@
 #include "utils.hpp"
 #include <vector>
 #include "GLHelpers.hpp"
+#include "Enemy.hpp"
+#include "Bullet.hpp"
+
+struct TowerDefense;
 
 struct Tower
 {
     int type;
     glm::vec2 pos;
     GLuint texture;
+    std::vector<Bullet> bullets;
     void setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
-    void update();
+    void update(const double &elapsedTime, const double &currentTime, TowerDefense*);
     void draw(Map& map);
 };
