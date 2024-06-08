@@ -12,8 +12,6 @@ void Tower::update(const double &elapsedTime, const double &currentTime, TowerDe
 {
     for(auto& enemy : TD->current_ENEMIES_in_WAVE)
     {
-        
-
         if(glm::distance(pos, enemy.second.pos) < 1)
         {
             std::cout << "Enemy nearby!\n";

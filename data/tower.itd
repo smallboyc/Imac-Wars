@@ -1,0 +1,10 @@
+ITD
+#NOMBRE DE TOURS
+Enemies 3
+
+
+#ENEMIES (name, id)
+type tower 0 
+type tower_cross 1
+type tower_yellow 2
+

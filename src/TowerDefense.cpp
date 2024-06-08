@@ -50,11 +50,12 @@ void TowerDefense::render_MAP()
 // Active l'interface utilisateurs et les infos
 void TowerDefense::active_UI(int &_width, int &_height)
 {
-    this->ui.show_CELLS(this->map,this->LoadedTextures);
+    this->ui.show_CELLS(this->map, this->LoadedTextures);
     this->ui.show_WALLET(_width, _height);
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
+    for (auto &tower : this->TOWERS_ITD)
+        this->ui.show_next_TOWER(this->map, tower.second.texture);
 }
-
 
 // Récupère la current_WAVE depuis l'ITD avec un id.
 void TowerDefense::setup_WAVE()
@@ -142,21 +143,21 @@ void TowerDefense::render_ENEMIES_in_WAVE()
 // Setup des tours (textures et attributs)
 void TowerDefense::setup_TOWERS()
 {
-    for (auto &tower : this->Towers)
+    for (auto &tower : this->current_TOWERS_in_MAP)
         tower.second.setup(this->LoadedTextures);
 }
 
 // Met à jour le comportement des tours
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
-    for (auto &tower : this->Towers)
+    for (auto &tower : this->current_TOWERS_in_MAP)
         tower.second.update(elapsedTime, currentTime, this);
 }
 
 // Met à jour et affiche les états des tours
 void TowerDefense::render_TOWERS()
 {
-    for (auto &tower : this->Towers)
+    for (auto &tower : this->current_TOWERS_in_MAP)
     {
         glPushMatrix();
         tower.second.draw(this->map);

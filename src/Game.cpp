@@ -23,6 +23,7 @@ void Game::LOAD(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int co
 void Game::SETUP(TowerDefense &TD)
 {
     glClearColor(0.0f, 0.0f, 0.24f, 1.0f); // Blue window
+    TD.get_TOWERS_from_ITD();
     TD.get_ENEMIES_from_ITD();
     TD.get_WAVES_from_ITD();
     TD.get_SPRITE_SHEETS_from_ITD();

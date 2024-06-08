@@ -43,7 +43,6 @@ void App::render()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     Game::RENDER(TD, _width, _height);
-    TD.ui.show_next_TOWER(TD.map,TD.LoadedTextures);
 }
 
 void App::key_callback(int key, int scancode, int action, int mods)
@@ -76,11 +75,18 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
             {
                 std::cout << "OK !" << std::endl;
 
-                Tower tower;
+                int id_tower{2};
+                // Tower tower;
+                // tower.pos.x = pixel.x;
+                // tower.pos.y = pixel.y;
+                // tower.setup(TD.LoadedTextures);
+                // TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+
+                Tower tower = TD.TOWERS_ITD.at(id_tower);
                 tower.pos.x = pixel.x;
                 tower.pos.y = pixel.y;
-                tower.setup(TD.LoadedTextures);
-                TD.Towers.insert({TD.towerID, tower});
+                TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+
                 TD.towerID++;
 
                 pixel.is_VOID = false;

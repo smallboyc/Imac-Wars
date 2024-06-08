@@ -8,6 +8,39 @@
 #include "Game.hpp"
 
 // Récupère les données des ennemis depuis l'ITD : this->ENEMIES_ITD
+void TowerDefense::get_TOWERS_from_ITD()
+{
+    std::ifstream inputFile("../../data/tower.itd");
+    std::string line;
+
+    while (getline(inputFile, line))
+    {
+        // Récupération des paramètres des ennemis.
+        if (line.find("type") != std::string::npos)
+        {
+            std::istringstream iss(line);
+            std::string type;
+            std::string name;
+            std::vector<float> numbers;
+
+            // on zap le premier element (type)
+            iss >> type;
+
+            iss >> name;
+
+            float number;
+            while (iss >> number)
+                numbers.push_back(number);
+
+            Tower tower;
+            tower.texture = this->LoadedTextures["images/textures/Tower/" + name + ".png"];
+            this->TOWERS_ITD.insert({numbers[0], tower});
+        }
+    }
+    inputFile.close();
+}
+
+// Récupère les données des ennemis depuis l'ITD : this->ENEMIES_ITD
 void TowerDefense::get_ENEMIES_from_ITD()
 {
     std::ifstream inputFile("../../data/enemy.itd");

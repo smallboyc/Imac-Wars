@@ -112,9 +112,9 @@ void UI::show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<in
     this->ENEMY_property.Render();
 }
 
-void UI::show_next_TOWER(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+void UI::show_next_TOWER(Map &map, GLuint &texture)
 {
     float x = 18;
     float y = 7;
-    draw_4quad_with_texture(LoadedTextures["images/textures/Map/Start_Point.png"], x, y, map);
+    draw_4quad_with_texture(texture, x, y, map);
 }

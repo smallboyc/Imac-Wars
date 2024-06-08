@@ -36,7 +36,8 @@ struct TowerDefense
     int ENEMIES_id_to_launch{0};                            // Cible l'ennemi à afficher en premier
     double TIME_since_last_ENEMY_launched;                  // Temps écoulé entre chaque spawn d'ennemi
     // Towers
-    std::unordered_map<int, Tower> Towers; // stock les tours
+    std::unordered_map<int, Tower> current_TOWERS_in_MAP; // stock les tours qui sont sur la map
+    std::unordered_map<int, Tower> TOWERS_ITD; // récupère tous les types de tours (depuis l'ITD)
     int towerID{0};
     // Particules
     std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets
@@ -48,8 +49,9 @@ struct TowerDefense
     // UI
     void active_UI(int &_width, int &_height);
     // ITD
-    void get_WAVES_from_ITD();
+    void get_TOWERS_from_ITD();
     void get_ENEMIES_from_ITD();
+    void get_WAVES_from_ITD();
     void get_SPRITE_SHEETS_from_ITD();
     // WAVE
     void setup_WAVE();
