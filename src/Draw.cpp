@@ -83,6 +83,11 @@ void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float healt
     draw_quad_with_texture(texture, x, y, map);
 }
 
+void draw_tower(GLuint const &texture, float &x, float &y, Map &map)
+{
+    draw_quad_with_texture(texture, x, y, map);
+}
+
 void draw_quad(float &x, float &y, Map &map)
 {
     float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;

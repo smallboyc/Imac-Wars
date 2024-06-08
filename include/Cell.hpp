@@ -31,6 +31,7 @@ struct Pixel
     bool is_PATH{false};
     bool is_START_POINT{false};
     bool is_END_POINT{false};
+    bool is_TOWER{false};
     // Situation
     bool on_Mouse_Over{false};
 

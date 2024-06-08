@@ -139,6 +139,31 @@ void TowerDefense::render_ENEMIES_in_WAVE()
     }
 }
 
+// Setup des tours (textures et attributs)
+void TowerDefense::setup_TOWERS()
+{
+    for (auto &tower : this->Towers)
+        tower.second.setup(this->LoadedTextures);
+}
+
+// Met à jour le comportement des tours
+void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
+{
+    for (auto &tower : this->Towers)
+        tower.second.update(elapsedTime, currentTime, this);
+}
+
+// Met à jour et affiche les états des tours
+void TowerDefense::render_TOWERS()
+{
+    for (auto &tower : this->Towers)
+    {
+        glPushMatrix();
+        tower.second.draw(this->map);
+        glPopMatrix();
+    }
+}
+
 // Update des vagues en fonction de l'avancée du jeu
 void TowerDefense::update_WAVE()
 {

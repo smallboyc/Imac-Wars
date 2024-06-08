@@ -4,6 +4,7 @@
 #include <stack>
 #include <queue>
 #include <utility>
+#include <algorithm>
 #include "Graph.hpp"
 
 namespace Graph
