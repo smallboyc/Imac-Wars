@@ -14,6 +14,7 @@
 #include "utils.hpp"
 #include "Draw.hpp"
 #include "SpriteSheet.hpp"
+#include "Tower.hpp"
 
 struct TowerDefense
 {
@@ -32,6 +33,8 @@ struct TowerDefense
     std::unordered_map<int, Enemy> ENEMIES_ITD;             // récupère tous les types d'ennemis (depuis l'ITD)
     int ENEMIES_id_to_launch{0};                            // Cible l'ennemi à afficher en premier
     double TIME_since_last_ENEMY_launched;                  // Temps écoulé entre chaque spawn d'ennemi
+    // Towers
+    std::unordered_map<int, Tower> Towers; // stock les tours
     // Particules
     std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets
     // TEXTURES
@@ -53,6 +56,10 @@ struct TowerDefense
     void setup_ENEMIES_in_WAVE();
     void update_ENEMIES_in_WAVE(const double &elapsedTime, const double &currentTime);
     void render_ENEMIES_in_WAVE();
+    // TOWER
+    void setup_TOWERS();
+    void update_TOWERS(const double &elapsedTime, const double &currentTime);
+    void render_TOWERS();
     // SPRITE SHEETS
     void setup_SPRITE_SHEETS();
 };

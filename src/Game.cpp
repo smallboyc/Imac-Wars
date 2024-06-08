@@ -29,6 +29,7 @@ void Game::SETUP(TowerDefense &TD)
     TD.setup_WAVE();
     TD.get_ENEMIES_into_WAVE();
     TD.setup_ENEMIES_in_WAVE();
+    TD.setup_TOWERS();
     TD.setup_SPRITE_SHEETS();
     TD.ui.setup_UI_Text();
 }
@@ -39,6 +40,7 @@ void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &cur
     {
         TD.update_WAVE();
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
+        TD.update_TOWERS(elapsedTime, currentTime);
     }
 }
 void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
@@ -52,6 +54,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         {
             TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
             TD.render_ENEMIES_in_WAVE();
+            TD.render_TOWERS();
             TD.active_UI(_width, _height);
         }
         else

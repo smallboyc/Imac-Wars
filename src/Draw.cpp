@@ -83,6 +83,11 @@ void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float healt
     draw_quad_with_texture(texture, x, y, map);
 }
 
+void draw_tower(GLuint const &texture, float &x, float &y, Map &map)
+{
+    draw_quad_with_texture(texture, x, y, map);
+}
+
 void draw_quad(float &x, float &y, Map &map)
 {
     float centerOffset = map.SEMI_MAP_SIZE - map.PIXEL_SIZE / 2;
