@@ -4,9 +4,6 @@
 
 void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    std::string texturePath = "images/textures/Tower/tower.png";
-    texture = LoadedTextures[texturePath];
-
     bullet.setup(LoadedTextures);
     bullet.pos = pos;
 }
@@ -26,8 +23,6 @@ void Tower::update(const double &elapsedTime, const double &currentTime, TowerDe
         }        
         bullet.isBeingShot = false;
     }
-
-    std::cout << fireRate << "\n";
 
     if(fireRate < 0)
     {

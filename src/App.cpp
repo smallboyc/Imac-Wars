@@ -87,6 +87,8 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
                 tower.pos.y = pixel.y;
                 TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
 
+                TD.setup_TOWERS();
+
                 TD.towerID++;
 
                 pixel.is_VOID = false;

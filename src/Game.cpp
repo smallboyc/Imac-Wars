@@ -30,7 +30,6 @@ void Game::SETUP(TowerDefense &TD)
     TD.setup_WAVE();
     TD.get_ENEMIES_into_WAVE();
     TD.setup_ENEMIES_in_WAVE();
-    TD.setup_TOWERS();
     TD.setup_SPRITE_SHEETS();
     TD.ui.setup_UI_Text();
 }
