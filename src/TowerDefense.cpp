@@ -15,12 +15,20 @@
 void TowerDefense::Load_All_Textures()
 {
     std::string path = "../../images/textures";
+
     for (const auto &folder : std::filesystem::directory_iterator(path))
     {
-        for (const auto &texture : std::filesystem::directory_iterator(folder.path()))
+        if (std::filesystem::is_directory(folder.path()))
         {
-            std::string texture_path{std::filesystem::relative(texture.path(), "../../").string()};
-            this->LoadedTextures[texture_path] = loadTexture(img::load(make_absolute_path(texture_path, true), 4, true));
+            for (const auto &texture : std::filesystem::directory_iterator(folder.path()))
+            {
+                if (std::filesystem::is_regular_file(texture) &&
+                    (texture.path().extension() == ".png" || texture.path().extension() == ".jpg"))
+                {
+                    std::string texture_path = std::filesystem::relative(texture.path(), "../../").string();
+                    this->LoadedTextures[texture_path] = loadTexture(img::load(make_absolute_path(texture_path, true), 4, true));
+                }
+            }
         }
     }
 }
