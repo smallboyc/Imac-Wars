@@ -75,13 +75,18 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 
 void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int action, int mods)
 {
+    // Lancer le jeu
     if (key == GLFW_KEY_S && action == GLFW_PRESS)
         TD.GAME_IS_PLAYING = true;
+
+    // Si le jeu est lancé
     if (TD.GAME_IS_PLAYING)
     {
+        // Pause
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
             TD.PAUSE = !TD.PAUSE;
 
+        // Si le jeu n'est pas en pause
         if (!TD.PAUSE)
         {
             if (key == GLFW_KEY_F && action == GLFW_PRESS)
@@ -92,22 +97,6 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
 
             if (key == GLFW_KEY_Q && action == GLFW_PRESS)
                 TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
-
-            if ((action == GLFW_PRESS || action == GLFW_REPEAT) && TD.ui.SHOW_TARGETED_CELL)
-            {
-                float top_neighbour{TD.ui.CELL_pos.y + 1};
-                float bottom_neighbour{TD.ui.CELL_pos.y - 1};
-                float right_neighbour{TD.ui.CELL_pos.x + 1};
-                float left_neighbour{TD.ui.CELL_pos.x - 1};
-                if (key == GLFW_KEY_UP && is_inside_MAP(TD.ui.CELL_pos.x, top_neighbour, TD.map))
-                    TD.ui.CELL_pos.y++;
-                if (key == GLFW_KEY_DOWN && is_inside_MAP(TD.ui.CELL_pos.x, bottom_neighbour, TD.map))
-                    TD.ui.CELL_pos.y--;
-                if (key == GLFW_KEY_LEFT && is_inside_MAP(left_neighbour, TD.ui.CELL_pos.y, TD.map))
-                    TD.ui.CELL_pos.x--;
-                if (key == GLFW_KEY_RIGHT && is_inside_MAP(right_neighbour, TD.ui.CELL_pos.y, TD.map))
-                    TD.ui.CELL_pos.x++;
-            }
         }
     }
 }

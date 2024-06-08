@@ -8,6 +8,7 @@
 #include "utils.hpp"
 #include "Map.hpp"
 #include "Enemy.hpp"
+#include "Tower.hpp"
 
 struct UI
 {
@@ -25,5 +26,6 @@ struct UI
     void show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_WALLET(int &_width, int &_height);
     void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
-    void show_next_TOWER(Map &map, GLuint &texture);
+    void show_TOWER_to_select(Map &map, Tower const &tower);
+    void show_CURSOR_select(Map &map, Tower const &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
 };

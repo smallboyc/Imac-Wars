@@ -33,6 +33,9 @@ void TowerDefense::get_TOWERS_from_ITD()
                 numbers.push_back(number);
 
             Tower tower;
+            tower.type = numbers[0];
+            tower.UI_pos = {numbers[1], numbers[2]};
+            tower.UI_size = numbers[3];
             tower.texture = this->LoadedTextures["images/textures/Tower/" + name + ".png"];
             this->TOWERS_ITD.insert({numbers[0], tower});
         }

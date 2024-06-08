@@ -25,3 +25,4 @@ void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list);
 
 bool is_inside_MAP(float &x, float &y, Map &map);
+bool hover_TOWER_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &tower_pos, int const &UI_size);

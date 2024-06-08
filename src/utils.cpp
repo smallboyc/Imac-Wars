@@ -118,3 +118,9 @@ bool is_inside_MAP(float &x, float &y, Map &map)
 {
     return (x >= 0 && x < map.NUMBER_OF_PIXELS_IN_LINE && y >= 0 && y < map.NUMBER_OF_PIXELS_IN_LINE);
 }
+
+bool hover_TOWER_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &tower_pos, int const &UI_size)
+{
+    return (mouse_cursor.x >= tower_pos.x && mouse_cursor.x < tower_pos.x + UI_size &&
+            mouse_cursor.y >= tower_pos.y && mouse_cursor.y < tower_pos.y + UI_size);
+}

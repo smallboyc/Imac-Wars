@@ -37,7 +37,8 @@ struct TowerDefense
     double TIME_since_last_ENEMY_launched;                  // Temps écoulé entre chaque spawn d'ennemi
     // Towers
     std::unordered_map<int, Tower> current_TOWERS_in_MAP; // stock les tours qui sont sur la map
-    std::unordered_map<int, Tower> TOWERS_ITD; // récupère tous les types de tours (depuis l'ITD)
+    std::unordered_map<int, Tower> TOWERS_ITD;            // récupère tous les types de tours (depuis l'ITD)
+    int current_TOWER_id{1};                              // ID de la tour qui peut être sélectionné par le joueur
     int towerID{0};
     // Particules
     std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets
@@ -62,7 +63,7 @@ struct TowerDefense
     void update_ENEMIES_in_WAVE(const double &elapsedTime, const double &currentTime);
     void render_ENEMIES_in_WAVE();
     // TOWER
-    void setup_TOWERS();
+    // void setup_TOWERS();
     void update_TOWERS(const double &elapsedTime, const double &currentTime);
     void render_TOWERS();
     // SPRITE SHEETS

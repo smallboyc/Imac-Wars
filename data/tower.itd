@@ -1,10 +1,10 @@
 ITD
 #NOMBRE DE TOURS
-Enemies 3
+Tours 3
 
 
-#ENEMIES (name, id)
-type tower 0 
-type tower_cross 1
-type tower_yellow 2
+#TOURS (name, id, position dans l'UI (x,y), taille de l'item dans l'UI)
+type tower 0 19 14 2
+type tower_cross 1 19 7 2
+type tower_yellow 2 19 -1 2
 

@@ -128,16 +128,45 @@ void draw_quad(float &x, float &y, Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
-void draw_4quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
+void draw_UI_ITEM(GLuint const &texture, float const &x, float const &y, int const &item_size, Map &map)
 {
     float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
-    float X1 = X0 + 2 * map.PIXEL_SIZE;
+    float X1 = X0 + item_size * map.PIXEL_SIZE;
     float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
-    float Y1 = Y0 + 2 * map.PIXEL_SIZE;
+    float Y1 = Y0 + item_size * map.PIXEL_SIZE;
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
     glColor3ub(255, 255, 255);
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f(X0, Y0);
+
+    glTexCoord2d(1, 0);
+    glVertex2f(X1, Y0);
+
+    glTexCoord2d(1, 1);
+    glVertex2f(X1, Y1);
+
+    glTexCoord2d(0, 1);
+    glVertex2f(X0, Y1);
+
+    glEnd();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
+void draw_UI_ITEM_state(float const &x, float const &y, int const &item_size, Map &map)
+{
+    float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float X1 = X0 + item_size * map.PIXEL_SIZE;
+    float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float Y1 = Y0 + item_size * map.PIXEL_SIZE;
+
+    glEnable(GL_TEXTURE_2D);
+    glColor4ub(0, 255, 0, 128);
     glPushMatrix();
     glBegin(GL_QUADS);
     glTexCoord2d(0, 0);

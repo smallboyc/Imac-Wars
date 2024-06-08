@@ -8,12 +8,9 @@
 #include <cmath>
 
 #include "simpletext.h"
-#include "Map.hpp"
-#include "utils.hpp"
 #include "GLHelpers.hpp"
 #include "UI.hpp"
 #include "Draw.hpp"
-#include "Enemy.hpp"
 
 void UI::setup_UI_Text()
 {
@@ -112,9 +109,13 @@ void UI::show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<in
     this->ENEMY_property.Render();
 }
 
-void UI::show_next_TOWER(Map &map, GLuint &texture)
+void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 {
-    float x = 18;
-    float y = 7;
-    draw_4quad_with_texture(texture, x, y, map);
+    draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
+}
+
+void UI::show_CURSOR_select(Map &map, Tower const &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    if (tower.is_Selected)
+        draw_UI_ITEM(LoadedTextures["images/textures/Tower/select.png"], tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
 }

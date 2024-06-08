@@ -6,7 +6,7 @@
 
 void draw_MAP_background(GLuint const &texture, Map &map);
 void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map);
-void draw_4quad_with_texture(GLuint const &texture, float &x, float &y, Map &map);
+void draw_UI_ITEM(GLuint const &texture, float const &x, float const &y, int const &item_size, Map &map);
 void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float health);
 void draw_tower(GLuint const &texture, float &x, float &y, Map &map);
 void draw_quad(float &x, float &y, Map &map);

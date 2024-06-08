@@ -65,34 +65,32 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
         double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
         double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
 
-        int mapX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
-        int mapY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+        int mouseX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+        int mouseY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
 
-        std::cout << "MOUSE : " << "X = " << mapX << ", Y = " << mapY << std::endl;
-        for (Pixel &pixel : TD.map.PIXELS)
+        if (TD.ui.SHOW_TARGETED_CELL)
         {
-            if (pixel.x == mapX && pixel.y == mapY && pixel.is_VOID)
+            // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
+            for (auto &tower : TD.TOWERS_ITD)
             {
-                std::cout << "OK !" << std::endl;
+                if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
+                    TD.current_TOWER_id = tower.second.type;
+            }
 
-                int id_tower{2};
-                // Tower tower;
-                // tower.pos.x = pixel.x;
-                // tower.pos.y = pixel.y;
-                // tower.setup(TD.LoadedTextures);
-                // TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+            // Position des tours sur la map au click
+            for (Pixel &pixel : TD.map.PIXELS)
+            {
+                if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID)
+                {
+                    Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
+                    tower.setup(TD.LoadedTextures, {pixel.x, pixel.y});
+                    TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
 
-                Tower tower = TD.TOWERS_ITD.at(id_tower);
-                tower.pos.x = pixel.x;
-                tower.pos.y = pixel.y;
-                TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+                    TD.towerID++;
 
-                TD.setup_TOWERS();
-
-                TD.towerID++;
-
-                pixel.is_VOID = false;
-                pixel.is_TOWER = true;
+                    pixel.is_VOID = false;
+                    pixel.is_TOWER = true;
+                }
             }
         }
     }
@@ -114,16 +112,20 @@ void App::cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
     double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
     double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
 
-    float centerOffset = TD.map.SEMI_MAP_SIZE - TD.map.PIXEL_SIZE / 2;
+    int mouseX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+    int mouseY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
 
-    // Coordonnées sur la map
-    int mapX = (normalizedX * 0.5 * _viewSize + centerOffset) * TD.map.NUMBER_OF_PIXELS_IN_LINE + TD.map.SEMI_MAP_SIZE;
-    int mapY = (normalizedY * 0.5 * _viewSize + centerOffset) * TD.map.NUMBER_OF_PIXELS_IN_LINE + TD.map.SEMI_MAP_SIZE;
+    // Affiche le curseur de sélection si on est sur l'item de tour.
+    for (auto &tower : TD.TOWERS_ITD)
+        if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
+            tower.second.is_Selected = true;
+        else
+            tower.second.is_Selected = false;
 
-    // std::cout << "MOUSE : " << "X = " << mapX << ", Y = " << mapY << std::endl;
+    // Affiche le curseur de positionnement si on est sur une case de la map.
     for (Pixel &pixel : TD.map.PIXELS)
     {
-        if (pixel.x == mapX && pixel.y == mapY)
+        if (pixel.x == mouseX && pixel.y == mouseY)
             pixel.on_Mouse_Over = true;
         else
             pixel.on_Mouse_Over = false;
