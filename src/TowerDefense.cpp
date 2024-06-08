@@ -55,10 +55,6 @@ void TowerDefense::active_UI(int &_width, int &_height)
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
 }
 
-void TowerDefense::TOWER_CELLS_pos()
-{
-   
-}
 
 // Récupère la current_WAVE depuis l'ITD avec un id.
 void TowerDefense::setup_WAVE()

@@ -12,6 +12,9 @@
 
 #include "App.hpp"
 
+float x = 1;
+float y = 0;
+
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     Game::LOAD(TD, "map_schema_15x15.itd", 15);
@@ -64,16 +67,15 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
         double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
         double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
 
-        float centerOffset = TD.map.SEMI_MAP_SIZE - TD.map.PIXEL_SIZE / 2;
-
-        int mapX = (normalizedX * 0.5 * _viewSize + centerOffset) * TD.map.NUMBER_OF_PIXELS_IN_LINE + TD.map.SEMI_MAP_SIZE;
-        int mapY = (normalizedY * 0.5 * _viewSize + centerOffset) * TD.map.NUMBER_OF_PIXELS_IN_LINE + TD.map.SEMI_MAP_SIZE;
+        int mapX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+        int mapY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
 
         std::cout << "MOUSE : " << "X = " << mapX << ", Y = " << mapY << std::endl;
         for (Pixel &pixel : TD.map.PIXELS)
         {
-            if (pixel.x == mapX && pixel.y == mapY)
+            if (pixel.x == mapX && pixel.y == mapY && pixel.is_VOID)
                 std::cout << "OK !" << std::endl;
+            // drawTower(pixel.x,pixel.y);
         }
     }
 }
