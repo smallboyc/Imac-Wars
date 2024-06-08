@@ -25,4 +25,5 @@ struct UI
     void show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_WALLET(int &_width, int &_height);
     void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
+    void show_next_TOWER(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
 };

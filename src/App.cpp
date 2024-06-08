@@ -12,9 +12,6 @@
 
 #include "App.hpp"
 
-float x = 1;
-float y = 0;
-
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
     Game::LOAD(TD, "map_schema_15x15.itd", 15);
@@ -45,6 +42,7 @@ void App::render()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     Game::RENDER(TD, _width, _height);
+    TD.ui.show_next_TOWER(TD.map,TD.LoadedTextures);
 }
 
 void App::key_callback(int key, int scancode, int action, int mods)
