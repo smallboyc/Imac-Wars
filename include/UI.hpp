@@ -14,7 +14,7 @@ struct UI
 {
     glm::vec2 CELL_pos{0, 0};
     bool SHOW_TARGETED_CELL{false};
-    int WALLET{100};
+    int WALLET{20};
     SimpleText MAIN_TITLE{};
     SimpleText PLAY_PAUSE{};
     SimpleText WALLET_indicator{};

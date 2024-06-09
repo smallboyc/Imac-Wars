@@ -15,6 +15,7 @@ struct Tower
 {
     int type;
     glm::vec2 pos;
+    int price;
     glm::vec2 UI_pos;
     int UI_size;
     GLuint texture;

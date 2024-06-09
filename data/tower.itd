@@ -3,8 +3,8 @@ ITD
 Tours 3
 
 
-#TOURS (name, id, position dans l'UI (x,y), taille de l'item dans l'UI)
-type tower 0 19 14 2
-type tower_cross 1 19 7 2
-type tower_yellow 2 19 -1 2
+#TOURS (name, id, prix, position dans l'UI (x,y), taille de l'item dans l'UI)
+type tower 0 10 19 14 2
+type tower_cross 1 20 19 7 2
+type tower_yellow 2 45 19 -1 2
 

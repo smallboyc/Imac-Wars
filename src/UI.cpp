@@ -126,5 +126,8 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 void UI::show_CURSOR_select(Map &map, Tower const &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     if (tower.is_Selected)
-        draw_UI_ITEM(LoadedTextures["images/textures/Tower/select.png"], tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
+    {
+        if (this->WALLET >= tower.price)
+            draw_UI_ITEM(LoadedTextures["images/textures/Tower/select.png"], tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
+    }
 }
