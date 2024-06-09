@@ -1,10 +1,24 @@
 #include "Bullet.hpp"
 #include "TowerDefense.hpp"
 
-void Bullet::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 &tower_pos)
+void Bullet::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 &tower_pos, int tower_id)
 {
     this->pos = tower_pos;
-    this->texture = LoadedTextures["images/textures/Tower/bullet.png"];
+
+    switch(tower_id)
+    {
+        case 0:
+            this->texture = LoadedTextures["images/textures/Tower/bullet.png"];
+            break;
+        case 1:
+            this->texture = LoadedTextures["images/textures/Tower/stoneBall.png"];
+            break;
+        case 2:
+            this->texture = LoadedTextures["images/textures/Tower/cannonBall.png"];
+            break;
+        default:
+            this->texture = LoadedTextures["images/textures/Tower/bullet.png"];
+    }
 }
 
 void Bullet::update(Enemy &enemy, const double &elapsedTime)

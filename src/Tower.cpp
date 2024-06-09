@@ -5,7 +5,7 @@
 void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 const &pixel_pos)
 {
     this->pos = pixel_pos;
-    this->bullet.setup(LoadedTextures, this->pos);
+    this->bullet.setup(LoadedTextures, this->pos, this->type);
 }
 
 void Tower::update(TowerDefense *TD, const double &elapsedTime)
