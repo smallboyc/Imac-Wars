@@ -73,7 +73,7 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
             // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
             for (auto &tower : TD.TOWERS_ITD)
             {
-                if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
+                if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
                     TD.current_TOWER_id = tower.second.type;
             }
 
@@ -114,9 +114,9 @@ void App::cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
     // Affiche le curseur de sélection si on est sur l'item de tour.
     for (auto &tower : TD.TOWERS_ITD)
         if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
-            tower.second.is_Selected = true;
+            tower.second.hover = true;
         else
-            tower.second.is_Selected = false;
+            tower.second.hover = false;
 
     // Affiche le curseur de positionnement si on est sur une case de la map.
     for (Pixel &pixel : TD.map.PIXELS)

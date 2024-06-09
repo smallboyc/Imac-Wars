@@ -123,11 +123,21 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
 }
 
-void UI::show_CURSOR_select(Map &map, Tower const &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    if (tower.is_Selected)
+    GLuint texture;
+    if (tower.hover) // Au survol de l'item de tour.
     {
-        if (this->WALLET >= tower.price)
-            draw_UI_ITEM(LoadedTextures["images/textures/Tower/select.png"], tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
+        if (this->WALLET >= tower.price) // Si le joueur a assez d'argent.
+        {
+            tower.can_be_Selected = true;
+            texture = LoadedTextures["images/textures/Tower/select.png"];
+        }
+        else
+        {
+            tower.can_be_Selected = false;
+            texture = LoadedTextures["images/textures/Tower/Target_Tower_Cell_Disabled.png"];
+        }
+        draw_UI_ITEM(texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
     }
 }
