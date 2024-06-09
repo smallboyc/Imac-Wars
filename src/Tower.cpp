@@ -15,7 +15,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime)
     for (auto &enemy : TD->current_ENEMIES_in_WAVE)
     {
         // Distance de Chebyshev
-        if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < 2)
+        if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < 2 && enemy.second.isMoving)
         {
             this->bullet.update(enemy.second, elapsedTime);
             this->bullet.isBeingShot = true;
