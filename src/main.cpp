@@ -56,8 +56,6 @@ int main()
                        { window_as_app(window).key_callback(key, scancode, action, mods); });
     glfwSetMouseButtonCallback(window, [](GLFWwindow *window, int button, int action, int mods)
                                { window_as_app(window).mouse_button_callback(window, button, action, mods); });
-    glfwSetScrollCallback(window, [](GLFWwindow *window, double xoffset, double yoffset)
-                          { window_as_app(window).scroll_callback(xoffset, yoffset); });
     glfwSetCursorPosCallback(window, [](GLFWwindow *window, double xpos, double ypos)
                              { window_as_app(window).cursor_position_callback(window, xpos, ypos); });
     glfwSetWindowSizeCallback(window, [](GLFWwindow *window, int width, int height)

@@ -104,7 +104,7 @@ void TowerDefense::setup_ENEMIES_in_WAVE()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
-        enemy.second.set(this->map, (std::rand() % this->current_WAVE.number_of_ENDPOINTS), this->LoadedTextures);
+        enemy.second.setup(this->map, (std::rand() % this->current_WAVE.number_of_ENDPOINTS), this->LoadedTextures);
     this->TIME_since_last_ENEMY_launched = 0.0f;
 }
 
@@ -123,7 +123,7 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
 
         if (enemy.second.isMoving)
         {
-            enemy.second.update_state(this->map, elapsedTime);
+            enemy.second.update(this->map, elapsedTime);
             if (enemy.second.is_burning)
                 this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
         }
@@ -138,7 +138,7 @@ void TowerDefense::render_ENEMIES_in_WAVE()
         if (!enemy.second.isDead && enemy.second.isMoving)
         {
             glPushMatrix();
-            enemy.second.move(this->map);
+            enemy.second.render(this->map);
             glPopMatrix();
 
             if (enemy.second.is_burning)
@@ -157,7 +157,7 @@ void TowerDefense::update_WAVE()
     // Le jeu se termine quand on a effectué toutes les vagues de l'ITD.
     if (this->current_WAVE_id != this->WAVES_ITD.size())
     {
-        //Si la WAVE correspondant au current_WAVE_id n'est pas trouvé, alors on la charge !
+        // Si la WAVE correspondant au current_WAVE_id n'est pas trouvé, alors on la charge !
         if (std::find(this->WAVES_checked.begin(), this->WAVES_checked.end(), this->current_WAVE_id) == this->WAVES_checked.end())
         {
             setup_WAVE();
@@ -185,19 +185,11 @@ void TowerDefense::update_WAVE()
         exit(0);
     }
 }
-
-// Setup des tours (textures et attributs)
-// void TowerDefense::setup_TOWERS()
-// {
-//     for (auto &tower : this->current_TOWERS_in_MAP)
-//         tower.second.setup(this->LoadedTextures);
-// }
-
 // Met à jour le comportement des tours
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
     for (auto &tower : this->current_TOWERS_in_MAP)
-        tower.second.update(elapsedTime, currentTime, this);
+        tower.second.update(this);
 }
 
 // Met à jour et affiche les états des tours
@@ -206,7 +198,7 @@ void TowerDefense::render_TOWERS()
     for (auto &tower : this->current_TOWERS_in_MAP)
     {
         glPushMatrix();
-        tower.second.draw(this->map);
+        tower.second.render(this->map);
         glPopMatrix();
     }
 }

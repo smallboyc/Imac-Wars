@@ -8,7 +8,7 @@ void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextu
     this->bullet.setup(LoadedTextures, this->pos);
 }
 
-void Tower::update(const double &elapsedTime, const double &currentTime, TowerDefense *TD)
+void Tower::update(TowerDefense *TD)
 {
     fireRate -= 0.1;
 
@@ -34,10 +34,10 @@ void Tower::update(const double &elapsedTime, const double &currentTime, TowerDe
     }
 }
 
-void Tower::draw(Map &map)
+void Tower::render(Map &map)
 {
     draw_tower(this->texture, this->pos.x, this->pos.y, map);
 
     if (this->bullet.isBeingShot)
-        this->bullet.draw(map);
+        this->bullet.render(map);
 }

@@ -16,7 +16,6 @@
 #include "SpriteSheet.hpp"
 #include "Tower.hpp"
 
-struct Tower;
 
 struct TowerDefense
 {
@@ -30,7 +29,7 @@ struct TowerDefense
     std::unordered_map<int, Wave> WAVES_ITD; // récupère toutes les vagues (depuis l'ITD)
     Wave current_WAVE;                       // Vague actuelle
     std::vector<int> WAVES_checked;          // Permet de vérifier si une vague a été réalisée
-    // Enemis
+    // Ennemis
     std::unordered_map<int, Enemy> current_ENEMIES_in_WAVE; // stock les ennemis d'une vague
     std::unordered_map<int, Enemy> ENEMIES_ITD;             // récupère tous les types d'ennemis (depuis l'ITD)
     int ENEMIES_id_to_launch{0};                            // Cible l'ennemi à afficher en premier
@@ -63,7 +62,6 @@ struct TowerDefense
     void update_ENEMIES_in_WAVE(const double &elapsedTime, const double &currentTime);
     void render_ENEMIES_in_WAVE();
     // TOWER
-    // void setup_TOWERS();
     void update_TOWERS(const double &elapsedTime, const double &currentTime);
     void render_TOWERS();
     // SPRITE SHEETS

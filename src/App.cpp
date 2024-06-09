@@ -96,10 +96,6 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
     }
 }
 
-void App::scroll_callback(double /*xoffset*/, double /*yoffset*/)
-{
-}
-
 void App::cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
 {
     int windowWidth, windowHeight;

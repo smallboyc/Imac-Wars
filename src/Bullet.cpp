@@ -12,7 +12,7 @@ void Bullet::update(Enemy &enemy)
     // Si le laser touche l'ennemi
     if (std::round(enemy.pos.x) == std::round(this->pos.x) && std::round(enemy.pos.y) == std::round(this->pos.y) && !(this->hitEnemy))
     {
-        std::cout << "HIT" << std::endl;
+        // std::cout << "HIT" << std::endl;
         enemy.hit += 1;
         this->hitEnemy = true;
     }
@@ -26,7 +26,7 @@ void Bullet::update(Enemy &enemy)
     pos.y += direction.y / 10;
 }
 
-void Bullet::draw(Map &map)
+void Bullet::render(Map &map)
 {
     draw_quad_with_texture(texture, pos.x, pos.y, map);
 }

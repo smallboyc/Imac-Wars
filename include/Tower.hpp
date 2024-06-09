@@ -22,6 +22,6 @@ struct Tower
     Bullet bullet;
     bool is_Selected{false};
     void setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 const &pixel_pos);
-    void update(const double &elapsedTime, const double &currentTime, TowerDefense *);
-    void draw(Map &map);
+    void update(TowerDefense *);
+    void render(Map &map);
 };

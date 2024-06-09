@@ -18,5 +18,5 @@ struct Bullet
     bool hitEnemy{false};
     void setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 &tower_pos);
     void update(Enemy &);
-    void draw(Map &);
+    void render(Map &);
 };

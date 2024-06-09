@@ -10,7 +10,7 @@
 #include "SpriteSheet.hpp"
 
 // Set l'ennemi : Sur une map précise, avec un type de chemin à parcourir, et un tableau de textures loadées
-void Enemy::set(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+void Enemy::setup(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     this->path = path;
     this->current.x = map.SHORTER_PATH_LIST[path][0].pixel.x;
@@ -27,8 +27,21 @@ void Enemy::set(Map &map, int const &path, std::unordered_map<std::filesystem::p
     }
 }
 
+// Mise à jour de l'état de l'ennemi
+void Enemy::update(Map &map, const double &elapsedTime)
+{
+    this->TIME = elapsedTime;
+
+    // Mise à jour du trajet d'un noeud à l'autre
+    this->travel += this->speed * this->TIME;
+
+    // Si l'ennemi atteint sa cible = sacrifice
+    if (this->current.x == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.x && this->current.y == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.y)
+        this->isDead = true;
+}
+
 // On fait avancer l'ennemi
-void Enemy::move(Map &map)
+void Enemy::render(Map &map)
 {
     // target_node = le prochain noeud que l'on veut atteindre
     glm::vec2 target_node{map.SHORTER_PATH_LIST[this->path][this->target_node_index].pixel.x, map.SHORTER_PATH_LIST[this->path][this->target_node_index].pixel.y};
@@ -82,18 +95,4 @@ void Enemy::move(Map &map)
         }
     }
     draw_enemy(this->texture, *this, this->current.x, this->current.y, map, this->health, this->hit);
-}
-
-// Mise à jour de l'état de l'ennemi
-void Enemy::update_state(Map &map, const double &elapsedTime)
-{
-    this->TIME = elapsedTime;
-
-    // Mise à jour du trajet d'un noeud à l'autre
-    this->travel += this->speed * this->TIME;
-
-    // Si l'ennemi atteint sa cible = sacrifice
-    if (this->current.x == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.x && this->current.y == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.y)
-        this->isDead = true;
-
 }

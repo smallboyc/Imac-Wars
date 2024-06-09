@@ -96,6 +96,36 @@ void draw_tower(GLuint const &texture, float &x, float &y, Map &map)
     draw_quad_with_texture(texture, x, y, map);
 }
 
+void draw_spriteSheet(SpriteSheet const &spriteSheet, float const &x, float const &y, Map &map)
+{
+    float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float X1 = X0 + map.PIXEL_SIZE;
+    float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float Y1 = Y0 + map.PIXEL_SIZE;
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, spriteSheet.texture);
+    glColor3ub(255, 255, 255);
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(spriteSheet.next_frame_in_LINE, spriteSheet.next_frame_in_COL);
+    glVertex2f(X0, Y0);
+
+    glTexCoord2d(spriteSheet.next_frame_in_LINE + spriteSheet.frame_width, spriteSheet.next_frame_in_COL);
+    glVertex2f(X1, Y0);
+
+    glTexCoord2d(spriteSheet.next_frame_in_LINE + spriteSheet.frame_width, spriteSheet.next_frame_in_COL + spriteSheet.frame_height);
+    glVertex2f(X1, Y1);
+
+    glTexCoord2d(spriteSheet.next_frame_in_LINE, spriteSheet.next_frame_in_COL + spriteSheet.frame_height);
+    glVertex2f(X0, Y1);
+
+    glEnd();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void draw_quad(float &x, float &y, Map &map)
 {
     float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;

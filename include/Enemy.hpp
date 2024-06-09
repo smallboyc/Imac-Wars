@@ -26,7 +26,7 @@ struct Enemy
     int target_node_index; // Index du prochain noeud à atteindre
     GLuint texture;
     std::unordered_map<std::string, GLuint> textures; // Contient les 4 textures de l'ennemi
-    void set(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
-    void move(Map &map);
-    void update_state(Map &map, const double &elapsedTime);
+    void setup(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
+    void update(Map &map, const double &elapsedTime);
+    void render(Map &map);
 };
