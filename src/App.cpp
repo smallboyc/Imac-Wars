@@ -83,7 +83,7 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
                 if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID)
                 {
                     Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
-                    tower.setup(TD.LoadedTextures, {pixel.x, pixel.y});
+                    tower.setup(TD.SPRITE_SHEETS_ITD, {pixel.x, pixel.y});
                     TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
 
                     TD.towerID++;

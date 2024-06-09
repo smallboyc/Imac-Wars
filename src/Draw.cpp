@@ -66,11 +66,35 @@ void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
 
 void draw_BASE_health(Base &base, float const &x, float const &y, Map &map)
 {
-    // BARRE DE VIE
+    // BARRE DE FOND NOIRE
     float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
-    float X1 = X0 + map.MAP_SIZE - base.ouch / base.health;
+    float X1 = X0 + map.MAP_SIZE;
     float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
     float Y1 = Y0 + map.PIXEL_SIZE;
+
+    glEnable(GL_TEXTURE_2D);
+    glColor4ub(0, 0, 0, 255);
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f(X0, Y0);
+
+    glTexCoord2d(1, 0);
+    glVertex2f(X1, Y0);
+
+    glTexCoord2d(1, 1);
+    glVertex2f(X1, Y1);
+
+    glTexCoord2d(0, 1);
+    glVertex2f(X0, Y1);
+    glEnd();
+    glPopMatrix();
+
+    // BARRE DE VIE
+    X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    X1 = X0 + map.MAP_SIZE - base.ouch / base.health;
+    Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    Y1 = Y0 + map.PIXEL_SIZE;
 
     // Si la barre de vie est vide = GAME OVER
     if (X1 <= X0)
@@ -79,7 +103,7 @@ void draw_BASE_health(Base &base, float const &x, float const &y, Map &map)
     if (!base.is_Destroyed)
     {
         glEnable(GL_TEXTURE_2D);
-        glColor4ub(0, 255, 0, 128);
+        glColor4ub(0 + 200 * base.ouch / base.health, 200 - 200 * base.ouch / base.health, 0, 255);
         glPushMatrix();
         glBegin(GL_QUADS);
         glTexCoord2d(0, 0);

@@ -1,28 +1,30 @@
 #include "Bullet.hpp"
 #include "TowerDefense.hpp"
 
-void Bullet::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 &tower_pos, int tower_id)
+void Bullet::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 &tower_pos, int tower_id)
 {
     this->pos = tower_pos;
 
-    switch(tower_id)
+    switch (tower_id)
     {
-        case 0:
-            this->texture = LoadedTextures["images/textures/Tower/bullet.png"];
-            break;
-        case 1:
-            this->texture = LoadedTextures["images/textures/Tower/stoneBall.png"];
-            break;
-        case 2:
-            this->texture = LoadedTextures["images/textures/Tower/cannonBall.png"];
-            break;
-        default:
-            this->texture = LoadedTextures["images/textures/Tower/bullet.png"];
+    case 0:
+        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE");
+        break;
+    case 1:
+        this->sprite = SPRITE_SHEETS_ITD.at("FIRE_ORANGE");
+        break;
+    case 2:
+        this->sprite = SPRITE_SHEETS_ITD.at("FIRE_BLUE");
+        break;
+    default:
+        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE");
     }
 }
 
-void Bullet::update(Enemy &enemy, const double &elapsedTime, float degats)
+void Bullet::update(Enemy &enemy, const double &elapsedTime, const double &currentTime, float degats)
 {
+    this->sprite.updateSpriteSheet(currentTime);
+
     // Si le laser touche l'ennemi
     if (std::round(enemy.pos.x) == std::round(this->pos.x) && std::round(enemy.pos.y) == std::round(this->pos.y) && !(this->hitEnemy))
     {
@@ -32,11 +34,10 @@ void Bullet::update(Enemy &enemy, const double &elapsedTime, float degats)
 
         pos = {1000, 1000};
     }
-    if (enemy.health/enemy.hit <= enemy.health/3)
+    if (enemy.health / enemy.hit <= enemy.health / 3)
     {
         enemy.is_burning = true;
     }
-    
 
     if (!fixedDirection)
     {
@@ -44,11 +45,13 @@ void Bullet::update(Enemy &enemy, const double &elapsedTime, float degats)
         fixedDirection = true;
     }
 
-    pos.x += direction.x * elapsedTime * 7;
-    pos.y += direction.y * elapsedTime * 7;
+    this->pos.x += direction.x * elapsedTime * 4;
+    this->pos.y += direction.y * elapsedTime * 4;
 }
 
 void Bullet::render(Map &map)
 {
-    draw_quad_with_texture(texture, pos.x, pos.y, map);
+    // On dessine la bullet si elle est dans la map.
+    if (is_inside_MAP(this->pos.x, this->pos.y, map))
+        this->sprite.renderSpriteSheet(this->pos.x, this->pos.y, map);
 }

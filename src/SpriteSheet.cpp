@@ -5,6 +5,7 @@
 #include "Map.hpp"
 #include "Draw.hpp"
 
+//Load toutes les sprites sheets dans le LoadTextures
 void SpriteSheet::loadSpriteSheet(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     this->texture = LoadedTextures[this->path];

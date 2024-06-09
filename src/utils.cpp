@@ -116,7 +116,7 @@ void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 
 bool is_inside_MAP(float &x, float &y, Map &map)
 {
-    return (x >= 0 && x < map.NUMBER_OF_PIXELS_IN_LINE && y >= 0 && y < map.NUMBER_OF_PIXELS_IN_LINE);
+    return (x >= 0 && x < map.NUMBER_OF_PIXELS_IN_LINE - 1 && y >= 0 && y < map.NUMBER_OF_PIXELS_IN_LINE - 1);
 }
 
 bool hover_TOWER_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &tower_pos, int const &UI_size)

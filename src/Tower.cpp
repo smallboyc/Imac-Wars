@@ -2,13 +2,13 @@
 #include <Draw.hpp>
 #include "TowerDefense.hpp"
 
-void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 const &pixel_pos)
+void Tower::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 const &pixel_pos)
 {
     this->pos = pixel_pos;
-    this->bullet.setup(LoadedTextures, this->pos, this->type);
+    this->bullet.setup(SPRITE_SHEETS_ITD, this->pos, this->type);
 }
 
-void Tower::update(TowerDefense *TD, const double &elapsedTime)
+void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &currentTime)
 {
     cadence -= elapsedTime * 3;
 
@@ -17,7 +17,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime)
         // Distance de Chebyshev
         if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < this->portee && enemy.second.isMoving)
         {
-            this->bullet.update(enemy.second, elapsedTime, this->degats);
+            this->bullet.update(enemy.second, elapsedTime, currentTime, this->degats);
             this->bullet.isBeingShot = true;
             break;
         }
