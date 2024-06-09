@@ -153,13 +153,13 @@ void Map::get_TILES_from_PIXELS()
         {
             // Point d'entrée
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/textures/Map/Start_Point.png");
+            TILE_path_list.push_back("images/textures/Map/Logo_Empire.png");
         }
         else if (pixel.is_END_POINT)
         {
             // Point de sortie
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
-            TILE_path_list.push_back("images/textures/Map/End_Point.png");
+            TILE_path_list.push_back("images/textures/Map/Logo_Alliance.png");
         }
         else if (pixel.is_PATH) // Point de chemin => route OU virage
         {

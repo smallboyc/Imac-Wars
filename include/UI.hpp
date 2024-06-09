@@ -14,7 +14,7 @@ struct UI
 {
     glm::vec2 CELL_pos{0, 0};
     bool SHOW_TARGETED_CELL{false};
-    int WALLET{100};
+    int WALLET{20};
     SimpleText MAIN_TITLE{};
     SimpleText PLAY_PAUSE{};
     SimpleText WALLET_indicator{};
@@ -28,5 +28,5 @@ struct UI
     void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
     void active_award_if_ENEMY_die(std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
     void show_TOWER_to_select(Map &map, Tower const &tower);
-    void show_CURSOR_select(Map &map, Tower const &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
+    void show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
 };
