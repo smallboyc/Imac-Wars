@@ -9,6 +9,13 @@ void Bullet::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedText
 
 void Bullet::update(Enemy &enemy)
 {
+    // Si le laser touche l'ennemi
+    if (std::round(enemy.pos.x) == std::round(this->pos.x) && std::round(enemy.pos.y) == std::round(this->pos.y) && !(this->hitEnemy))
+    {
+        std::cout << "HIT" << std::endl;
+        enemy.hit += 1;
+        this->hitEnemy = true;
+    }
     if (!fixedDirection)
     {
         direction = {enemy.pos.x - pos.x, enemy.pos.y - pos.y};

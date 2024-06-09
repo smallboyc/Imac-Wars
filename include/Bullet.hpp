@@ -15,7 +15,8 @@ struct Bullet
     glm::vec2 direction;
     bool fixedDirection{false};
     bool isBeingShot{false};
+    bool hitEnemy{false};
     void setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 &tower_pos);
-    void update(Enemy&);
-    void draw(Map&);
+    void update(Enemy &);
+    void draw(Map &);
 };

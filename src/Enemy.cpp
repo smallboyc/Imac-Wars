@@ -13,11 +13,9 @@
 void Enemy::set(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     this->path = path;
-    this->health = 0.07f;
     this->current.x = map.SHORTER_PATH_LIST[path][0].pixel.x;
     this->current.y = map.SHORTER_PATH_LIST[path][0].pixel.y;
-    this->pos.x = this->current.x;
-    this->pos.y = this->current.y;
+    this->pos = this->current;
     this->travel = 0.0f;
     this->target_node_index = 1;
     // Chargement des textures au set
@@ -83,7 +81,7 @@ void Enemy::move(Map &map)
             this->target_node_index++;
         }
     }
-    draw_enemy(this->texture, this->current.x, this->current.y, map, this->health);
+    draw_enemy(this->texture, *this, this->current.x, this->current.y, map, this->health, this->hit);
 }
 
 // Mise à jour de l'état de l'ennemi
@@ -97,7 +95,5 @@ void Enemy::update_state(Map &map, const double &elapsedTime)
     // Si l'ennemi atteint sa cible = sacrifice
     if (this->current.x == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.x && this->current.y == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.y)
         this->isDead = true;
-    // Si l'ennemi perd toute sa barre de vie
-    if (this->health <= 0.01f)
-        this->isDead = true;
+
 }

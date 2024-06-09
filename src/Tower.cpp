@@ -17,18 +17,20 @@ void Tower::update(const double &elapsedTime, const double &currentTime, TowerDe
         // Distance de Chebyshev
         if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < 2)
         {
-            bullet.update(enemy.second);
-            bullet.isBeingShot = true;
+            this->bullet.update(enemy.second);
+            this->bullet.isBeingShot = true;
             break;
         }
-        bullet.isBeingShot = false;
+        this->bullet.isBeingShot = false;
     }
 
+    // Réinitialise l'état du laser si on touche l'ennemi OU le laser termine son trajet.
     if (fireRate < 0)
     {
-        bullet.pos = pos;
+        this->bullet.pos = this->pos;
         fireRate = 3;
-        bullet.fixedDirection = false;
+        this->bullet.fixedDirection = false;
+        this->bullet.hitEnemy = false;
     }
 }
 
@@ -36,6 +38,6 @@ void Tower::draw(Map &map)
 {
     draw_tower(this->texture, this->pos.x, this->pos.y, map);
 
-    if (bullet.isBeingShot)
-        bullet.draw(map);
+    if (this->bullet.isBeingShot)
+        this->bullet.draw(map);
 }

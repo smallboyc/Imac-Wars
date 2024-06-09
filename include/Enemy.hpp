@@ -14,9 +14,10 @@ struct Enemy
     glm::vec2 current; // position actuel de l'ennemi
     glm::vec2 pos;     // position relative de l'ennemi
     float health;      // Point de vie
+    float hit{0};      // Nombre de fois que l'ennemi est touché par une tour
     float speed;       // Vitesse
     float damage;      // Dégats
-    bool isMoving{false};  
+    bool isMoving{false};
     bool is_burning{false};
     bool isDead{false};
     int path;              // Chemin suivi par l'ennemi = id (déterminé par le plus court chemin)

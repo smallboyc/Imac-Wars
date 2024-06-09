@@ -64,23 +64,31 @@ void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
-void draw_enemy(GLuint const &texture, float &x, float &y, Map &map, float health)
+void draw_enemy(GLuint const &texture, Enemy &enemy, float &x, float &y, Map &map, float &health, float &hit)
 {
     // BARRE DE VIE
     float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
-    float X1 = X0 + map.PIXEL_SIZE;
+    float X1 = X0 + map.PIXEL_SIZE - hit / health;
     float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
     float Y1 = Y0 + map.PIXEL_SIZE;
 
-    glColor3ub(255, 0, 0); // Couleur rouge pour la barre de vie
-    glPushMatrix();
-    glLineWidth(5);
-    glBegin(GL_LINES);
-    glVertex2f(X0, Y1); // Coin supérieur gauche
-    glVertex2f(X1, Y1); // Coin supérieur droit
-    glEnd();
-    glPopMatrix();
-    draw_quad_with_texture(texture, x, y, map);
+    // Si la barre de vie est vide = l'ennemi meurt
+    if (X1 <= X0)
+        enemy.isDead = true;
+
+    // Si l'ennemi n'est pas mort on le dessine.
+    if (!enemy.isDead)
+    {
+        glColor3ub(255, 0, 0); // Couleur rouge pour la barre de vie
+        glPushMatrix();
+        glLineWidth(5);
+        glBegin(GL_LINES);
+        glVertex2f(X0, Y1); // Coin supérieur gauche
+        glVertex2f(X1, Y1); // Coin supérieur droit
+        glEnd();
+        glPopMatrix();
+        draw_quad_with_texture(texture, x, y, map);
+    }
 }
 
 void draw_tower(GLuint const &texture, float &x, float &y, Map &map)

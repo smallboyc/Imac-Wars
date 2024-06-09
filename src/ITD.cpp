@@ -71,7 +71,7 @@ void TowerDefense::get_ENEMIES_from_ITD()
 
             Enemy enemy;
             enemy.name = name;
-            enemy.health = numbers[1] / 100;
+            enemy.health = numbers[1];
             enemy.speed = numbers[2] / 10;
             enemy.damage = numbers[3];
             this->ENEMIES_ITD.insert({static_cast<int>(numbers[0]), enemy});

@@ -59,8 +59,9 @@ void TowerDefense::render_MAP()
 void TowerDefense::active_UI(int &_width, int &_height)
 {
     this->ui.show_CELLS(this->map, this->LoadedTextures);
-    this->ui.show_WALLET(_width, _height);
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
+    this->ui.active_award_if_ENEMY_die(this->current_ENEMIES_in_WAVE);
+    this->ui.show_WALLET(_width, _height);
     for (auto &tower : this->TOWERS_ITD)
     {
         this->ui.show_TOWER_to_select(this->map, tower.second);
@@ -150,6 +151,40 @@ void TowerDefense::render_ENEMIES_in_WAVE()
         }
     }
 }
+// Update des vagues en fonction de l'avancée du jeu
+void TowerDefense::update_WAVE()
+{
+    // Le jeu se termine quand on a effectué toutes les vagues de l'ITD.
+    if (this->current_WAVE_id != this->WAVES_ITD.size())
+    {
+        //Si la WAVE correspondant au current_WAVE_id n'est pas trouvé, alors on la charge !
+        if (std::find(this->WAVES_checked.begin(), this->WAVES_checked.end(), this->current_WAVE_id) == this->WAVES_checked.end())
+        {
+            setup_WAVE();
+            get_ENEMIES_into_WAVE();
+            setup_ENEMIES_in_WAVE();
+        }
+
+        // Si l'ennemi meurt, on le supprime de la vague.
+        std::unordered_map<int, Enemy> current_ENEMIES_in_WAVE_copy{this->current_ENEMIES_in_WAVE}; // copy pour pas boucler sur des éléments que l'on delete
+        for (auto &enemy : current_ENEMIES_in_WAVE_copy)
+            if (enemy.second.isDead)
+                this->current_ENEMIES_in_WAVE.erase(enemy.first);
+
+        // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
+        if (this->current_ENEMIES_in_WAVE.empty())
+        {
+            this->ENEMIES_id_to_launch = 0;
+            this->current_WAVE_id++;
+        }
+    }
+    else
+    {
+        std::cout << "FIN DU JEU" << std::endl;
+        // écran de fin au lieu d'exit après.
+        exit(0);
+    }
+}
 
 // Setup des tours (textures et attributs)
 // void TowerDefense::setup_TOWERS()
@@ -173,42 +208,6 @@ void TowerDefense::render_TOWERS()
         glPushMatrix();
         tower.second.draw(this->map);
         glPopMatrix();
-    }
-}
-
-// Update des vagues en fonction de l'avancée du jeu
-void TowerDefense::update_WAVE()
-{
-    // Le jeu se termine quand on a effectué toutes les vagues de l'ITD.
-    if (this->current_WAVE_id != this->WAVES_ITD.size())
-    {
-        if (std::find(this->WAVES_checked.begin(), this->WAVES_checked.end(), this->current_WAVE_id) == this->WAVES_checked.end())
-        {
-            setup_WAVE();
-            get_ENEMIES_into_WAVE();
-            setup_ENEMIES_in_WAVE();
-        }
-        std::unordered_map<int, Enemy> current_ENEMIES_in_WAVE_copy{this->current_ENEMIES_in_WAVE}; // copy pour pas boucler sur des éléments que l'on delete
-        // Si l'ennemi meurt, on l'enlève de notre liste dans la vague
-        for (auto &enemy : current_ENEMIES_in_WAVE_copy)
-            if (enemy.second.isDead)
-            {
-                this->current_ENEMIES_in_WAVE.erase(enemy.first);
-                this->ui.WALLET -= 5;
-            }
-
-        // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
-        if (this->current_ENEMIES_in_WAVE.empty())
-        {
-            this->ENEMIES_id_to_launch = 0;
-            this->current_WAVE_id++;
-        }
-    }
-    else
-    {
-        std::cout << "FIN DU JEU" << std::endl;
-        // écran de fin au lieu d'exit après.
-        exit(0);
     }
 }
 
