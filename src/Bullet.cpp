@@ -18,6 +18,12 @@ void Bullet::update(Enemy &enemy, const double &elapsedTime)
 
         pos = {1000, 1000};
     }
+    if (enemy.health/enemy.hit <= enemy.health/3)
+    {
+        enemy.is_burning = true;
+    }
+    
+
     if (!fixedDirection)
     {
         direction = {enemy.pos.x - pos.x, enemy.pos.y - pos.y};
