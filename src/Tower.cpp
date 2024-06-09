@@ -8,16 +8,16 @@ void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextu
     this->bullet.setup(LoadedTextures, this->pos);
 }
 
-void Tower::update(TowerDefense *TD)
+void Tower::update(TowerDefense *TD, const double &elapsedTime)
 {
-    fireRate -= 0.1;
+    fireRate -= elapsedTime * 3;
 
     for (auto &enemy : TD->current_ENEMIES_in_WAVE)
     {
         // Distance de Chebyshev
         if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < 2)
         {
-            this->bullet.update(enemy.second);
+            this->bullet.update(enemy.second, elapsedTime);
             this->bullet.isBeingShot = true;
             break;
         }

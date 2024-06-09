@@ -189,7 +189,7 @@ void TowerDefense::update_WAVE()
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
     for (auto &tower : this->current_TOWERS_in_MAP)
-        tower.second.update(this);
+        tower.second.update(this, elapsedTime);
 }
 
 // Met à jour et affiche les états des tours
