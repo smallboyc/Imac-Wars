@@ -15,6 +15,8 @@ void Bullet::update(Enemy &enemy, const double &elapsedTime)
         // std::cout << "HIT" << std::endl;
         enemy.hit += 1;
         this->hitEnemy = true;
+
+        pos = {1000, 1000};
     }
     if (!fixedDirection)
     {
