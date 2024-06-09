@@ -4,8 +4,8 @@ Enemies 3
 
 
 #ENEMIES (name, id, health, speed, damage)
-type X-Wing 0 40 1 5
-type Y-Wing 1 70 1.2 3
-type A-Wing 2 50 1.7 2
-type Falcon 3 100 2 4
+type X-Wing 0 40 1 0.5
+type Y-Wing 1 70 1.2 0.75
+type A-Wing 2 50 1.7 1
+type Falcon 3 100 2 2
 

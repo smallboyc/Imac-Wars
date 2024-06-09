@@ -31,18 +31,20 @@ void Game::SETUP(TowerDefense &TD)
     TD.get_ENEMIES_into_WAVE();
     TD.setup_ENEMIES_in_WAVE();
     TD.setup_SPRITE_SHEETS();
+    TD.setup_BASE();
     TD.ui.setup_UI_Text();
 }
 
 void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &currentTime)
 {
-    if (TD.GAME_IS_PLAYING && !TD.PAUSE) // Si le jeu est lancé et on est pas en pause
+    if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER) // Si le jeu est lancé et on est pas en pause
     {
         TD.update_WAVE();
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
         TD.update_TOWERS(elapsedTime, currentTime);
     }
 }
+
 void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 {
     if (TD.GAME_IS_PLAYING)
@@ -53,6 +55,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         if (!TD.PAUSE)
         {
             TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
+            TD.render_BASE_health();
             TD.render_ENEMIES_in_WAVE();
             TD.render_TOWERS();
             TD.active_UI(_width, _height);
@@ -64,9 +67,21 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
             draw_BREAK_MENU(TD.map);
         }
     }
-    else
+    else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER)
     {
         TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height / 2, SimpleText::CENTER);
+    }
+
+    if (TD.GAME_OVER) // SI LE JOUEUR PERD => Active l'écran de GAME OVER
+    {
+        TD.GAME_IS_PLAYING = false;
+        std::cout << "GAME OVER" << std::endl;
+    }
+
+    if (TD.PLAYER_WIN) // SI LE JOUEUR GAGNE => Active l'écran de WIN !
+    {
+        TD.GAME_IS_PLAYING = false;
+        std::cout << "PLAYER WIN" << std::endl;
     }
 
     TD.ui.show_MAIN_TITLE(_width, _height);

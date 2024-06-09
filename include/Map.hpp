@@ -6,6 +6,7 @@
 #include <glad/glad.h>
 #include <simpletext.h>
 #include "utils.hpp"
+#include "Base.hpp"
 #include "Graph.hpp"
 
 struct Map
@@ -41,5 +42,3 @@ struct Map
     float SEMI_MAP_SIZE{MAP_SIZE / 2.0f};
     float PIXEL_SIZE{MAP_SIZE / NUMBER_OF_PIXELS_IN_LINE};
 };
-
-

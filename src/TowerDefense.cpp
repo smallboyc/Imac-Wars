@@ -55,6 +55,22 @@ void TowerDefense::render_MAP()
     this->map.load_MAP();
 }
 
+void TowerDefense::setup_BASE()
+{
+    for (Pixel &pixel : this->map.PIXELS)
+        if (pixel.is_START_POINT)
+            this->base.pos = {pixel.x, pixel.y};
+}
+
+void TowerDefense::render_BASE_health()
+{
+    draw_BASE_health(this->base, 0.0f, -1.0f, this->map);
+
+    // Si la base est détruite => GAME OVER.
+    if (this->base.is_Destroyed)
+        this->GAME_OVER = true;
+}
+
 // Active l'interface utilisateurs et les infos
 void TowerDefense::active_UI(int &_width, int &_height)
 {
@@ -127,12 +143,20 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
             if (enemy.second.is_burning)
                 this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
         }
+
+        // Si l'ennemi atteint la Base, il se sacrifie et fait des dégats.
+        if (std::round(enemy.second.pos.x) == std::round(this->base.pos.x) && std::round(enemy.second.pos.y) == std::round(this->base.pos.y))
+        {
+            enemy.second.isDead = true;
+            this->base.ouch += enemy.second.damage;
+        }
     }
 }
 
 // Met à jour et affiche les états de l'ennemi : Position des sprites / Autres sprites liés à l'ennemi.
 void TowerDefense::render_ENEMIES_in_WAVE()
 {
+
     for (auto &enemy : this->current_ENEMIES_in_WAVE)
     {
         if (!enemy.second.isDead && enemy.second.isMoving)
@@ -178,11 +202,9 @@ void TowerDefense::update_WAVE()
             this->current_WAVE_id++;
         }
     }
-    else
+    else if (!this->GAME_OVER)
     {
-        std::cout << "FIN DU JEU" << std::endl;
-        // écran de fin au lieu d'exit après.
-        exit(0);
+        this->PLAYER_WIN = true;
     }
 }
 // Met à jour le comportement des tours

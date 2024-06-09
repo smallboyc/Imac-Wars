@@ -16,7 +16,7 @@ struct Enemy
     float health;      // Point de vie
     float hit{0};      // Nombre de fois que l'ennemi est touché par une tour
     float speed;       // Vitesse
-    float damage;      // Dégats
+    float damage{10};      // Dégats
     bool isMoving{false};
     bool is_burning{false};
     bool isDead{false};

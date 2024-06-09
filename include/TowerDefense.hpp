@@ -16,13 +16,15 @@
 #include "SpriteSheet.hpp"
 #include "Tower.hpp"
 
-
 struct TowerDefense
 {
     bool GAME_IS_PLAYING{false};
     bool PAUSE{false};
+    bool GAME_OVER{false};
+    bool PLAYER_WIN{false};
     Map map;
     UI ui;
+    Base base;
     std::unordered_map<std::filesystem::path, GLuint> LoadedTextures; // stock toutes les instances de textures load (1 fois)
     // Vagues
     size_t current_WAVE_id{0};               // ID de la vague actuelle
@@ -46,6 +48,9 @@ struct TowerDefense
     // MAP
     void setup_MAP(std::string const path, int const pixels_in_LINE);
     void render_MAP();
+    // BASE
+    void setup_BASE();
+    void render_BASE_health();
     // UI
     void active_UI(int &_width, int &_height);
     // ITD
