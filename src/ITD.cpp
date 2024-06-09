@@ -35,8 +35,12 @@ void TowerDefense::get_TOWERS_from_ITD()
             Tower tower;
             tower.type = numbers[0];
             tower.price = numbers[1];
-            tower.UI_pos = {numbers[2], numbers[3]};
-            tower.UI_size = numbers[4];
+            tower.cadence = numbers[2];
+            tower.health = numbers[3];
+            tower.degats = numbers[4];
+            tower.portee = numbers[5];
+            tower.UI_pos = {numbers[6], numbers[7]};
+            tower.UI_size = numbers[8];
             tower.texture = this->LoadedTextures["images/textures/Tower/" + name + ".png"];
             this->TOWERS_ITD.insert({numbers[0], tower});
         }

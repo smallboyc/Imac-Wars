@@ -10,7 +10,7 @@ void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextu
 
 void Tower::update(TowerDefense *TD, const double &elapsedTime)
 {
-    fireRate -= elapsedTime * 3;
+    cadence -= elapsedTime * 3;
 
     for (auto &enemy : TD->current_ENEMIES_in_WAVE)
     {
@@ -24,11 +24,11 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime)
         this->bullet.isBeingShot = false;
     }
 
-    // Réinitialise l'état du laser si on touche l'ennemi OU le laser termine son trajet.
-    if (fireRate < 0)
+    // Réinitialise l'état du laser si le laser termine son trajet.
+    if (cadence < 0)
     {
         this->bullet.pos = this->pos;
-        fireRate = 3;
+        cadence = 3;
         this->bullet.fixedDirection = false;
         this->bullet.hitEnemy = false;
     }

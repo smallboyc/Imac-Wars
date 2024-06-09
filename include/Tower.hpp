@@ -20,7 +20,9 @@ struct Tower
     int price;
     float health;
     GLuint texture;
-    float fireRate{3};
+    float cadence;
+    float degats;
+    float portee;
     Bullet bullet;
     bool can_be_Selected{false};
     bool hover{false};
