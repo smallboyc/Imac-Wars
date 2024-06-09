@@ -65,9 +65,9 @@ void UI::show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> 
         for (Pixel &pixel : map.PIXELS)
         {
             if (pixel.on_Mouse_Over && pixel.is_VOID)
-                draw_quad_with_texture(LoadedTextures["images/textures/Tower/Target_Tower_Cell.png"], pixel.x, pixel.y, map);
+                draw_quad_with_texture(LoadedTextures["images/textures/Cursor/Cursor_set_Tower_ON.png"], pixel.x, pixel.y, map);
             else if (pixel.on_Mouse_Over && pixel.is_PATH)
-                draw_quad_with_texture(LoadedTextures["images/textures/Tower/Target_Tower_Cell_Disabled.png"], pixel.x, pixel.y, map);
+                draw_quad_with_texture(LoadedTextures["images/textures/Cursor/Cursor_set_Tower_OFF.png"], pixel.x, pixel.y, map);
         }
         // draw_quad(this->CELL_pos.x, this->CELL_pos.y, map);
     }
@@ -131,12 +131,12 @@ void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::file
         if (this->WALLET >= tower.price) // Si le joueur a assez d'argent.
         {
             tower.can_be_Selected = true;
-            texture = LoadedTextures["images/textures/Tower/select.png"];
+            texture = LoadedTextures["images/textures/Cursor/Cursor_selected_ON.png"];
         }
         else
         {
             tower.can_be_Selected = false;
-            texture = LoadedTextures["images/textures/Tower/Target_Tower_Cell_Disabled.png"];
+            texture = LoadedTextures["images/textures/Cursor/Cursor_selected_OFF.png"];
         }
         draw_UI_ITEM(texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);
     }
