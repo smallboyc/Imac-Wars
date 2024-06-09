@@ -5,30 +5,30 @@
 void Tower::setup(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, glm::vec2 const &pixel_pos)
 {
     this->pos = pixel_pos;
-    this->bullet.setup(LoadedTextures, this->pos);
+    this->bullet.setup(LoadedTextures, this->pos, this->type);
 }
 
 void Tower::update(TowerDefense *TD, const double &elapsedTime)
 {
-    fireRate -= elapsedTime * 3;
+    cadence -= elapsedTime * 3;
 
     for (auto &enemy : TD->current_ENEMIES_in_WAVE)
     {
         // Distance de Chebyshev
-        if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < 2 && enemy.second.isMoving)
+        if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < this->portee && enemy.second.isMoving)
         {
-            this->bullet.update(enemy.second, elapsedTime);
+            this->bullet.update(enemy.second, elapsedTime, this->degats);
             this->bullet.isBeingShot = true;
             break;
         }
         this->bullet.isBeingShot = false;
     }
 
-    // Réinitialise l'état du laser si on touche l'ennemi OU le laser termine son trajet.
-    if (fireRate < 0)
+    // Réinitialise l'état du laser si le laser termine son trajet.
+    if (cadence < 0)
     {
         this->bullet.pos = this->pos;
-        fireRate = 3;
+        cadence = 3;
         this->bullet.fixedDirection = false;
         this->bullet.hitEnemy = false;
     }
