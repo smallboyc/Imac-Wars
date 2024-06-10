@@ -61,7 +61,6 @@ struct TowerDefense
     // WAVE
     void setup_WAVE();
     void get_ENEMIES_into_WAVE();
-    void update_WAVE();
     // ENEMY
     void setup_ENEMIES_in_WAVE();
     void update_ENEMIES_in_WAVE(const double &elapsedTime, const double &currentTime);

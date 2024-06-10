@@ -109,15 +109,6 @@ void UI::show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<in
     this->ENEMY_property.Render();
 }
 
-void UI::active_award_if_ENEMY_die(std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE)
-{
-    for (auto &enemy : current_ENEMIES_in_WAVE)
-    {
-        if (enemy.second.isDead)
-            this->WALLET += 10;
-    }
-}
-
 void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 {
     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, map);

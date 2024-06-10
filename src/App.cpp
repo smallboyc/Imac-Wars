@@ -13,7 +13,7 @@
 #include "App.hpp"
 #include "Tower.hpp"
 
-App::App() : _previousTime(0.0), _viewSize(1.5)
+App::App() : _previousTime(0.0), _viewSize(2)
 {
     Game::LOAD(TD, "map_schema_15x15.itd", 15);
 }

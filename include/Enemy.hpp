@@ -16,10 +16,11 @@ struct Enemy
     float health;      // Point de vie
     float hit{0};      // Nombre de fois que l'ennemi est touché par une tour
     float speed;       // Vitesse
-    float damage{10};      // Dégats
+    float damage{10};  // Dégats
     bool isMoving{false};
     bool is_burning{false};
     bool isDead{false};
+    bool hasReachTarget{false};
     int path;              // Chemin suivi par l'ennemi = id (déterminé par le plus court chemin)
     float travel;          // Trajet parcouru d'un noeud à l'autre => utilise elapsedTime
     float TIME;            // elapsedTime
@@ -27,6 +28,6 @@ struct Enemy
     GLuint texture;
     std::unordered_map<std::string, GLuint> textures; // Contient les 4 textures de l'ennemi
     void setup(Map &map, int const &path, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
-    void update(Map &map, const double &elapsedTime);
+    void update(const double &elapsedTime);
     void render(Map &map);
 };
