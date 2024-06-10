@@ -52,7 +52,8 @@ void TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LIN
 
 void TowerDefense::render_MAP()
 {
-    this->map.load_MAP();
+    draw_MAP_background(this->LoadedTextures["images/textures/Map/Map_VF_2.png"], this->map);
+    this->map.draw_MAP();
 }
 
 void TowerDefense::setup_BASE()
@@ -64,7 +65,7 @@ void TowerDefense::setup_BASE()
 
 void TowerDefense::render_BASE_health()
 {
-    draw_BASE_health(this->base, 0.0f, -1.0f, this->map);
+    draw_BASE_health(this->base, 0.0f, -2.f, this->map);
 
     // Si la base est détruite => GAME OVER.
     if (this->base.is_Destroyed)
@@ -74,7 +75,7 @@ void TowerDefense::render_BASE_health()
 // Active l'interface utilisateurs et les infos
 void TowerDefense::active_UI(int &_width, int &_height)
 {
-    this->ui.show_CELLS(this->map, this->LoadedTextures);
+    this->ui.show_CURSOR_on_MAP(this->map, this->LoadedTextures);
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
     this->ui.show_WALLET(_width, _height);
     for (auto &tower : this->TOWERS_ITD)
@@ -179,9 +180,7 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
 
         // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
         if (this->current_ENEMIES_in_WAVE.empty())
-        {
             this->FINISHED_WAVE = true;
-        }
     }
     else if (!this->GAME_OVER)
     {
@@ -215,7 +214,13 @@ void TowerDefense::render_ENEMIES_in_WAVE()
 // Met à jour le comportement des tours
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
-
+    for (auto &tower : this->TOWERS_ITD)
+    {
+        if (tower.second.type == this->current_TOWER_id)
+            tower.second.isSelectedinUI = true;
+        else
+            tower.second.isSelectedinUI = false;
+    }
     // Mise à jour des tours.
     for (auto &tower : this->current_TOWERS_in_MAP)
         tower.second.update(this, elapsedTime, currentTime);
@@ -235,6 +240,10 @@ void TowerDefense::update_TOWERS(const double &elapsedTime, const double &curren
             // On supprime la tour de la map.
             this->current_TOWERS_in_MAP.erase(tower.first);
         }
+
+    // Si aucune tour n'est posé ET que le joueur ne peut rien acheter => GAME OVER
+    if (this->current_TOWERS_in_MAP.empty() && this->ui.WALLET == 0)
+        this->GAME_OVER = true;
 }
 
 // Met à jour et affiche les états des tours

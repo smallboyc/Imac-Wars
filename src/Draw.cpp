@@ -246,12 +246,12 @@ void draw_quad(float &x, float &y, Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
-void draw_UI_ITEM(GLuint const &texture, float const &x, float const &y, int const &item_size, Map &map)
+void draw_UI_ITEM(GLuint const &texture, float const &x, float const &y, int const &item_width, int const &item_height, Map &map)
 {
     float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
-    float X1 = X0 + item_size * map.PIXEL_SIZE;
+    float X1 = X0 + item_width * map.PIXEL_SIZE;
     float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
-    float Y1 = Y0 + item_size * map.PIXEL_SIZE;
+    float Y1 = Y0 + item_height * map.PIXEL_SIZE;
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -275,7 +275,6 @@ void draw_UI_ITEM(GLuint const &texture, float const &x, float const &y, int con
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
 }
-
 
 void draw_BREAK_MENU(Map &map)
 {

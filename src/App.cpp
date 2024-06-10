@@ -15,7 +15,7 @@
 
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
-    Game::LOAD(TD, "map_schema_15x15.itd", 15);
+    Game::LOAD(TD, "map_schema_15x15_02.itd", 15);
 }
 
 void App::setup()
@@ -68,40 +68,32 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
         int mouseX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
         int mouseY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
 
-        if (TD.ui.SHOW_TARGETED_CELL)
+        // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
+        for (auto &tower : TD.TOWERS_ITD)
         {
-            // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
-            for (auto &tower : TD.TOWERS_ITD)
+            if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
             {
-                if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
-                {
-                    for (auto &tower : TD.TOWERS_ITD)
-                    {
-                        tower.second.isSelectedinUI = false;
-                    }
-                    TD.current_TOWER_id = tower.second.type;
-                    tower.second.isSelectedinUI = true;
-                }
+                TD.current_TOWER_id = tower.second.type;
             }
+        }
 
-            // le joueur positionne une tour sur la map au click
-            for (Pixel &pixel : TD.map.PIXELS)
+        // le joueur positionne une tour sur la map au click
+        for (Pixel &pixel : TD.map.PIXELS)
+        {
+            // Si le joueur click sur un pixel de map.
+            if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID && !pixel.is_FORBIDDEN && !pixel.is_TOWER)
             {
-                // Si le joueur click sur un pixel de map.
-                if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID && !pixel.is_TOWER)
+                // Le joueur peut poser sa tour s'il dispose de l'argent nécessaire.
+                if (TD.ui.WALLET >= TD.TOWERS_ITD.at(TD.current_TOWER_id).price)
                 {
-                    // Le joueur peut poser sa tour s'il dispose de l'argent nécessaire.
-                    if (TD.ui.WALLET >= TD.TOWERS_ITD.at(TD.current_TOWER_id).price)
-                    {
-                        Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
-                        tower.setup(TD.SPRITE_SHEETS_ITD, {pixel.x, pixel.y});
-                        TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+                    Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
+                    tower.setup(TD.SPRITE_SHEETS_ITD, {pixel.x, pixel.y});
+                    TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
 
-                        TD.towerID++;
-                        TD.ui.WALLET -= tower.price;
-                        pixel.is_VOID = false;
-                        pixel.is_TOWER = true;
-                    }
+                    TD.towerID++;
+                    TD.ui.WALLET -= tower.price;
+                    pixel.is_VOID = false;
+                    pixel.is_TOWER = true;
                 }
             }
         }

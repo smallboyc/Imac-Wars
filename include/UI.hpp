@@ -12,20 +12,29 @@
 
 struct UI
 {
-    glm::vec2 CELL_pos{0, 0};
-    bool SHOW_TARGETED_CELL{false};
     int WALLET{20};
     SimpleText MAIN_TITLE{};
     SimpleText PLAY_PAUSE{};
+    SimpleText PLAYER_WIN{};
+    SimpleText GAME_OVER{};
+    SimpleText QUIT_GAME{};
     SimpleText WALLET_indicator{};
     SimpleText WAVE_property{};
     SimpleText ENEMY_Title{};
     SimpleText ENEMY_property{};
+
+    // Textes
     void setup_UI_Text();
     void show_MAIN_TITLE(int &_width, int &_height);
-    void show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
+    void show_PLAYER_WIN(int &_width, int &_height);
+    void show_GAME_OVER(int &_width, int &_height);
+    void show_QUIT_GAME(int &_width, int &_height);
+
+    // Elements de jeu
+    void show_CURSOR_on_MAP(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_WALLET(int &_width, int &_height);
-    void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
     void show_TOWER_to_select(Map &map, Tower const &tower);
+    void show_HELP_in_PAUSE(Map &map);
     void show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
+    void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
 };

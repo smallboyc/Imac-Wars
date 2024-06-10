@@ -31,7 +31,7 @@ struct Map
     void set_PIXELS_connected();
     void get_TILES_from_PIXELS();
     void load_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
-    void load_MAP();
+    void draw_MAP();
 
     // Debug
     void display_PIXELS_informations();

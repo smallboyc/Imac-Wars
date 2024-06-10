@@ -97,6 +97,11 @@ void Map::set_PIXELS_type()
             pixel.is_END_POINT = true;
             pixel.is_PATH = true;
         }
+        else if (pixel.color == get_colors_from_ITD("forbidden"))
+        {
+            pixel.is_FORBIDDEN = true;
+            pixel.is_VOID = true;
+        }
         else if (pixel.color == get_colors_from_ITD("path"))
             pixel.is_PATH = true;
         else
@@ -193,7 +198,7 @@ void Map::load_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &Load
 }
 
 // 8) Génération de la map en dessinant via 'draw_quad_with_texture'
-void Map::load_MAP()
+void Map::draw_MAP()
 {
     for (Tile &tile : this->TILES)
         for (GLuint &texture : tile.texture_list)

@@ -39,7 +39,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
                 enemy.second.reSpeedSet = true;
             }
 
-            std::cout << currentTime - enemy.second.reSpeed << "\n";
+            // std::cout << currentTime - enemy.second.reSpeed << "\n";
 
             if(currentTime - enemy.second.reSpeed >= 2)
             {
