@@ -119,7 +119,8 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     GLuint texture;
-    if (tower.hover) // Au survol de l'item de tour.
+        
+    if (tower.hover || tower.isSelectedinUI) // Au survol de l'item de tour.
     {
         if (this->WALLET >= tower.price) // Si le joueur a assez d'argent.
         {

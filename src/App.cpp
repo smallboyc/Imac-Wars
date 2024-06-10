@@ -74,7 +74,14 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
             for (auto &tower : TD.TOWERS_ITD)
             {
                 if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
+                {
+                    for (auto &tower : TD.TOWERS_ITD)
+                    {
+                        tower.second.isSelectedinUI = false;
+                    }
                     TD.current_TOWER_id = tower.second.type;
+                    tower.second.isSelectedinUI = true;
+                }
             }
 
             // le joueur positionne une tour sur la map au click
