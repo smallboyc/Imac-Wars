@@ -183,8 +183,7 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
         // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
         if (this->current_ENEMIES_in_WAVE.empty())
         {
-            this->ENEMIES_id_to_launch = 0;
-            this->current_WAVE_id++;
+            this->FINISHED_WAVE = true;
         }
     }
     else if (!this->GAME_OVER)

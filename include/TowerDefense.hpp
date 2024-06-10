@@ -20,6 +20,7 @@ struct TowerDefense
 {
     bool GAME_IS_PLAYING{false};
     bool PAUSE{false};
+    bool FINISHED_WAVE{false};
     bool GAME_OVER{false};
     bool PLAYER_WIN{false};
     Map map;

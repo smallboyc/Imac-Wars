@@ -53,16 +53,26 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 
         if (!TD.PAUSE)
         {
-            TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
-            TD.render_BASE_health();
-            TD.render_ENEMIES_in_WAVE();
-            TD.render_TOWERS();
-            TD.active_UI(_width, _height);
+            if(!TD.FINISHED_WAVE)
+            {
+                TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
+                TD.render_BASE_health();
+                TD.render_ENEMIES_in_WAVE();
+                TD.render_TOWERS();
+                TD.active_UI(_width, _height);
+            }
         }
         else
         {
             TD.ui.PLAY_PAUSE.Label("> PAUSE <", _width / 2, _height / 2, SimpleText::CENTER);
             TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
+            draw_BREAK_MENU(TD.map);
+        }
+
+        if(TD.FINISHED_WAVE)
+        {
+            TD.ui.PLAY_PAUSE.Label("> WAVE FINISHED! <", _width / 2, _height / 2, SimpleText::CENTER);
+            TD.ui.PLAY_PAUSE.Label("PRESS -ENTER- TO CONTINUE", _width / 2, 150, SimpleText::CENTER);
             draw_BREAK_MENU(TD.map);
         }
     }
@@ -103,14 +113,18 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
         // Si le jeu n'est pas en pause
         if (!TD.PAUSE)
         {
-            if (key == GLFW_KEY_F && action == GLFW_PRESS)
-            {
-                for (auto &enemy : TD.current_ENEMIES_in_WAVE)
-                    enemy.second.is_burning = !enemy.second.is_burning;
-            }
-
             if (key == GLFW_KEY_Q && action == GLFW_PRESS)
                 TD.ui.SHOW_TARGETED_CELL = !TD.ui.SHOW_TARGETED_CELL;
+        }
+
+        if(TD.FINISHED_WAVE)
+        {
+            if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+            {
+                TD.ENEMIES_id_to_launch = 0;
+                TD.current_WAVE_id++;
+                TD.FINISHED_WAVE = false;
+            }
         }
     }
 }
