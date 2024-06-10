@@ -1,11 +1,11 @@
 #include "Bullet.hpp"
 #include "TowerDefense.hpp"
 
-void Bullet::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 &tower_pos, int tower_id)
+void Bullet::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, Tower* tower)
 {
-    this->pos = tower_pos;
+    this->pos = tower->pos;
 
-    switch (tower_id)
+    switch (tower->type)
     {
     case 0:
         this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE");
@@ -21,23 +21,31 @@ void Bullet::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_I
     }
 }
 
-void Bullet::update(Enemy &enemy, const double &elapsedTime, const double &currentTime, float degats)
+void Bullet::update(Enemy& enemy, const double &elapsedTime, const double &currentTime, Tower* tower)
 {
-    this->sprite.updateSpriteSheet(currentTime);
-
     // Si le laser touche l'ennemi
     if (std::round(enemy.pos.x) == std::round(this->pos.x) && std::round(enemy.pos.y) == std::round(this->pos.y) && !(this->hitEnemy))
     {
         // std::cout << "HIT" << std::endl;
-        enemy.hit += degats;
-        this->hitEnemy = true;
+        if(tower->type != 1)
+        {
+            enemy.hit += tower->degats;
+        }
+        else
+        {
+            enemy.speed /= 3;
+            enemy.isTarget = false;
+        }
 
+        this->hitEnemy = true;
         pos = {1000, 1000};
     }
     if (enemy.health / enemy.hit <= enemy.health / 3)
     {
         enemy.is_burning = true;
     }
+
+    this->sprite.updateSpriteSheet(currentTime);
 
     if (!fixedDirection)
     {

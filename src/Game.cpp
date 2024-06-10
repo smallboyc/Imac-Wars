@@ -69,7 +69,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
             TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
             draw_BREAK_MENU(TD.map);
         }
-
+        
         if(TD.FINISHED_WAVE)
         {
             TD.ui.PLAY_PAUSE.Label("> WAVE FINISHED! <", _width / 2, _height / 2, SimpleText::CENTER);
@@ -108,7 +108,7 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
     if (TD.GAME_IS_PLAYING)
     {
         // Pause
-        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS && !TD.FINISHED_WAVE)
             TD.PAUSE = !TD.PAUSE;
 
         // Si le jeu n'est pas en pause

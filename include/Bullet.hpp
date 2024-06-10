@@ -9,6 +9,8 @@
 #include "Enemy.hpp"
 #include "SpriteSheet.hpp"
 
+struct Tower;
+
 struct Bullet
 {
     // GLuint texture;
@@ -18,7 +20,7 @@ struct Bullet
     bool fixedDirection{false};
     bool isBeingShot{false};
     bool hitEnemy{false};
-    void setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 &tower_pos, int tower_id);
-    void update(Enemy &, const double &elapsedTime, const double &currentTime, float degats);
+    void setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, Tower*);
+    void update(Enemy&, const double &elapsedTime, const double &currentTime, Tower*);
     void render(Map &);
 };

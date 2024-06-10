@@ -27,6 +27,6 @@ struct Tower
     bool can_be_Selected{false};
     bool hover{false};
     void setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 const &pixel_pos);
-    void update(TowerDefense *, const double &elapsedTime, const double &currentTime);
+    void update(TowerDefense*, const double &elapsedTime, const double &currentTime);
     void render(Map &map);
 };

@@ -5,7 +5,7 @@
 void Tower::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 const &pixel_pos)
 {
     this->pos = pixel_pos;
-    this->bullet.setup(SPRITE_SHEETS_ITD, this->pos, this->type);
+    this->bullet.setup(SPRITE_SHEETS_ITD, this);
 }
 
 void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &currentTime)
@@ -14,14 +14,35 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
 
     for (auto &enemy : TD->current_ENEMIES_in_WAVE)
     {
-        // Distance de Chebyshev
-        if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < this->portee && enemy.second.isMoving)
+        if(enemy.second.isTarget)
         {
-            this->bullet.update(enemy.second, elapsedTime, currentTime, this->degats);
-            this->bullet.isBeingShot = true;
-            break;
+            // Distance de Chebyshev
+            if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < this->portee && enemy.second.isMoving)
+            {
+                this->bullet.update(enemy.second, elapsedTime, currentTime, this);
+                this->bullet.isBeingShot = true;
+                break;
+            }
+            this->bullet.isBeingShot = false;
         }
-        this->bullet.isBeingShot = false;
+        else
+        {
+            if(!enemy.second.reSpeedSet)
+            {
+                enemy.second.reSpeed = currentTime;
+                enemy.second.reSpeedSet = true;
+            }
+
+            std::cout << currentTime - enemy.second.reSpeed << "\n";
+
+            if(currentTime - enemy.second.reSpeed >= 2)
+            {
+                enemy.second.speed *= 3;
+
+                enemy.second.isTarget = true;
+                enemy.second.reSpeedSet = false;
+            }
+        }
     }
 
     // Réinitialise l'état du laser si le laser termine son trajet.

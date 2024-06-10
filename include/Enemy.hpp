@@ -20,6 +20,9 @@ struct Enemy
     bool isMoving{false};
     bool is_burning{false};
     bool isDead{false};
+    bool isTarget{true};
+    float reSpeed{.0f};
+    bool reSpeedSet{false};
     int path;              // Chemin suivi par l'ennemi = id (déterminé par le plus court chemin)
     float travel;          // Trajet parcouru d'un noeud à l'autre => utilise elapsedTime
     float TIME;            // elapsedTime
