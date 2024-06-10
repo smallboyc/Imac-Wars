@@ -52,7 +52,7 @@ void TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LIN
 
 void TowerDefense::render_MAP()
 {
-    draw_MAP_background(this->LoadedTextures["images/textures/Map/Background.png"], this->map);
+    draw_MAP_background(this->LoadedTextures["images/textures/Map/Background_Map.png"], this->map);
     this->map.draw_MAP();
 }
 
