@@ -6,6 +6,7 @@ SpriteSheet 3
 #SPRITESHEETS (key, frame in line, frame in column, frame rate, path)
 type FIRE_BLUE 8 1 0.07 burning_loop_1.png 
 type FIRE_ORANGE 8 1 0.07 burning_loop_2.png
-type BULLET_BLUE 7 1 0.07 Bullet_Blue.png
+type BULLET_BLUE 4 1 0.07 Bullet_Blue.png
+type BULLET_BLUE_2 4 1 0.07 Bullet_Blue_2.png
 
 

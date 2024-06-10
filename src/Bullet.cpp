@@ -11,7 +11,7 @@ void Bullet::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_I
         this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE");
         break;
     case 1:
-        this->sprite = SPRITE_SHEETS_ITD.at("FIRE_ORANGE");
+        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE_2");
         break;
     case 2:
         this->sprite = SPRITE_SHEETS_ITD.at("FIRE_BLUE");

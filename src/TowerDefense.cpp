@@ -144,11 +144,13 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
                 this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
         }
 
-        // Si l'ennemi atteint la Base, il se sacrifie et fait des dégats.
+        // Si l'ennemi atteint la Base, il se sacrifie + fait des dégats + fait perdre de l'argent.
         if (std::round(enemy.second.pos.x) == std::round(this->base.pos.x) && std::round(enemy.second.pos.y) == std::round(this->base.pos.y))
         {
             enemy.second.isDead = true;
             this->base.ouch += enemy.second.damage;
+            // std::cout 
+            // this->ui.WALLET -= 10;
         }
     }
 }
@@ -211,7 +213,7 @@ void TowerDefense::update_WAVE()
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
     for (auto &tower : this->current_TOWERS_in_MAP)
-        tower.second.update(this,elapsedTime, currentTime);
+        tower.second.update(this, elapsedTime, currentTime);
 }
 
 // Met à jour et affiche les états des tours

@@ -3,7 +3,7 @@ ITD
 Tours 3
 
 #TYPE (name, id, prix, cadence, health, degats, portee) ----- #UI (position (x,y), taille de l'item)
-type tower        0 10 4 40 1.0 2 19 14 2
+type tower        0 10 4 40 1.0 5 19 14 2
 type tower_cross  1 20 3 40 0.5 4 19 7. 2
 type tower_yellow 2 45 2 70 1.5 4 19 -1 2
 
