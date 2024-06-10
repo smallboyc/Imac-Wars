@@ -66,7 +66,7 @@ void UI::show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> 
         {
             if (pixel.on_Mouse_Over && pixel.is_VOID)
                 draw_quad_with_texture(LoadedTextures["images/textures/Cursor/Cursor_set_Tower_ON.png"], pixel.x, pixel.y, map);
-            else if (pixel.on_Mouse_Over && pixel.is_PATH)
+            else if (pixel.on_Mouse_Over && (pixel.is_PATH || pixel.is_TOWER))
                 draw_quad_with_texture(LoadedTextures["images/textures/Cursor/Cursor_set_Tower_OFF.png"], pixel.x, pixel.y, map);
         }
         // draw_quad(this->CELL_pos.x, this->CELL_pos.y, map);
@@ -75,6 +75,8 @@ void UI::show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> 
 
 void UI::show_WALLET(int &_width, int &_height)
 {
+    if (this->WALLET < 0)
+        this->WALLET = 0;
     std::string WALLET_label{" Wallets : " + std::to_string(this->WALLET) + " "};
     this->WALLET_indicator.Label(WALLET_label.c_str(), _width / 2, _height - 100, SimpleText::CENTER);
     this->WALLET_indicator.Render();

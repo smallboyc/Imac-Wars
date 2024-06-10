@@ -10,6 +10,12 @@ void Tower::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_IT
 
 void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &currentTime)
 {
+    if (currentTime - previousTimeTower >= 2) // On décrémente la vie de la tour toutes les 2 secondes.
+    {
+        this->age += 1;
+        previousTimeTower = currentTime;
+    }
+
     cadence -= elapsedTime * 3;
 
     for (auto &enemy : TD->current_ENEMIES_in_WAVE)
@@ -36,7 +42,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
 
 void Tower::render(Map &map)
 {
-    draw_tower(this->texture, this->pos.x, this->pos.y, map);
+    draw_tower(this->texture, *this, this->pos.x, this->pos.y, map, this->health, this->age);
 
     if (this->bullet.isBeingShot)
         this->bullet.render(map);

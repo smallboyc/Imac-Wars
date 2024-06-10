@@ -150,13 +150,10 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
             enemy.second.hasReachTarget = true;
         }
 
-        if (enemy.second.isDead && !enemy.second.hasReachTarget)
-        {
+        if (enemy.second.isDead && !enemy.second.hasReachTarget) // Gain de WALLET si l'ennemi meurt
             this->ui.WALLET += 10;
-            std::cout << "dead" << std::endl;
-        }
 
-        if (enemy.second.isDead && enemy.second.hasReachTarget)
+        if (enemy.second.isDead && enemy.second.hasReachTarget) // Perte de WALLET si l'ennemi atteint la Base
         {
             this->base.ouch += enemy.second.damage;
             this->ui.WALLET -= 5;
@@ -218,8 +215,26 @@ void TowerDefense::render_ENEMIES_in_WAVE()
 // Met à jour le comportement des tours
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
+
+    // Mise à jour des tours.
     for (auto &tower : this->current_TOWERS_in_MAP)
         tower.second.update(this, elapsedTime, currentTime);
+
+    // Suppression des tours.
+    std::unordered_map<int, Tower> current_TOWERS_in_MAP_copy{this->current_TOWERS_in_MAP}; // copy pour pas boucler sur des éléments que l'on delete
+    for (auto &tower : current_TOWERS_in_MAP_copy)
+        if (tower.second.isDestroyed)
+        {
+            // Si la tour meurt => On reset les propriétés du pixel où était la tour à VOID.
+            for (Pixel &pixel : this->map.PIXELS)
+                if (tower.second.pos.x == pixel.x && tower.second.pos.y == pixel.y)
+                {
+                    pixel.is_VOID = true;
+                    pixel.is_TOWER = false;
+                }
+            // On supprime la tour de la map.
+            this->current_TOWERS_in_MAP.erase(tower.first);
+        }
 }
 
 // Met à jour et affiche les états des tours
