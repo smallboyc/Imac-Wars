@@ -8,16 +8,16 @@ void Bullet::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_I
     switch (tower->type)
     {
     case 0:
-        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE");
+        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_GREEN");
         break;
     case 1:
-        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE_2");
+        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE");
         break;
     case 2:
-        this->sprite = SPRITE_SHEETS_ITD.at("FIRE_BLUE");
+        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_YELLOW");
         break;
     default:
-        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_BLUE");
+        this->sprite = SPRITE_SHEETS_ITD.at("BULLET_GREEN");
     }
 }
 

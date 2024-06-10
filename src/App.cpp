@@ -77,19 +77,24 @@ void App::mouse_button_callback(GLFWwindow *window, int button, int action, int 
                     TD.current_TOWER_id = tower.second.type;
             }
 
-            // Position des tours sur la map au click
+            // le joueur positionne une tour sur la map au click
             for (Pixel &pixel : TD.map.PIXELS)
             {
-                if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID)
+                // Si le joueur click sur un pixel de map.
+                if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID && !pixel.is_TOWER)
                 {
-                    Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
-                    tower.setup(TD.SPRITE_SHEETS_ITD, {pixel.x, pixel.y});
-                    TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+                    // Le joueur peut poser sa tour s'il dispose de l'argent nécessaire.
+                    if (TD.ui.WALLET >= TD.TOWERS_ITD.at(TD.current_TOWER_id).price)
+                    {
+                        Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
+                        tower.setup(TD.SPRITE_SHEETS_ITD, {pixel.x, pixel.y});
+                        TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
 
-                    TD.towerID++;
-
-                    pixel.is_VOID = false;
-                    pixel.is_TOWER = true;
+                        TD.towerID++;
+                        TD.ui.WALLET -= tower.price;
+                        pixel.is_VOID = false;
+                        pixel.is_TOWER = true;
+                    }
                 }
             }
         }

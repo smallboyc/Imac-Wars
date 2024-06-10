@@ -24,6 +24,9 @@ struct Tower
     float degats;
     float portee;
     Bullet bullet;
+    float age{0}; // Age de la tour => Elle meurt à un certain moment.
+    double previousTimeTower{0};
+    bool isDestroyed{false};
     bool can_be_Selected{false};
     bool hover{false};
     void setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 const &pixel_pos);

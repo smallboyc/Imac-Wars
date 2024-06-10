@@ -76,7 +76,6 @@ void TowerDefense::active_UI(int &_width, int &_height)
 {
     this->ui.show_CELLS(this->map, this->LoadedTextures);
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
-    this->ui.active_award_if_ENEMY_die(this->current_ENEMIES_in_WAVE);
     this->ui.show_WALLET(_width, _height);
     for (auto &tower : this->TOWERS_ITD)
     {
@@ -139,47 +138,28 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
 
         if (enemy.second.isMoving)
         {
-            enemy.second.update(this->map, elapsedTime);
+            enemy.second.update(elapsedTime);
             if (enemy.second.is_burning)
                 this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").updateSpriteSheet(currentTime);
         }
 
-        // Si l'ennemi atteint la Base, il se sacrifie + fait des dégats + fait perdre de l'argent.
+        // Si l'ennemi atteint la Base.
         if (std::round(enemy.second.pos.x) == std::round(this->base.pos.x) && std::round(enemy.second.pos.y) == std::round(this->base.pos.y))
         {
             enemy.second.isDead = true;
-            this->base.ouch += enemy.second.damage;
-            // std::cout 
-            // this->ui.WALLET -= 10;
+            enemy.second.hasReachTarget = true;
         }
-    }
-}
 
-// Met à jour et affiche les états de l'ennemi : Position des sprites / Autres sprites liés à l'ennemi.
-void TowerDefense::render_ENEMIES_in_WAVE()
-{
+        if (enemy.second.isDead && !enemy.second.hasReachTarget) // Gain de WALLET si l'ennemi meurt
+            this->ui.WALLET += 10;
 
-    for (auto &enemy : this->current_ENEMIES_in_WAVE)
-    {
-        if (!enemy.second.isDead && enemy.second.isMoving)
+        if (enemy.second.isDead && enemy.second.hasReachTarget) // Perte de WALLET si l'ennemi atteint la Base
         {
-            glPushMatrix();
-            enemy.second.render(this->map);
-            glPopMatrix();
-
-            if (enemy.second.is_burning)
-            {
-                glPushMatrix();
-                glTranslatef(0, 0.01, 0);
-                this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").renderSpriteSheet(enemy.second.pos.x, enemy.second.pos.y, this->map);
-                glPopMatrix();
-            }
+            this->base.ouch += enemy.second.damage;
+            this->ui.WALLET -= 5;
         }
     }
-}
-// Update des vagues en fonction de l'avancée du jeu
-void TowerDefense::update_WAVE()
-{
+
     // Le jeu se termine quand on a effectué toutes les vagues de l'ITD.
     if (this->current_WAVE_id != this->WAVES_ITD.size())
     {
@@ -208,11 +188,53 @@ void TowerDefense::update_WAVE()
         this->PLAYER_WIN = true;
     }
 }
+
+// Met à jour et affiche les états de l'ennemi : Position des sprites / Autres sprites liés à l'ennemi.
+void TowerDefense::render_ENEMIES_in_WAVE()
+{
+
+    for (auto &enemy : this->current_ENEMIES_in_WAVE)
+    {
+        if (!enemy.second.isDead && enemy.second.isMoving)
+        {
+            glPushMatrix();
+            enemy.second.render(this->map);
+            glPopMatrix();
+
+            if (enemy.second.is_burning)
+            {
+                glPushMatrix();
+                glTranslatef(0, 0.01, 0);
+                this->SPRITE_SHEETS_ITD.at("FIRE_ORANGE").renderSpriteSheet(enemy.second.pos.x, enemy.second.pos.y, this->map);
+                glPopMatrix();
+            }
+        }
+    }
+}
+
 // Met à jour le comportement des tours
 void TowerDefense::update_TOWERS(const double &elapsedTime, const double &currentTime)
 {
+
+    // Mise à jour des tours.
     for (auto &tower : this->current_TOWERS_in_MAP)
         tower.second.update(this, elapsedTime, currentTime);
+
+    // Suppression des tours.
+    std::unordered_map<int, Tower> current_TOWERS_in_MAP_copy{this->current_TOWERS_in_MAP}; // copy pour pas boucler sur des éléments que l'on delete
+    for (auto &tower : current_TOWERS_in_MAP_copy)
+        if (tower.second.isDestroyed)
+        {
+            // Si la tour meurt => On reset les propriétés du pixel où était la tour à VOID.
+            for (Pixel &pixel : this->map.PIXELS)
+                if (tower.second.pos.x == pixel.x && tower.second.pos.y == pixel.y)
+                {
+                    pixel.is_VOID = true;
+                    pixel.is_TOWER = false;
+                }
+            // On supprime la tour de la map.
+            this->current_TOWERS_in_MAP.erase(tower.first);
+        }
 }
 
 // Met à jour et affiche les états des tours

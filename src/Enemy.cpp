@@ -28,16 +28,12 @@ void Enemy::setup(Map &map, int const &path, std::unordered_map<std::filesystem:
 }
 
 // Mise à jour de l'état de l'ennemi
-void Enemy::update(Map &map, const double &elapsedTime)
+void Enemy::update(const double &elapsedTime)
 {
     this->TIME = elapsedTime;
 
     // Mise à jour du trajet d'un noeud à l'autre
     this->travel += this->speed * this->TIME;
-
-    // Si l'ennemi atteint sa cible = sacrifice
-    if (this->current.x == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.x && this->current.y == map.SHORTER_PATH_LIST[0][map.SHORTER_PATH_LIST[0].size() - 1].pixel.y)
-        this->isDead = true;
 }
 
 // On fait avancer l'ennemi

@@ -66,7 +66,7 @@ void UI::show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> 
         {
             if (pixel.on_Mouse_Over && pixel.is_VOID)
                 draw_quad_with_texture(LoadedTextures["images/textures/Cursor/Cursor_set_Tower_ON.png"], pixel.x, pixel.y, map);
-            else if (pixel.on_Mouse_Over && pixel.is_PATH)
+            else if (pixel.on_Mouse_Over && (pixel.is_PATH || pixel.is_TOWER))
                 draw_quad_with_texture(LoadedTextures["images/textures/Cursor/Cursor_set_Tower_OFF.png"], pixel.x, pixel.y, map);
         }
         // draw_quad(this->CELL_pos.x, this->CELL_pos.y, map);
@@ -75,6 +75,8 @@ void UI::show_CELLS(Map &map, std::unordered_map<std::filesystem::path, GLuint> 
 
 void UI::show_WALLET(int &_width, int &_height)
 {
+    if (this->WALLET < 0)
+        this->WALLET = 0;
     std::string WALLET_label{" Wallets : " + std::to_string(this->WALLET) + " "};
     this->WALLET_indicator.Label(WALLET_label.c_str(), _width / 2, _height - 100, SimpleText::CENTER);
     this->WALLET_indicator.Render();
@@ -107,15 +109,6 @@ void UI::show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<in
         gap += 30;
     }
     this->ENEMY_property.Render();
-}
-
-void UI::active_award_if_ENEMY_die(std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE)
-{
-    for (auto &enemy : current_ENEMIES_in_WAVE)
-    {
-        if (enemy.second.isDead)
-            this->WALLET += 10;
-    }
 }
 
 void UI::show_TOWER_to_select(Map &map, Tower const &tower)

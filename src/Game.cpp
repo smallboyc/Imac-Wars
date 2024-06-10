@@ -39,7 +39,6 @@ void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &cur
 {
     if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER) // Si le jeu est lancé et on est pas en pause
     {
-        TD.update_WAVE();
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
         TD.update_TOWERS(elapsedTime, currentTime);
     }
