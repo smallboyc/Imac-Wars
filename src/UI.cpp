@@ -173,10 +173,10 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 void UI::show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     // Left menu
-    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], -10, 1.5, 9, 12, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Ennemies.png"], -11, 0.5, 9, 14, map);
 
     // Right menu
-    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], 16, 1.5, 9, 12, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Allies.png"], 16, 0.5, 9, 14, map);
 }
 
 void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
