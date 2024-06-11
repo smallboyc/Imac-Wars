@@ -6,6 +6,7 @@
 #include <sstream>
 #include "Map.hpp"
 #include "utils.hpp"
+#include "Enemy.hpp"
 
 std::filesystem::path make_absolute_path(std::filesystem::path const &path, bool check_path_exists)
 {
@@ -74,13 +75,47 @@ std::ostream &operator<<(std::ostream &os, const Graph::WeightedGraph graph)
     return os;
 }
 
+bool is_NODE(const Connections &NEIGHBOUR)
+{
+    bool top = NEIGHBOUR.top->is_PATH;
+    bool bottom = NEIGHBOUR.bottom->is_PATH;
+    bool left = NEIGHBOUR.left->is_PATH;
+    bool right = NEIGHBOUR.right->is_PATH;
+
+    int pathCount = top + bottom + left + right;
+
+    // CROSS
+    if (pathCount == 4)
+        return true;
+
+    // ANGLE
+    if (pathCount == 2)
+    {
+        if ((top && right) || (top && left) || (bottom && left) || (bottom && right))
+            return true;
+    }
+
+    // INTERSECTION
+    if (pathCount == 3)
+        return true;
+
+    // ALONE
+    if (pathCount == 1)
+        return true;
+
+    return false;
+}
 void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
-    if (!NEIGHBOUR.top->is_VOID)
+    bool top = NEIGHBOUR.top->is_PATH;
+    bool bottom = NEIGHBOUR.bottom->is_PATH;
+    bool left = NEIGHBOUR.left->is_PATH;
+
+    if (top)
         TILE_path_list.push_back("images/textures/Map/Tip_Bottom.png");
-    else if (!NEIGHBOUR.bottom->is_VOID)
+    else if (bottom)
         TILE_path_list.push_back("images/textures/Map/Tip_Top.png");
-    else if (!NEIGHBOUR.left->is_VOID)
+    else if (left)
         TILE_path_list.push_back("images/textures/Map/Tip_Right.png");
     else
         TILE_path_list.push_back("images/textures/Map/Tip_Left.png");
@@ -88,19 +123,25 @@ void set_IN_OUT_orientation_texture(Connections const &NEIGHBOUR, std::vector<st
 
 void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
-    if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.right->is_VOID)
+
+    bool top = NEIGHBOUR.top->is_PATH;
+    bool bottom = NEIGHBOUR.bottom->is_PATH;
+    bool left = NEIGHBOUR.left->is_PATH;
+    bool right = NEIGHBOUR.right->is_PATH;
+
+    if (!top && !right)
         TILE_path_list.push_back("images/textures/Map/Angle_LB.png");
-    else if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.left->is_VOID)
+    else if (!top && !left)
         TILE_path_list.push_back("images/textures/Map/Angle_RB.png");
-    else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.right->is_VOID)
+    else if (!bottom && !right)
         TILE_path_list.push_back("images/textures/Map/Angle_LT.png");
-    else if (NEIGHBOUR.bottom->is_VOID && NEIGHBOUR.left->is_VOID)
+    else if (!bottom && !left)
         TILE_path_list.push_back("images/textures/Map/Angle_RT.png");
-    else if (NEIGHBOUR.top->is_VOID)
+    else if (!top)
         TILE_path_list.push_back("images/textures/Map/Inter_Bottom.png");
-    else if (NEIGHBOUR.bottom->is_VOID)
+    else if (!bottom)
         TILE_path_list.push_back("images/textures/Map/Inter_Top.png");
-    else if (NEIGHBOUR.left->is_VOID)
+    else if (!left)
         TILE_path_list.push_back("images/textures/Map/Inter_Right.png");
     else
         TILE_path_list.push_back("images/textures/Map/Inter_Left.png");
@@ -108,10 +149,26 @@ void set_NODE_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 
 void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std::filesystem::path> &TILE_path_list)
 {
-    if (NEIGHBOUR.top->is_VOID && NEIGHBOUR.bottom->is_VOID)
+    bool top = NEIGHBOUR.top->is_PATH;
+    bool bottom = NEIGHBOUR.bottom->is_PATH;
+
+    if (!top && !bottom)
         TILE_path_list.push_back("images/textures/Map/Path_Horizontal.png");
     else
         TILE_path_list.push_back("images/textures/Map/Path_Vertical.png");
+}
+
+// Si l'ennemi est sur un chemin => OK sinon PAS OK.
+bool is_ENEMY_travel_correctly(Enemy &enemy, Map &map)
+{
+    for (Pixel &pixel : map.PIXELS)
+        if (std::round(enemy.pos.x) == pixel.x && std::round(enemy.pos.y) == pixel.y)
+        {
+            if (pixel.is_PATH)
+                return true;
+            else
+                return false;
+        }
 }
 
 bool is_inside_MAP(float &x, float &y, Map &map)
