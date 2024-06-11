@@ -20,6 +20,12 @@ void UI::setup_UI_Text()
     this->MAIN_TITLE.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
     this->MAIN_TITLE.EnableBlending(true);
 
+    // WAVE FINISHED
+    this->WAVE_FINISHED.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
+    this->WAVE_FINISHED.SetTextSize(SimpleText::FontSize::SIZE_64);
+    this->WAVE_FINISHED.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
+    this->WAVE_FINISHED.EnableBlending(true);
+
     // PLAY & PAUSE
     this->PLAY_PAUSE.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
     this->PLAY_PAUSE.SetTextSize(SimpleText::FontSize::SIZE_32);
@@ -71,6 +77,15 @@ void UI::show_MAIN_TITLE(int &_width, int &_height)
 {
     this->MAIN_TITLE.Label("- IMAC WARS : Tower Defense -", _width / 2, 100, SimpleText::CENTER);
     this->MAIN_TITLE.Render();
+}
+
+void UI::show_WAVE_FINISHED(int &_width, int &_height, size_t current_WAVE_id)
+{
+    std::string text = "> WAVE " + std::to_string(current_WAVE_id) + " FINISHED! <";
+
+    this->WAVE_FINISHED.Label(text.c_str(), _width / 2, _height / 2, SimpleText::CENTER);
+    this->WAVE_FINISHED.Label("PRESS -ENTER- TO CONTINUE", _width / 2, _height / 2 + 150, SimpleText::CENTER);
+    this->WAVE_FINISHED.Render();
 }
 
 void UI::show_PLAYER_WIN(int &_width, int &_height)
@@ -159,7 +174,7 @@ void UI::show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, 
 {
     // Left menu
     draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], -10, 1.5, 9, 12, map);
-    
+
     // Right menu
     draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], 16, 1.5, 9, 12, map);
 }

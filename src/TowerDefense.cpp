@@ -67,7 +67,7 @@ void TowerDefense::setup_BASE()
 
 void TowerDefense::render_BASE_health()
 {
-    draw_BASE_health(this->base, 0.0f, -2.f, this->map);
+    draw_BASE_health(this->LoadedTextures["images/textures/UI/Base_Life.png"], this->base, 0.0f, -2.f, this->map);
 
     // Si la base est détruite => GAME OVER.
     if (this->base.is_Destroyed)
