@@ -48,7 +48,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 {
     if (TD.GAME_IS_PLAYING)
     {
-        
+
         TD.render_MAP();
 
         if (!TD.PAUSE)
@@ -66,6 +66,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         {
             TD.ui.PLAY_PAUSE.Label("> PAUSE <", _width / 2, _height / 2, SimpleText::CENTER);
             TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
+            TD.ui.show_HELP_in_PAUSE(TD.map, TD.LoadedTextures);
             TD.ui.show_QUIT_GAME(_width, _height);
             draw_BREAK_MENU(TD.map);
         }
@@ -85,7 +86,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
     if (TD.GAME_OVER) // SI LE JOUEUR PERD => Active l'écran de GAME OVER
     {
         TD.GAME_IS_PLAYING = false;
-        TD.ui.show_GAME_OVER(_width, _height);
+        TD.ui.show_GAME_OVER(_width, _height, TD.current_TOWERS_in_MAP);
         TD.ui.show_QUIT_GAME(_width, _height);
     }
 

@@ -45,7 +45,6 @@ void UI::setup_UI_Text()
     this->QUIT_GAME.EnableBlending(true);
 
     // WALLET
-    this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::RED);
     this->WALLET_indicator.SetTextSize(SimpleText::FontSize::SIZE_32);
     this->WALLET_indicator.SetColorf(SimpleText::BACKGROUND_COLOR, .0f, .0f, .0f, 0.9f);
     this->WALLET_indicator.EnableBlending(true);
@@ -80,9 +79,13 @@ void UI::show_PLAYER_WIN(int &_width, int &_height)
     this->PLAYER_WIN.Render();
 }
 
-void UI::show_GAME_OVER(int &_width, int &_height)
+void UI::show_GAME_OVER(int &_width, int &_height, std::unordered_map<int, Tower> current_TOWERS_in_MAP)
 {
     this->GAME_OVER.Label("GAME OVER !", _width / 2, _height / 2, SimpleText::CENTER);
+    if (current_TOWERS_in_MAP.empty() && this->WALLET == 0)
+        this->GAME_OVER.Label("NO TOUR ON MAP & NO MONEY!", _width / 2, _height / 2 + 100, SimpleText::CENTER);
+    else
+        this->GAME_OVER.Label("DEATH STAR HAS BEEN DESTROYED...", _width / 2, _height / 2 + 100, SimpleText::CENTER);
     this->GAME_OVER.Render();
 }
 
@@ -108,6 +111,11 @@ void UI::show_WALLET(int &_width, int &_height)
 {
     if (this->WALLET < 0)
         this->WALLET = 0;
+
+    if (this->WALLET == 0)
+        this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::RED);
+    else
+        this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::MAGENTA);
     std::string WALLET_label{" ARGENT : " + std::to_string(this->WALLET) + " "};
     this->WALLET_indicator.Label(WALLET_label.c_str(), _width / 2, _height - 50, SimpleText::CENTER);
     this->WALLET_indicator.Render();
@@ -147,10 +155,14 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);
 }
 
-// void UI::show_HELP_in_PAUSE(Map &map)
-// {
-//     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);
-// }
+void UI::show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    // Left menu
+    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], -10, 1.5, 9, 12, map);
+    
+    // Right menu
+    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], 16, 1.5, 9, 12, map);
+}
 
 void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
