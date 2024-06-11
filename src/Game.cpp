@@ -48,7 +48,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 {
     if (TD.GAME_IS_PLAYING)
     {
-        
+
         TD.render_MAP();
 
         if (!TD.PAUSE)
@@ -56,9 +56,9 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
             if (!TD.FINISHED_WAVE)
             {
                 TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
-                TD.render_BASE_health();
                 TD.render_ENEMIES_in_WAVE();
                 TD.render_TOWERS();
+                TD.render_BASE_health();
                 TD.active_UI(_width, _height);
             }
         }
@@ -66,15 +66,15 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         {
             TD.ui.PLAY_PAUSE.Label("> PAUSE <", _width / 2, _height / 2, SimpleText::CENTER);
             TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
+            TD.ui.show_HELP_in_PAUSE(TD.map, TD.LoadedTextures);
             TD.ui.show_QUIT_GAME(_width, _height);
             draw_BREAK_MENU(TD.map);
         }
 
         if (TD.FINISHED_WAVE)
         {
-            TD.ui.PLAY_PAUSE.Label("> WAVE FINISHED! <", _width / 2, _height / 2, SimpleText::CENTER);
-            TD.ui.PLAY_PAUSE.Label("PRESS -ENTER- TO CONTINUE", _width / 2, 150, SimpleText::CENTER);
             draw_BREAK_MENU(TD.map);
+            TD.ui.show_WAVE_FINISHED(_width, _height, TD.current_WAVE_id);
         }
     }
     else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER && !TD.PLAYER_WIN) // MENU START
@@ -85,7 +85,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
     if (TD.GAME_OVER) // SI LE JOUEUR PERD => Active l'écran de GAME OVER
     {
         TD.GAME_IS_PLAYING = false;
-        TD.ui.show_GAME_OVER(_width, _height);
+        TD.ui.show_GAME_OVER(_width, _height, TD.current_TOWERS_in_MAP);
         TD.ui.show_QUIT_GAME(_width, _height);
     }
 
@@ -103,8 +103,9 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int action, int mods)
 {
     // Lancer le jeu
-    if (key == GLFW_KEY_S && action == GLFW_PRESS)
-        TD.GAME_IS_PLAYING = true;
+    if (!TD.GAME_OVER && !TD.PLAYER_WIN)
+        if (key == GLFW_KEY_S && action == GLFW_PRESS)
+            TD.GAME_IS_PLAYING = true;
 
     // Si le jeu est en PAUSE, ou que c'est une fin de partie => possibilité de quitter le jeu.
     if (TD.PAUSE || TD.GAME_OVER || TD.PLAYER_WIN)

@@ -41,13 +41,15 @@ void TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LIN
     this->map.check_order_elements_ITD();
     this->map.get_SCHEMA_from_ITD();
     this->map.get_NODES_from_ITD();
-    this->map.create_GRAPH_from_NODES();
-    this->map.get_SHORTER_PATH_LIST();
     this->map.get_PIXELS_from_SCHEMA();
     this->map.set_PIXELS_type();
     this->map.set_PIXELS_connected();
-    this->map.get_TILES_from_PIXELS();
-    this->map.load_TILES_MAP(this->LoadedTextures);
+    this->map.check_if_PIXEL_is_NODE();
+    // Plus court chemin
+    this->map.create_GRAPH_from_NODES();
+    this->map.get_SHORTER_PATH_LIST();
+    this->map.get_TILES_path_from_PIXELS();
+    this->map.get_TILES_MAP(this->LoadedTextures);
 }
 
 void TowerDefense::render_MAP()
@@ -65,7 +67,7 @@ void TowerDefense::setup_BASE()
 
 void TowerDefense::render_BASE_health()
 {
-    draw_BASE_health(this->base, 0.0f, -2.f, this->map);
+    draw_BASE_health(this->LoadedTextures["images/textures/UI/Base_Life.png"], this->base, 0.0f, -2.f, this->map);
 
     // Si la base est détruite => GAME OVER.
     if (this->base.is_Destroyed)

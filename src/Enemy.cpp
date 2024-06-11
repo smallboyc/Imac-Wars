@@ -90,5 +90,13 @@ void Enemy::render(Map &map)
             this->target_node_index++;
         }
     }
+
+    // Check si l'ennemi est sur un chemin en parcourant.
+    if (!is_ENEMY_travel_correctly(*this, map))
+    {
+        std::cout << "Le chemin n'est pas continue." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
     draw_enemy(this->texture, *this, this->current.x, this->current.y, map, this->health, this->hit);
 }

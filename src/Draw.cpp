@@ -64,7 +64,7 @@ void draw_quad_with_texture(GLuint const &texture, float &x, float &y, Map &map)
     glDisable(GL_TEXTURE_2D);
 }
 
-void draw_BASE_health(Base &base, float const &x, float const &y, Map &map)
+void draw_BASE_health(GLuint const &texture, Base &base, float const &x, float const &y, Map &map)
 {
     // BARRE DE FOND NOIRE
     float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
@@ -91,10 +91,7 @@ void draw_BASE_health(Base &base, float const &x, float const &y, Map &map)
     glPopMatrix();
 
     // BARRE DE VIE
-    X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
     X1 = X0 + map.MAP_SIZE - base.ouch / base.health;
-    Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
-    Y1 = Y0 + map.PIXEL_SIZE;
 
     // Si la barre de vie est vide = GAME OVER
     if (X1 <= X0)
@@ -120,6 +117,28 @@ void draw_BASE_health(Base &base, float const &x, float const &y, Map &map)
         glEnd();
         glPopMatrix();
     }
+
+    // DESIGN BARRE DE VIE
+    X1 = X0 + map.MAP_SIZE;
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3ub(255, 255, 255);
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f(X0, Y0);
+
+    glTexCoord2d(1, 0);
+    glVertex2f(X1, Y0);
+
+    glTexCoord2d(1, 1);
+    glVertex2f(X1, Y1);
+
+    glTexCoord2d(0, 1);
+    glVertex2f(X0, Y1);
+    glEnd();
+    glPopMatrix();
 }
 
 void draw_enemy(GLuint const &texture, Enemy &enemy, float &x, float &y, Map &map, float &health, float &hit)

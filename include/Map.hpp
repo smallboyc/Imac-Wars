@@ -24,13 +24,14 @@ struct Map
     void get_SCHEMA_from_ITD();
     Color get_colors_from_ITD(std::string const &type);
     void get_NODES_from_ITD();
-    void create_GRAPH_from_NODES();
-    void get_SHORTER_PATH_LIST();
     void get_PIXELS_from_SCHEMA();
     void set_PIXELS_type();
     void set_PIXELS_connected();
-    void get_TILES_from_PIXELS();
-    void load_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
+    void check_if_PIXEL_is_NODE();
+    void create_GRAPH_from_NODES();
+    void get_SHORTER_PATH_LIST();
+    void get_TILES_path_from_PIXELS();
+    void get_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void draw_MAP();
 
     // Debug

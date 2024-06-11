@@ -18,8 +18,9 @@ void Map::create_GRAPH_from_NODES()
 // Détermine tous les plus courts chemins du GRAPH en les stockant dans un vector
 void Map::get_SHORTER_PATH_LIST()
 {
-    std::vector<int> END_POINTS;
-    int START_POINT{0};
+    std::vector<int> END_POINTS;    // Spawns ennemi (plusieurs)
+    bool START_POINT_exists{false}; // Bases à défendre (unique)
+    int START_POINT{0};             // id de la Base
 
     for (Node &node : this->NODES)
     {
@@ -28,14 +29,25 @@ void Map::get_SHORTER_PATH_LIST()
             END_POINTS.push_back(node.id);
     }
 
+    for (Pixel &pixel : this->PIXELS)
+    {
+        if (pixel.is_START_POINT)
+            START_POINT_exists = true;
+    }
+
     // On check s'il existe des END_POINTS. Sinon : erreur
     if (END_POINTS.empty())
     {
         std::cout << "ERREUR : Aucun spawn d'ennemi (End points) trouvé..." << std::endl;
         std::exit(EXIT_FAILURE);
     }
+    else if (!START_POINT_exists) // On check s'il existe un START POINT. Sinon : erreur
+    {
+        std::cout << "ERREUR : Aucune Base à défendre (Start point) trouvée..." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
-    // Pour chaque END POINTS, on leur attribue un plus court chemin par rapport à l'entrée
+    // Pour chaque END POINTS, on leur attribue un plus court chemin par rapport à l'entrée (START POINT)
     for (int end_point : END_POINTS)
     {
         std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(START_POINT, end_point)};
@@ -106,13 +118,6 @@ void Map::set_PIXELS_type()
             pixel.is_PATH = true;
         else
             pixel.is_VOID = true;
-
-        for (Node node : this->NODES)
-        {
-            // node.pixel.y = this->SCHEMA.width() - 1 - node.pixel.y; // Conversion pour changement de repère :  f(x,y) = (x, width() - y)
-            if (pixel == node.pixel)
-                pixel.is_NODE = true;
-        }
     }
 }
 
@@ -145,8 +150,30 @@ void Map::set_PIXELS_connected()
     }
 }
 
+void Map::check_if_PIXEL_is_NODE()
+{
+    for (Pixel &pixel : this->PIXELS)
+    {
+        for (Node node : this->NODES)
+        {
+            // Si on pixel est référencé comme Node par l'utilisateur, on vérifie si c'est bien le cas.
+            if (pixel == node.pixel)
+            {
+                Connections &NEIGHBOUR{pixel.PIXEL_connection};
+                if (pixel.is_VOID || !is_NODE(NEIGHBOUR))
+                {
+                    std::cout << "le pixel (" << pixel.x << ":" << pixel.y << ") n'est pas un node." << std::endl;
+                    exit(EXIT_FAILURE);
+                    break;
+                }
+                pixel.is_NODE = true;
+            }
+        }
+    }
+}
+
 // 8) Récupère la tile qui correspond au pixel (en fonction de ses informations)
-void Map::get_TILES_from_PIXELS()
+void Map::get_TILES_path_from_PIXELS()
 {
     std::vector<Tile> TILES_list;
     for (Pixel &pixel : this->PIXELS)
@@ -173,11 +200,6 @@ void Map::get_TILES_from_PIXELS()
             else // Route
                 set_PATH_orientation_texture(NEIGHBOUR, TILE_path_list);
         }
-        // else // Herbe
-        // {
-        //     TILE_path_list.push_back("images/Tiles/tile_0110.png");
-        //     // set ici la végétation aléatoire
-        // }
 
         if (!TILE_path_list.empty())
             TILES_list.push_back({pixel, {}, TILE_path_list});
@@ -186,7 +208,7 @@ void Map::get_TILES_from_PIXELS()
 }
 
 // 9) Load les textures de la map
-void Map::load_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+void Map::get_TILES_MAP(std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     for (Tile &tile : this->TILES)
     {
@@ -204,118 +226,3 @@ void Map::draw_MAP()
         for (GLuint &texture : tile.texture_list)
             draw_quad_with_texture(texture, tile.pixel.x, tile.pixel.y, *this);
 }
-
-// BONUS!! (Pas terminé)
-// HARDCORE!! Remplace get_NODES_from_ITD car récupère les nodes directement sur le schéma et les ajoute dans NODS
-// void Map::get_NODES_from_PIXELS_AUTO()
-// {
-//     Pixel START_PIXEL;
-//     int id{0};
-//     // 1) On trouve un START_POINT ou un END_POINT.
-//     for (Pixel &pixel : this->PIXELS)
-//     {
-//         if (pixel.is_START_POINT || pixel.is_END_POINT)
-//         {
-//             START_PIXEL = pixel;
-//             Node new_node{id, {START_PIXEL.x, START_PIXEL.y}};
-//             this->NODES.push_back(new_node);
-//             id++;
-//             break;
-//         }
-//     }
-
-//     // Booléen utile pour ne pas revenir sur nos pas.
-//     bool go_top{true};
-//     bool go_bottom{true};
-//     bool go_left{true};
-//     bool go_right{true};
-
-//     // REF_PIXEL va varier sur tous les chemins pour atteindre un noeud
-//     Pixel &REF_PIXEL = START_PIXEL;
-//     // Tant que je n'ai pas récupéré tous mes noeuds, je continue
-//     while (this->NODES.size() < 8)
-//     {
-
-//         if (go_left) // Si je peux aller à gauche
-//         {
-//             while (REF_PIXEL.PIXEL_connection.left->is_PATH)
-//             {
-//                 // On regarde si on vient pas déjà de la gauche
-
-//                 REF_PIXEL = *REF_PIXEL.PIXEL_connection.left;
-//                 if (REF_PIXEL.PIXEL_connection.left->is_VOID) // Si à gauche, il y a rien, on est au bout, donc c'est un noeud
-//                 {
-//                     Node new_node{id, {REF_PIXEL.x, REF_PIXEL.y, REF_PIXEL.color}};
-//                     this->NODES.push_back(new_node);
-//                     id++;
-//                     // On vient de la droite car on est venu à gauche
-//                     go_right = false;
-//                     go_left = true;
-//                     go_top = true;
-//                     go_bottom = true;
-//                 }
-//             }
-//         }
-
-//         if (go_top) // Si je peux aller en haut
-//         {
-//             while (REF_PIXEL.PIXEL_connection.top->is_PATH)
-//             {
-//                 REF_PIXEL = *REF_PIXEL.PIXEL_connection.top;
-//                 if (REF_PIXEL.PIXEL_connection.top->is_VOID)
-//                 {
-//                     Node new_node{id, {REF_PIXEL.x, REF_PIXEL.y, REF_PIXEL.color}};
-//                     this->NODES.push_back(new_node);
-//                     id++;
-//                     // On vient d'en bas car on est venu en haut
-//                     go_bottom = false;
-//                     go_left = true;
-//                     go_right = true;
-//                     go_top = true;
-//                 }
-//             }
-//         }
-//         if (go_right) // Si je peux aller à droite
-//         {
-//             while (REF_PIXEL.PIXEL_connection.right->is_PATH)
-//             {
-//                 REF_PIXEL = *REF_PIXEL.PIXEL_connection.right;
-//                 if (REF_PIXEL.PIXEL_connection.right->is_VOID)
-//                 {
-//                     Node new_node{id, {REF_PIXEL.x, REF_PIXEL.y, REF_PIXEL.color}};
-//                     this->NODES.push_back(new_node);
-//                     id++;
-//                     // On vient de la gauche car on est venu à droite
-//                     go_left = false;
-//                     go_right = true;
-//                     go_top = true;
-//                     go_bottom = true;
-//                 }
-//             }
-//         }
-
-//         if (go_bottom) // Si je peux aller en bas
-//         {
-//             while (REF_PIXEL.PIXEL_connection.bottom->is_PATH)
-//             {
-//                 REF_PIXEL = *REF_PIXEL.PIXEL_connection.bottom;
-//                 if (REF_PIXEL.PIXEL_connection.bottom->is_VOID)
-//                 {
-//                     Node new_node{id, {REF_PIXEL.x, REF_PIXEL.y, REF_PIXEL.color}};
-//                     this->NODES.push_back(new_node);
-//                     id++;
-//                     // On vient d'en haut car on est venu en bas
-//                     go_top = false;
-//                     go_bottom = true;
-//                     go_left = true;
-//                     go_right = true;
-//                 }
-//             }
-//         }
-//     }
-
-//     for (Pixel &pixel : this->PIXELS)
-//         for (Node node : this->NODES)
-//             if (pixel == node.pixel)
-//                 pixel.is_NODE = true;
-// }
