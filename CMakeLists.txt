@@ -45,6 +45,16 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 # ---Add libraries---
 
+# ---miniaudio---
+FetchContent_Declare(
+    miniaudio
+    GIT_REPOSITORY https://github.com/mackron/miniaudio
+)
+FetchContent_MakeAvailable(miniaudio)
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio SYSTEM INTERFACE ${miniaudio_SOURCE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE miniaudio)
+
 # ---GLFW---
 FetchContent_Declare(
         glfw
