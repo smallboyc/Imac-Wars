@@ -6,6 +6,7 @@
 #include <string>
 
 // include
+#include <GLFW/glfw3.h>
 #include "GLHelpers.hpp"
 #include "Map.hpp"
 #include "Enemy.hpp"

@@ -17,4 +17,6 @@ namespace Game
 
     // PLAYER CALLBACK
     void active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int action, int mods);
+    void active_MOUSE_CLICK_CALLBACK(TowerDefense &TD, GLFWwindow *window, float &_viewSize, int button, int action, int mods);
+    void active_MOUSE_POSITION_CALLBACK(TowerDefense &TD, GLFWwindow *window, float &_viewSize, double xpos, double ypos);
 }

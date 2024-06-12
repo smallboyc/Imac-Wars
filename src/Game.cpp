@@ -34,7 +34,6 @@ void Game::SETUP(TowerDefense &TD)
     TD.setup_BASE();
     TD.ui.setup_UI_Text();
 }
-
 void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &currentTime)
 {
     if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER) // Si le jeu est lancé et on est pas en pause
@@ -128,5 +127,87 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
                 TD.FINISHED_WAVE = false;
             }
         }
+    }
+}
+
+void Game::active_MOUSE_CLICK_CALLBACK(TowerDefense &TD, GLFWwindow *window, float &_viewSize, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        int windowWidth, windowHeight;
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+        float aspectRatio = windowWidth / static_cast<float>(windowHeight);
+
+        double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
+        double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
+
+        int mouseX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+        int mouseY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+
+        // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
+        for (auto &tower : TD.TOWERS_ITD)
+        {
+            if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
+            {
+                TD.current_TOWER_id = tower.second.type;
+            }
+        }
+
+        // le joueur positionne une tour sur la map au click
+        for (Pixel &pixel : TD.map.PIXELS)
+        {
+            // Si le joueur click sur un pixel de map.
+            if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID && !pixel.is_FORBIDDEN && !pixel.is_TOWER)
+            {
+                // Le joueur peut poser sa tour s'il dispose de l'argent nécessaire.
+                if (TD.ui.WALLET >= TD.TOWERS_ITD.at(TD.current_TOWER_id).price)
+                {
+                    Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
+                    tower.setup(TD.SPRITE_SHEETS_ITD, {pixel.x, pixel.y});
+                    TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+
+                    TD.towerID++;
+                    TD.ui.WALLET -= tower.price;
+                    pixel.is_VOID = false;
+                    pixel.is_TOWER = true;
+                }
+            }
+        }
+    }
+}
+
+void Game::active_MOUSE_POSITION_CALLBACK(TowerDefense &TD, GLFWwindow *window, float &_viewSize, double xpos, double ypos)
+{
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+    // Calculer l'aspect ratio pour x
+    float aspectRatio = windowWidth / static_cast<float>(windowHeight);
+
+    // Coordonnées normalisées [-1, 1]
+    double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
+    double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
+
+    int mouseX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+    int mouseY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+
+    // Affiche le curseur de sélection si on est sur l'item de tour.
+    for (auto &tower : TD.TOWERS_ITD)
+        if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
+            tower.second.hover = true;
+        else
+            tower.second.hover = false;
+
+    // Affiche le curseur de positionnement si on est sur une case de la map.
+    for (Pixel &pixel : TD.map.PIXELS)
+    {
+        if (pixel.x == mouseX && pixel.y == mouseY)
+            pixel.on_Mouse_Over = true;
+        else
+            pixel.on_Mouse_Over = false;
     }
 }
