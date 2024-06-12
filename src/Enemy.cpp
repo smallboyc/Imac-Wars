@@ -27,13 +27,10 @@ void Enemy::setup(Map &map, int const &path, std::unordered_map<std::filesystem:
     }
 }
 
-// Mise à jour de l'état de l'ennemi
 void Enemy::update(const double &elapsedTime)
 {
+    // On récupère elapsedTime pour que le temps soit passé au render.
     this->TIME = elapsedTime;
-
-    // Mise à jour du trajet d'un noeud à l'autre
-    this->travel += this->speed * this->TIME;
 }
 
 // On fait avancer l'ennemi
@@ -41,8 +38,6 @@ void Enemy::render(Map &map)
 {
     // target_node = le prochain noeud que l'on veut atteindre
     glm::vec2 target_node{map.SHORTER_PATH_LIST[this->path][this->target_node_index].pixel.x, map.SHORTER_PATH_LIST[this->path][this->target_node_index].pixel.y};
-    float distance_x = (target_node.x - this->current.x) / map.NUMBER_OF_PIXELS_IN_LINE;
-    float distance_y = (target_node.y - this->current.y) / map.NUMBER_OF_PIXELS_IN_LINE;
 
     // Mouvement positif / négatif pour x & y
     float step_x = (target_node.x > this->current.x) ? 1.0f : (target_node.x < this->current.x) ? -1.0f
@@ -62,33 +57,24 @@ void Enemy::render(Map &map)
 
     if (abs(this->current.x - target_node.x) > abs(this->current.y - target_node.y)) // parcours selon x
     {
-        if (this->travel <= abs(distance_x)) // tant que le trajet n'est pas terminé
+
+        if (std::round(this->pos.x * 10) / 10 == target_node.x) //si la pos du current = target
         {
-            glTranslatef(step_x * this->travel, 0, 0);                                       // déplacement selon des coordonnées normalisées (CN)
+            this->current.x = target_node.x;
+            this->target_node_index++;
+        }
+        else
             this->pos.x += step_x * this->TIME * this->speed * map.NUMBER_OF_PIXELS_IN_LINE; // Position relative x
-        }
-        else // On est arrivé au noeud ciblé
-        {
-            this->current.x = target_node.x; // la cible atteinte devient notre nouvelle référence
-            // std::cout << this->current.x << ":" << this->current.y << std::endl;
-            this->travel = 0;          // le trajet est terminé, on en recommence un nouveau
-            this->target_node_index++; // on change de cible
-        }
     }
     else // parcours selon y
     {
-        if (this->travel <= abs(distance_y)) // tant que le trajet n'est pas terminé
-        {
-            glTranslatef(0, step_y * this->travel, 0);
-            this->pos.y += step_y * this->TIME * this->speed * map.NUMBER_OF_PIXELS_IN_LINE; // Position relative y
-        }
-        else // On est arrivé au noeud ciblé
+        if (std::round(this->pos.y * 10) / 10 == target_node.y)  //si la pos du current = target
         {
             this->current.y = target_node.y;
-            // std::cout << this->current.x << ":" << this->current.y << std::endl;
-            this->travel = 0;
             this->target_node_index++;
         }
+        else
+            this->pos.y += step_y * this->TIME * this->speed * map.NUMBER_OF_PIXELS_IN_LINE; // Position relative y
     }
 
     // Check si l'ennemi est sur un chemin en parcourant.
@@ -98,5 +84,5 @@ void Enemy::render(Map &map)
         exit(EXIT_FAILURE);
     }
 
-    draw_enemy(this->texture, *this, this->current.x, this->current.y, map, this->health, this->hit);
+    draw_enemy(this->texture, *this, this->pos.x, this->pos.y, map, this->health, this->hit);
 }

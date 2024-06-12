@@ -1,14 +1,13 @@
 #include "App.hpp"
 
-
 App::App() : _previousTime(0.0), _viewSize(1.5)
 {
-    Game::LOAD(TD, "map_schema_15x15_02.itd", 15);
+    Game::LOAD(TD);
 }
 
 void App::setup()
 {
-    Game::SETUP(TD);
+    Game::SETUP(TD, "map_schema_15x15_02.itd", 15);
 }
 
 void App::update()
@@ -30,7 +29,7 @@ void App::render()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
-    
+
     Game::RENDER(TD, _width, _height);
 }
 

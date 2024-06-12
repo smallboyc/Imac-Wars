@@ -15,14 +15,15 @@
 
 // FONCTIONS PRINCIPALES
 
-void Game::LOAD(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int const &pixel_UNIT)
+void Game::LOAD(TowerDefense &TD)
 {
     TD.Load_All_Textures();
-    TD.setup_MAP(MAP_SCHEMA_ITD_path, pixel_UNIT);
 }
-void Game::SETUP(TowerDefense &TD)
+
+void Game::SETUP(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int const &pixel_UNIT)
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black window
+    TD.setup_MAP(MAP_SCHEMA_ITD_path, pixel_UNIT);
     TD.get_TOWERS_from_ITD();
     TD.get_ENEMIES_from_ITD();
     TD.get_WAVES_from_ITD();
@@ -36,7 +37,7 @@ void Game::SETUP(TowerDefense &TD)
 }
 void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &currentTime)
 {
-    if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER) // Si le jeu est lancé et on est pas en pause
+    if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER)
     {
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
         TD.update_TOWERS(elapsedTime, currentTime);
@@ -47,7 +48,6 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 {
     if (TD.GAME_IS_PLAYING)
     {
-
         TD.render_MAP();
 
         if (!TD.PAUSE)
@@ -76,6 +76,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
             TD.ui.show_WAVE_FINISHED(_width, _height, TD.current_WAVE_id);
         }
     }
+
     else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER && !TD.PLAYER_WIN) // MENU START
     {
         TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height / 2, SimpleText::CENTER);
