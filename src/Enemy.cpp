@@ -58,23 +58,23 @@ void Enemy::render(Map &map)
     if (abs(this->current.x - target_node.x) > abs(this->current.y - target_node.y)) // parcours selon x
     {
 
-        if (std::round(this->pos.x * 10) / 10 == target_node.x) //si la pos du current = target
+        if (std::round(this->pos.x * 10) / 10 == target_node.x) // si la pos du current = target
         {
             this->current.x = target_node.x;
             this->target_node_index++;
         }
         else
-            this->pos.x += step_x * this->TIME * this->speed * map.NUMBER_OF_PIXELS_IN_LINE; // Position relative x
+            this->pos.x += step_x * this->TIME * this->speed; // Position relative x
     }
     else // parcours selon y
     {
-        if (std::round(this->pos.y * 10) / 10 == target_node.y)  //si la pos du current = target
+        if (std::round(this->pos.y * 10) / 10 == target_node.y) // si la pos du current = target
         {
             this->current.y = target_node.y;
             this->target_node_index++;
         }
         else
-            this->pos.y += step_y * this->TIME * this->speed * map.NUMBER_OF_PIXELS_IN_LINE; // Position relative y
+            this->pos.y += step_y * this->TIME * this->speed; // Position relative y
     }
 
     // Check si l'ennemi est sur un chemin en parcourant.
