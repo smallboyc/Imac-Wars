@@ -7,6 +7,32 @@
 #include "Map.hpp"
 #include "Draw.hpp"
 
+void draw_WINDOW_Background(GLuint const &texture)
+{
+    glEnable(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3ub(255, 255, 255);
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f(-1.5, -1);
+
+    glTexCoord2d(1, 0);
+    glVertex2f(1.5, -1);
+
+    glTexCoord2d(1, 1);
+    glVertex2f(1.5, 1);
+
+    glTexCoord2d(0, 1);
+    glVertex2f(-1.5, 1);
+
+    glEnd();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void draw_MAP_background(GLuint const &texture, Map &map)
 {
     glEnable(GL_TEXTURE_2D);
@@ -245,6 +271,45 @@ void draw_quad(float &x, float &y, Map &map)
         else
             glColor4ub(255, 0, 0, 128);
     }
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex2f(X0, Y0);
+
+    glTexCoord2d(1, 0);
+    glVertex2f(X1, Y0);
+
+    glTexCoord2d(1, 1);
+    glVertex2f(X1, Y1);
+
+    glTexCoord2d(0, 1);
+    glVertex2f(X0, Y1);
+
+    glEnd();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
+void draw_IMAC_WARS(GLuint const &texture, float &x, float &y, float &item_width, float &item_height, Map &map, const double &elapsedTime, const double &currentTime, float &previousTime)
+{
+    if (currentTime - previousTime >= 0.02 && std::round(x) > -2)
+    {
+        x -= 0.4 * elapsedTime;
+        y -= 0.3 * elapsedTime;
+        item_width += 0.8 * elapsedTime;
+        item_height += 0.6 * elapsedTime;
+        previousTime = currentTime;
+    }
+
+    float X0 = x / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float X1 = X0 + item_width * map.PIXEL_SIZE;
+    float Y0 = y / map.NUMBER_OF_PIXELS_IN_LINE - map.SEMI_MAP_SIZE;
+    float Y1 = Y0 + item_height * map.PIXEL_SIZE;
+    // std::cout << currentTime << std::endl;
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3ub(255, 255, 255);
     glPushMatrix();
     glBegin(GL_QUADS);
     glTexCoord2d(0, 0);

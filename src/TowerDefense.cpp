@@ -12,6 +12,21 @@
 
 #include "TowerDefense.hpp"
 
+// SONS
+void TowerDefense::Load_All_Sounds(std::vector<std::pair<std::string, ma_sound *>> &sounds)
+{
+    ma_result result;
+    for (auto &sound : sounds)
+    {
+        result = ma_sound_init_from_file(&SoundEngine::GetEngine(), sound.first.c_str(), MA_SOUND_FLAG_STREAM, NULL, NULL, sound.second);
+        if (result != MA_SUCCESS)
+        {
+            std::cerr << "Impossible d'initialiser le son : " << sound.first << std::endl;
+        }
+    }
+}
+
+// TEXTURES
 void TowerDefense::Load_All_Textures()
 {
     std::string path = "../../images/textures";
@@ -54,7 +69,6 @@ void TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LIN
 
 void TowerDefense::render_MAP()
 {
-
     draw_MAP_background(this->LoadedTextures["images/textures/Map/Background_Map.png"], this->map);
     this->map.draw_MAP();
 }
@@ -68,7 +82,7 @@ void TowerDefense::setup_BASE()
 
 void TowerDefense::render_BASE_health()
 {
-    draw_BASE_health(this->LoadedTextures["images/textures/UI/Base_Life.png"], this->base, 0.0f, -2.f, this->map);
+    draw_BASE_health(this->LoadedTextures["images/textures/Other/Base_Life.png"], this->base, 0.0f, -2.f, this->map);
 
     // Si la base est détruite => GAME OVER.
     if (this->base.is_Destroyed)

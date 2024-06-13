@@ -13,6 +13,12 @@
 #include "Draw.hpp"
 #include "SoundEngine.hpp"
 
+void UI::get_TIME_in_UI(const double &elapsedTime, const double &currentTime)
+{
+    this->UI_elapsedTime = elapsedTime;
+    this->UI_currentTime = currentTime;
+}
+
 void UI::setup_UI_Text()
 {
     // MAIN
@@ -74,6 +80,11 @@ void UI::setup_UI_Text()
     this->ENEMY_property.EnableBlending(true);
 }
 
+void UI::show_IMAC_WARS_TITLE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    draw_IMAC_WARS(LoadedTextures["images/textures/Start/IMAC_WARS.png"], this->TITLE_pos.x, this->TITLE_pos.y, this->TITLE_size.x, this->TITLE_size.y, map, this->UI_elapsedTime, this->UI_currentTime, this->UI_previous_Time);
+}
+
 void UI::show_MAIN_TITLE(int &_width, int &_height)
 {
     this->MAIN_TITLE.Label("- IMAC WARS : Tower Defense -", _width / 2, 100, SimpleText::CENTER);
@@ -91,7 +102,6 @@ void UI::show_WAVE_FINISHED(int &_width, int &_height, size_t current_WAVE_id)
 
 void UI::show_PLAYER_WIN(int &_width, int &_height)
 {
-    ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Cantina.mp3", NULL);
     this->PLAYER_WIN.Label("CONGRATULATIONS, YOU WIN !", _width / 2, _height / 2, SimpleText::CENTER);
     this->PLAYER_WIN.Render();
 }
@@ -99,7 +109,6 @@ void UI::show_PLAYER_WIN(int &_width, int &_height)
 void UI::show_GAME_OVER(int &_width, int &_height, std::unordered_map<int, Tower> current_TOWERS_in_MAP)
 {
     this->GAME_OVER.Label("GAME OVER !", _width / 2, _height / 2, SimpleText::CENTER);
-    ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Throne_Room.mp3", NULL);
     if (current_TOWERS_in_MAP.empty() && this->WALLET == 0)
         this->GAME_OVER.Label("NO TOUR ON MAP & NO MONEY!", _width / 2, _height / 2 + 100, SimpleText::CENTER);
     else
@@ -185,7 +194,7 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 void UI::show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     // Left menu
-    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Ennemies.png"], -11, 0.5, 9, 14, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Ennemies.png"], -10, 0.5, 9, 14, map);
 
     // Right menu
     draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Allies.png"], 16, 0.5, 9, 14, map);

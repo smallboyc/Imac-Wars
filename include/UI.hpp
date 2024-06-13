@@ -12,6 +12,10 @@
 
 struct UI
 {
+    // START
+    glm::vec2 TITLE_pos{7, 7};
+    glm::vec2 TITLE_size{1, 1};
+    // IN GAME
     int WALLET{20};
     SimpleText MAIN_TITLE{};
     SimpleText WAVE_FINISHED{};
@@ -23,6 +27,16 @@ struct UI
     SimpleText WAVE_property{};
     SimpleText ENEMY_Title{};
     SimpleText ENEMY_property{};
+
+    // TIMES
+    double UI_elapsedTime;
+    double UI_currentTime;
+    float UI_previous_Time{0.f};
+    void get_TIME_in_UI(const double &elapsedTime, const double &currentTime);
+
+    // START IMAC WARs
+    void
+    show_IMAC_WARS_TITLE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
 
     // Textes
     void setup_UI_Text();

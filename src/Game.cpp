@@ -10,38 +10,33 @@
 #include <fstream>
 #include <cmath>
 
-// include
-#include "SoundEngine.hpp"
-
 #include "Game.hpp"
-
-// FONCTIONS PRINCIPALES
 
 ma_sound mainThemeSound;
 ma_sound imperialMarchSound;
+ma_sound cantinaSound;
+ma_sound throneRoomSound;
+
+std::vector<std::pair<std::string, ma_sound *>> sounds = {
+    {"../../sound/Main_Theme.mp3", &mainThemeSound},
+    {"../../sound/Imperial_March.mp3", &imperialMarchSound},
+    {"../../sound/Cantina.mp3", &cantinaSound},
+    {"../../sound/Throne_Room.mp3", &throneRoomSound}};
 
 void Game::LOAD(TowerDefense &TD)
 {
-    ma_engine_set_volume(&SoundEngine::GetEngine(), 0.1f);
-    // ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", NULL);
-    ma_result result;
-    result = ma_sound_init_from_file(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &mainThemeSound);
-    if (result != MA_SUCCESS)
-    {
-        std::cerr << "Failed to initialize Main Theme sound." << std::endl;
-    }
-    result = ma_sound_init_from_file(&SoundEngine::GetEngine(), "../../sound/Imperial_March.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &imperialMarchSound);
-    if (result != MA_SUCCESS)
-    {
-        std::cerr << "Failed to initialize Imperial March sound." << std::endl;
-    }
-    ma_sound_start(&mainThemeSound);
+    // Textures
     TD.Load_All_Textures();
+
+    // Sons
+    TD.Load_All_Sounds(sounds);
+    ma_engine_set_volume(&SoundEngine::GetEngine(), 0.1f);
 }
 
 void Game::SETUP(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int const &pixel_UNIT)
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black window
+
     TD.setup_MAP(MAP_SCHEMA_ITD_path, pixel_UNIT);
     TD.get_TOWERS_from_ITD();
     TD.get_ENEMIES_from_ITD();
@@ -53,9 +48,15 @@ void Game::SETUP(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int c
     TD.setup_SPRITE_SHEETS();
     TD.setup_BASE();
     TD.ui.setup_UI_Text();
+
+    // STAR WARS Main title (sound)
+    ma_sound_start(&mainThemeSound);
 }
 void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &currentTime)
 {
+    // Pour l'animation de IMAC WARS => récupère le temps
+    TD.ui.get_TIME_in_UI(elapsedTime, currentTime);
+
     if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER)
     {
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
@@ -65,6 +66,7 @@ void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &cur
 
 void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 {
+    draw_WINDOW_Background(TD.LoadedTextures["images/textures/Other/window_background.png"]);
     if (TD.GAME_IS_PLAYING)
     {
         TD.render_MAP();
@@ -98,11 +100,14 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 
     else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER && !TD.PLAYER_WIN) // MENU START
     {
-        TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height / 2, SimpleText::CENTER);
+        TD.ui.show_IMAC_WARS_TITLE(TD.map, TD.LoadedTextures);
+        TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height - 100, SimpleText::CENTER);
     }
 
     if (TD.GAME_OVER) // SI LE JOUEUR PERD => Active l'écran de GAME OVER
     {
+        ma_sound_stop(&imperialMarchSound);
+        ma_sound_start(&throneRoomSound);
         TD.GAME_IS_PLAYING = false;
         TD.ui.show_GAME_OVER(_width, _height, TD.current_TOWERS_in_MAP);
         TD.ui.show_QUIT_GAME(_width, _height);
@@ -110,6 +115,8 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 
     if (TD.PLAYER_WIN) // SI LE JOUEUR GAGNE => Active l'écran de WIN !
     {
+        ma_sound_stop(&imperialMarchSound);
+        ma_sound_start(&cantinaSound);
         TD.GAME_IS_PLAYING = false;
         TD.ui.show_PLAYER_WIN(_width, _height);
         TD.ui.show_QUIT_GAME(_width, _height);
@@ -128,10 +135,6 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
             TD.GAME_IS_PLAYING = true;
             ma_sound_stop(&mainThemeSound);
             ma_sound_start(&imperialMarchSound);
-
-            // ma_engine_stop_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3");
-            // ma_engine_uninit(&SoundEngine::GetEngine());
-            // ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Imperial_March.mp3", NULL);
         }
 
     // Si le jeu est en PAUSE, ou que c'est une fin de partie => possibilité de quitter le jeu.
