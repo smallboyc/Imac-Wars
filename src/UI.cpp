@@ -11,6 +11,7 @@
 #include "GLHelpers.hpp"
 #include "UI.hpp"
 #include "Draw.hpp"
+#include "SoundEngine.hpp"
 
 void UI::setup_UI_Text()
 {
@@ -90,6 +91,7 @@ void UI::show_WAVE_FINISHED(int &_width, int &_height, size_t current_WAVE_id)
 
 void UI::show_PLAYER_WIN(int &_width, int &_height)
 {
+    ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Cantina.mp3", NULL);
     this->PLAYER_WIN.Label("CONGRATULATIONS, YOU WIN !", _width / 2, _height / 2, SimpleText::CENTER);
     this->PLAYER_WIN.Render();
 }
@@ -97,6 +99,7 @@ void UI::show_PLAYER_WIN(int &_width, int &_height)
 void UI::show_GAME_OVER(int &_width, int &_height, std::unordered_map<int, Tower> current_TOWERS_in_MAP)
 {
     this->GAME_OVER.Label("GAME OVER !", _width / 2, _height / 2, SimpleText::CENTER);
+    ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Throne_Room.mp3", NULL);
     if (current_TOWERS_in_MAP.empty() && this->WALLET == 0)
         this->GAME_OVER.Label("NO TOUR ON MAP & NO MONEY!", _width / 2, _height / 2 + 100, SimpleText::CENTER);
     else

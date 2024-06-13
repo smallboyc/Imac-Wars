@@ -11,12 +11,16 @@
 #include <cmath>
 
 // include
+#include "SoundEngine.hpp"
+
 #include "Game.hpp"
 
 // FONCTIONS PRINCIPALES
 
 void Game::LOAD(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int const &pixel_UNIT)
 {
+    ma_engine_set_volume(&SoundEngine::GetEngine(), 0.1f);
+    ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", NULL);
     TD.Load_All_Textures();
     TD.setup_MAP(MAP_SCHEMA_ITD_path, pixel_UNIT);
 }
@@ -48,7 +52,6 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 {
     if (TD.GAME_IS_PLAYING)
     {
-
         TD.render_MAP();
 
         if (!TD.PAUSE)
@@ -104,8 +107,11 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
 {
     // Lancer le jeu
     if (!TD.GAME_OVER && !TD.PLAYER_WIN)
-        if (key == GLFW_KEY_S && action == GLFW_PRESS)
+        if (key == GLFW_KEY_S && action == GLFW_PRESS){
             TD.GAME_IS_PLAYING = true;
+            ma_engine_uninit(&SoundEngine::GetEngine());
+            // ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Imperial_March.mp3", NULL);
+        }
 
     // Si le jeu est en PAUSE, ou que c'est une fin de partie => possibilité de quitter le jeu.
     if (TD.PAUSE || TD.GAME_OVER || TD.PLAYER_WIN)
@@ -114,11 +120,10 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
 
     // Si le jeu est lancé
     if (TD.GAME_IS_PLAYING)
-    {
+    {   
         // Pause
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS && !TD.FINISHED_WAVE)
             TD.PAUSE = !TD.PAUSE;
-
         if (TD.FINISHED_WAVE)
         {
             if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
