@@ -19,11 +19,12 @@
 
 ma_sound mainThemeSound;
 ma_sound imperialMarchSound;
+ma_sound cantinaSound;
+ma_sound throneRoomSound;
 
 void Game::LOAD(TowerDefense &TD)
 {
-    ma_engine_set_volume(&SoundEngine::GetEngine(), 0.1f);
-    // ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", NULL);
+    ma_engine_set_volume(&SoundEngine::GetEngine(), 0.2f);
     ma_result result;
     result = ma_sound_init_from_file(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &mainThemeSound);
     if (result != MA_SUCCESS)
@@ -34,6 +35,16 @@ void Game::LOAD(TowerDefense &TD)
     if (result != MA_SUCCESS)
     {
         std::cerr << "Failed to initialize Imperial March sound." << std::endl;
+    }
+    result = ma_sound_init_from_file(&SoundEngine::GetEngine(), "../../sound/Cantina.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &cantinaSound);
+    if (result != MA_SUCCESS)
+    {
+        std::cerr << "Failed to initialize Cantina sound." << std::endl;
+    }
+    result = ma_sound_init_from_file(&SoundEngine::GetEngine(), "../../sound/Throne_Room.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &throneRoomSound);
+    if (result != MA_SUCCESS)
+    {
+        std::cerr << "Failed to initialize Throne Room sound." << std::endl;
     }
     ma_sound_start(&mainThemeSound);
     TD.Load_All_Textures();
@@ -103,6 +114,8 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 
     if (TD.GAME_OVER) // SI LE JOUEUR PERD => Active l'écran de GAME OVER
     {
+        ma_sound_stop(&imperialMarchSound);
+        ma_sound_start(&throneRoomSound);
         TD.GAME_IS_PLAYING = false;
         TD.ui.show_GAME_OVER(_width, _height, TD.current_TOWERS_in_MAP);
         TD.ui.show_QUIT_GAME(_width, _height);
@@ -110,6 +123,8 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 
     if (TD.PLAYER_WIN) // SI LE JOUEUR GAGNE => Active l'écran de WIN !
     {
+        ma_sound_stop(&imperialMarchSound);
+        ma_sound_start(&cantinaSound);
         TD.GAME_IS_PLAYING = false;
         TD.ui.show_PLAYER_WIN(_width, _height);
         TD.ui.show_QUIT_GAME(_width, _height);
@@ -128,10 +143,6 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
             TD.GAME_IS_PLAYING = true;
             ma_sound_stop(&mainThemeSound);
             ma_sound_start(&imperialMarchSound);
-
-            // ma_engine_stop_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3");
-            // ma_engine_uninit(&SoundEngine::GetEngine());
-            // ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Imperial_March.mp3", NULL);
         }
 
     // Si le jeu est en PAUSE, ou que c'est une fin de partie => possibilité de quitter le jeu.
