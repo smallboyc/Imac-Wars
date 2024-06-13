@@ -17,10 +17,25 @@
 
 // FONCTIONS PRINCIPALES
 
+ma_sound mainThemeSound;
+ma_sound imperialMarchSound;
+
 void Game::LOAD(TowerDefense &TD)
 {
     ma_engine_set_volume(&SoundEngine::GetEngine(), 0.1f);
-    ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", NULL);
+    // ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", NULL);
+    ma_result result;
+    result = ma_sound_init_from_file(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &mainThemeSound);
+    if (result != MA_SUCCESS)
+    {
+        std::cerr << "Failed to initialize Main Theme sound." << std::endl;
+    }
+    result = ma_sound_init_from_file(&SoundEngine::GetEngine(), "../../sound/Imperial_March.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &imperialMarchSound);
+    if (result != MA_SUCCESS)
+    {
+        std::cerr << "Failed to initialize Imperial March sound." << std::endl;
+    }
+    ma_sound_start(&mainThemeSound);
     TD.Load_All_Textures();
 }
 
@@ -108,9 +123,14 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
 {
     // Lancer le jeu
     if (!TD.GAME_OVER && !TD.PLAYER_WIN)
-        if (key == GLFW_KEY_S && action == GLFW_PRESS){
+        if (key == GLFW_KEY_S && action == GLFW_PRESS)
+        {
             TD.GAME_IS_PLAYING = true;
-            ma_engine_uninit(&SoundEngine::GetEngine());
+            ma_sound_stop(&mainThemeSound);
+            ma_sound_start(&imperialMarchSound);
+
+            // ma_engine_stop_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3");
+            // ma_engine_uninit(&SoundEngine::GetEngine());
             // ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Imperial_March.mp3", NULL);
         }
 
@@ -121,11 +141,11 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
 
     // Si le jeu est lancé
     if (TD.GAME_IS_PLAYING)
-    {   
+    {
         // Pause
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS && !TD.FINISHED_WAVE)
             TD.PAUSE = !TD.PAUSE;
-            
+
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
             for (auto &enemy : TD.current_ENEMIES_in_WAVE)
                 enemy.second.showProperty = false;

@@ -16,6 +16,6 @@ class SoundEngine {
         SoundEngine();
         ~SoundEngine();
 
-        ma_engine _sound_engine;
+    ma_engine _sound_engine;
 
 };

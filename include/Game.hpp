@@ -7,6 +7,7 @@
 
 // include
 #include "TowerDefense.hpp"
+#include "SoundEngine.hpp"
 
 namespace Game
 {
