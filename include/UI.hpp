@@ -54,4 +54,8 @@ struct UI
     void show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
     void show_ENEMY_PROPERTY(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE);
+    void show_TOWER_PROPERTY(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, std::unordered_map<int, Tower> &current_TOWERS_in_MAP);
+
+    //BONUS
+    void show_TEAM(Map &map,std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
 };

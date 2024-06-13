@@ -25,6 +25,7 @@ struct TowerDefense
     bool FINISHED_WAVE{false};
     bool GAME_OVER{false};
     bool PLAYER_WIN{false};
+    bool BONUS{false};
     Map map;
     UI ui;
     Base base;

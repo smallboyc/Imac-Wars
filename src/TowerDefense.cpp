@@ -95,6 +95,7 @@ void TowerDefense::active_UI(int &_width, int &_height)
     this->ui.show_CURSOR_on_MAP(this->map, this->LoadedTextures);
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
     this->ui.show_ENEMY_PROPERTY(this->map, this->LoadedTextures, this->current_ENEMIES_in_WAVE);
+    this->ui.show_TOWER_PROPERTY(this->map, this->LoadedTextures, this->current_TOWERS_in_MAP);
     this->ui.show_WALLET(_width, _height);
     for (auto &tower : this->TOWERS_ITD)
     {

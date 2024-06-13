@@ -182,7 +182,16 @@ void UI::show_ENEMY_PROPERTY(Map &map, std::unordered_map<std::filesystem::path,
     for (auto &enemy : current_ENEMIES_in_WAVE)
     {
         if (enemy.second.showProperty)
-            draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], -10, 1.5, 9, 12, map);
+            draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Ennemies.png"], -10, 1.5, 9, 12, map);
+    }
+}
+
+void UI::show_TOWER_PROPERTY(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, std::unordered_map<int, Tower> &current_TOWERS_in_MAP)
+{
+    for (auto &tower : current_TOWERS_in_MAP)
+    {
+        if (tower.second.showProperty)
+            draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Allies.png"], -10, 1.5, 9, 12, map);
     }
 }
 
@@ -218,4 +227,10 @@ void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::file
         }
         draw_UI_ITEM(texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);
     }
+}
+
+// BONUS
+void UI::show_TEAM(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    draw_UI_ITEM(LoadedTextures["images/textures/Team/max.jpg"], 2, 2, 10, 10, map);
 }
