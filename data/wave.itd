@@ -1,9 +1,10 @@
 ITD
 #NOMBRE DE VAGUES
-Waves 7
+Waves 5
 
 
-#VAGUES (niveau, nombre d'entrée, nombre d'ennemi, temps entre chaque spawn d'ennemi (en seconde), type de l'ennemi)
+#VAGUES (niveau, nombre d'entrée, nombre d'ennemi, 
+temps entre chaque spawn d'ennemi (en seconde), type de l'ennemi)
 
 level 0 4 5 3 0 1 2 3
 level 1 4 10 3 0 1

@@ -41,7 +41,7 @@ struct TowerDefense
     // Towers
     std::unordered_map<int, Tower> current_TOWERS_in_MAP; // stock les tours qui sont sur la map
     std::unordered_map<int, Tower> TOWERS_ITD;            // récupère tous les types de tours (depuis l'ITD)
-    int current_TOWER_id{0};                              // ID de la tour qui peut être sélectionné par le joueur
+    int current_TOWER_id{0};                              // ID de la tour qui peut être sélectionnée par le joueur
     int towerID{0};
     // Particules
     std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets

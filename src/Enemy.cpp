@@ -44,7 +44,6 @@ void Enemy::render(Map &map)
                                                                                                 : 0.0f;
     float step_y = (target_node.y > this->current.y) ? 1.0f : (target_node.y < this->current.y) ? -1.0f
                                                                                                 : 0.0f;
-
     // Orientation des textures
     if (step_x == -1.0f)
         this->texture = this->textures["Left"];
@@ -57,7 +56,6 @@ void Enemy::render(Map &map)
 
     if (abs(this->current.x - target_node.x) > abs(this->current.y - target_node.y)) // parcours selon x
     {
-
         if (std::round(this->pos.x * 10) / 10 == target_node.x) // si la pos du current = target
         {
             this->current.x = target_node.x;

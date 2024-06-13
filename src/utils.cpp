@@ -176,8 +176,8 @@ bool is_inside_MAP(float &x, float &y, Map &map)
     return (x >= 0 && x < map.NUMBER_OF_PIXELS_IN_LINE - 1 && y >= 0 && y < map.NUMBER_OF_PIXELS_IN_LINE - 1);
 }
 
-bool hover_TOWER_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &tower_pos, int const &UI_size)
+bool hover_ELEMENT_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &element_pos, int const &UI_size)
 {
-    return (mouse_cursor.x >= tower_pos.x && mouse_cursor.x < tower_pos.x + UI_size &&
-            mouse_cursor.y >= tower_pos.y && mouse_cursor.y < tower_pos.y + UI_size);
+    return (mouse_cursor.x >= std::round(element_pos.x) && mouse_cursor.x < std::round(element_pos.x) + UI_size &&
+            mouse_cursor.y >= std::round(element_pos.y) && mouse_cursor.y < std::round(element_pos.y) + UI_size);
 }

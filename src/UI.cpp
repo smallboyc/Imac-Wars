@@ -165,6 +165,15 @@ void UI::show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<in
     this->ENEMY_property.Render();
 }
 
+void UI::show_ENEMY_PROPERTY(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE)
+{
+    for (auto &enemy : current_ENEMIES_in_WAVE)
+    {
+        if (enemy.second.showProperty)
+            draw_UI_ITEM(LoadedTextures["images/textures/Help/Help.png"], -10, 1.5, 9, 12, map);
+    }
+}
+
 void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 {
     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);

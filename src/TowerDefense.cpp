@@ -54,6 +54,7 @@ void TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LIN
 
 void TowerDefense::render_MAP()
 {
+
     draw_MAP_background(this->LoadedTextures["images/textures/Map/Background_Map.png"], this->map);
     this->map.draw_MAP();
 }
@@ -79,6 +80,7 @@ void TowerDefense::active_UI(int &_width, int &_height)
 {
     this->ui.show_CURSOR_on_MAP(this->map, this->LoadedTextures);
     this->ui.show_ENEMY_PROPERTIES(this->current_WAVE_id, this->current_ENEMIES_in_WAVE);
+    this->ui.show_ENEMY_PROPERTY(this->map, this->LoadedTextures, this->current_ENEMIES_in_WAVE);
     this->ui.show_WALLET(_width, _height);
     for (auto &tower : this->TOWERS_ITD)
     {
@@ -92,7 +94,6 @@ void TowerDefense::setup_WAVE()
 {
     this->current_WAVE = this->WAVES_ITD.at(this->current_WAVE_id);
     this->WAVES_checked.push_back(this->current_WAVE_id);
-    std::cout << "Vague " << this->current_WAVE_id << " => " << this->current_WAVE.number_of_ENDPOINTS << " spawns avec " << this->current_WAVE.number_of_ENEMIES << " ennemis " << std::endl;
 }
 
 // Récupère les ennemis de la vague (aléatoirement en fonction des types référencés)
@@ -117,7 +118,7 @@ void TowerDefense::get_ENEMIES_into_WAVE()
     }
 }
 
-// Setup des ennemis (textures et attributs)
+// Setup des ennemis
 void TowerDefense::setup_ENEMIES_in_WAVE()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));

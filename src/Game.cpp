@@ -118,6 +118,10 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
         // Pause
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS && !TD.FINISHED_WAVE)
             TD.PAUSE = !TD.PAUSE;
+            
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+            for (auto &enemy : TD.current_ENEMIES_in_WAVE)
+                enemy.second.showProperty = false;
 
         if (TD.FINISHED_WAVE)
         {
@@ -152,9 +156,18 @@ void Game::active_MOUSE_CLICK_CALLBACK(TowerDefense &TD, GLFWwindow *window, flo
         // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
         for (auto &tower : TD.TOWERS_ITD)
         {
-            if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
+            if (hover_ELEMENT_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
             {
                 TD.current_TOWER_id = tower.second.type;
+            }
+        }
+
+        // Si un joueur click sur un ennemi, il peut voir ses propriétés
+        for (auto &enemy : TD.current_ENEMIES_in_WAVE)
+        {
+            if (hover_ELEMENT_in_UI({mouseX, mouseY}, enemy.second.pos, 1))
+            {
+                enemy.second.showProperty = true;
             }
         }
 
@@ -198,7 +211,7 @@ void Game::active_MOUSE_POSITION_CALLBACK(TowerDefense &TD, GLFWwindow *window, 
 
     // Affiche le curseur de sélection si on est sur l'item de tour.
     for (auto &tower : TD.TOWERS_ITD)
-        if (hover_TOWER_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
+        if (hover_ELEMENT_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
             tower.second.hover = true;
         else
             tower.second.hover = false;
