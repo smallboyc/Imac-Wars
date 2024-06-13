@@ -17,16 +17,17 @@
 
 // FONCTIONS PRINCIPALES
 
-void Game::LOAD(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int const &pixel_UNIT)
+void Game::LOAD(TowerDefense &TD)
 {
     ma_engine_set_volume(&SoundEngine::GetEngine(), 0.1f);
     ma_engine_play_sound(&SoundEngine::GetEngine(), "../../sound/Main_Theme.mp3", NULL);
     TD.Load_All_Textures();
-    TD.setup_MAP(MAP_SCHEMA_ITD_path, pixel_UNIT);
 }
-void Game::SETUP(TowerDefense &TD)
+
+void Game::SETUP(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int const &pixel_UNIT)
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black window
+    TD.setup_MAP(MAP_SCHEMA_ITD_path, pixel_UNIT);
     TD.get_TOWERS_from_ITD();
     TD.get_ENEMIES_from_ITD();
     TD.get_WAVES_from_ITD();
@@ -38,10 +39,9 @@ void Game::SETUP(TowerDefense &TD)
     TD.setup_BASE();
     TD.ui.setup_UI_Text();
 }
-
 void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &currentTime)
 {
-    if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER) // Si le jeu est lancé et on est pas en pause
+    if (TD.GAME_IS_PLAYING && !TD.PAUSE && !TD.GAME_OVER)
     {
         TD.update_ENEMIES_in_WAVE(elapsedTime, currentTime);
         TD.update_TOWERS(elapsedTime, currentTime);
@@ -80,6 +80,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
             TD.ui.show_WAVE_FINISHED(_width, _height, TD.current_WAVE_id);
         }
     }
+
     else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER && !TD.PLAYER_WIN) // MENU START
     {
         TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height / 2, SimpleText::CENTER);
@@ -124,6 +125,11 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
         // Pause
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS && !TD.FINISHED_WAVE)
             TD.PAUSE = !TD.PAUSE;
+            
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+            for (auto &enemy : TD.current_ENEMIES_in_WAVE)
+                enemy.second.showProperty = false;
+
         if (TD.FINISHED_WAVE)
         {
             if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
@@ -133,5 +139,96 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
                 TD.FINISHED_WAVE = false;
             }
         }
+    }
+}
+
+void Game::active_MOUSE_CLICK_CALLBACK(TowerDefense &TD, GLFWwindow *window, float &_viewSize, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        int windowWidth, windowHeight;
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+        float aspectRatio = windowWidth / static_cast<float>(windowHeight);
+
+        double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
+        double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
+
+        int mouseX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+        int mouseY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+
+        // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
+        for (auto &tower : TD.TOWERS_ITD)
+        {
+            if (hover_ELEMENT_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
+            {
+                TD.current_TOWER_id = tower.second.type;
+            }
+        }
+
+        // Si un joueur click sur un ennemi, il peut voir ses propriétés
+        for (auto &enemy : TD.current_ENEMIES_in_WAVE)
+        {
+            if (hover_ELEMENT_in_UI({mouseX, mouseY}, enemy.second.pos, 1))
+            {
+                enemy.second.showProperty = true;
+            }
+        }
+
+        // le joueur positionne une tour sur la map au click
+        for (Pixel &pixel : TD.map.PIXELS)
+        {
+            // Si le joueur click sur un pixel de map.
+            if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID && !pixel.is_FORBIDDEN && !pixel.is_TOWER)
+            {
+                // Le joueur peut poser sa tour s'il dispose de l'argent nécessaire.
+                if (TD.ui.WALLET >= TD.TOWERS_ITD.at(TD.current_TOWER_id).price)
+                {
+                    Tower tower = TD.TOWERS_ITD.at(TD.current_TOWER_id);
+                    tower.setup(TD.SPRITE_SHEETS_ITD, {pixel.x, pixel.y});
+                    TD.current_TOWERS_in_MAP.insert({TD.towerID, tower});
+
+                    TD.towerID++;
+                    TD.ui.WALLET -= tower.price;
+                    pixel.is_VOID = false;
+                    pixel.is_TOWER = true;
+                }
+            }
+        }
+    }
+}
+
+void Game::active_MOUSE_POSITION_CALLBACK(TowerDefense &TD, GLFWwindow *window, float &_viewSize, double xpos, double ypos)
+{
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+    // Calculer l'aspect ratio pour x
+    float aspectRatio = windowWidth / static_cast<float>(windowHeight);
+
+    // Coordonnées normalisées [-1, 1]
+    double normalizedX = (2.0 * xpos / windowWidth - 1.0) * aspectRatio;
+    double normalizedY = 1.0 - 2.0 * ypos / windowHeight;
+
+    int mouseX = (normalizedX * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+    int mouseY = (normalizedY * 0.5 * _viewSize + TD.map.SEMI_MAP_SIZE) * TD.map.NUMBER_OF_PIXELS_IN_LINE;
+
+    // Affiche le curseur de sélection si on est sur l'item de tour.
+    for (auto &tower : TD.TOWERS_ITD)
+        if (hover_ELEMENT_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size))
+            tower.second.hover = true;
+        else
+            tower.second.hover = false;
+
+    // Affiche le curseur de positionnement si on est sur une case de la map.
+    for (Pixel &pixel : TD.map.PIXELS)
+    {
+        if (pixel.x == mouseX && pixel.y == mouseY)
+            pixel.on_Mouse_Over = true;
+        else
+            pixel.on_Mouse_Over = false;
     }
 }

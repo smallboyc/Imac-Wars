@@ -28,4 +28,4 @@ void set_PATH_orientation_texture(Connections const &NEIGHBOUR, std::vector<std:
 
 bool is_ENEMY_travel_correctly(Enemy &enemy, Map &map);
 bool is_inside_MAP(float &x, float &y, Map &map);
-bool hover_TOWER_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &tower_pos, int const &UI_size);
+bool hover_ELEMENT_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &element_pos, int const &UI_size);
