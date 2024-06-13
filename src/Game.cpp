@@ -73,42 +73,6 @@ void Game::UPDATE(TowerDefense &TD, const double &elapsedTime, const double &cur
 void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
 {
     draw_WINDOW_Background(TD.LoadedTextures["images/textures/Other/window_background.png"]);
-    if (TD.GAME_IS_PLAYING)
-    {
-        TD.render_MAP();
-
-        if (!TD.PAUSE)
-        {
-            if (!TD.FINISHED_WAVE)
-            {
-                TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
-                TD.render_ENEMIES_in_WAVE();
-                TD.render_TOWERS();
-                TD.render_BASE_health();
-                TD.active_UI(_width, _height);
-            }
-        }
-        else // JEU EN PAUSE
-        {
-            TD.ui.PLAY_PAUSE.Label("> PAUSE <", _width / 2, _height / 2, SimpleText::CENTER);
-            TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
-            TD.ui.show_HELP_in_PAUSE(TD.map, TD.LoadedTextures);
-            TD.ui.show_QUIT_GAME(_width, _height);
-            draw_BREAK_MENU(TD.map);
-        }
-
-        if (TD.FINISHED_WAVE)
-        {
-            draw_BREAK_MENU(TD.map);
-            TD.ui.show_WAVE_FINISHED(_width, _height, TD.current_WAVE_id);
-        }
-    }
-
-    else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER && !TD.PLAYER_WIN && !TD.BONUS) // MENU START
-    {
-        TD.ui.show_IMAC_WARS_TITLE(TD.map, TD.LoadedTextures);
-        TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height - 100, SimpleText::CENTER);
-    }
 
     if (TD.GAME_OVER) // SI LE JOUEUR PERD => Active l'écran de GAME OVER
     {
@@ -128,15 +92,49 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         TD.ui.show_QUIT_GAME(_width, _height);
     }
 
-    if (TD.BONUS) //Le petit bonus qui fait plaiz 
+    if (TD.BONUS) // Le petit bonus qui fait plaiz
     {
         ma_sound_stop(&cantinaSound);
         ma_sound_start(&bonusSound);
         TD.ui.show_TEAM(TD.map, TD.LoadedTextures);
         TD.ui.show_QUIT_GAME(_width, _height);
     }
+    
+    if (TD.GAME_IS_PLAYING)
+    {
+        TD.render_MAP();
 
-    TD.ui.show_MAIN_TITLE(_width, _height);
+        if (!TD.PAUSE)
+        {
+            if (!TD.FINISHED_WAVE)
+            {
+                TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
+                TD.render_ENEMIES_in_WAVE();
+                TD.render_TOWERS();
+                TD.render_BASE_health();
+                TD.active_UI(_width, _height);
+            }
+        }
+        else // JEU EN PAUSE
+        {
+            draw_BREAK_MENU(TD.map);
+            TD.ui.show_PAUSE(TD.map, TD.LoadedTextures);
+            TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
+            TD.ui.show_HELP_in_PAUSE(TD.map, TD.LoadedTextures);
+            TD.ui.show_QUIT_GAME(_width, _height);
+        }
+
+        if (TD.FINISHED_WAVE)
+        {
+            draw_BREAK_MENU(TD.map);
+            TD.ui.show_WAVE_FINISHED(_width, _height, TD.current_WAVE_id);
+        }
+    }
+    else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER && !TD.PLAYER_WIN && !TD.BONUS) // MENU START
+    {
+        TD.ui.show_IMAC_WARS_TITLE(TD.map, TD.LoadedTextures);
+        TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height - 100, SimpleText::CENTER);
+    }
     TD.ui.PLAY_PAUSE.Render();
 }
 

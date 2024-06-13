@@ -29,7 +29,7 @@ void UI::setup_UI_Text()
 
     // WAVE FINISHED
     this->WAVE_FINISHED.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
-    this->WAVE_FINISHED.SetTextSize(SimpleText::FontSize::SIZE_64);
+    this->WAVE_FINISHED.SetTextSize(SimpleText::FontSize::SIZE_32);
     this->WAVE_FINISHED.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
     this->WAVE_FINISHED.EnableBlending(true);
 
@@ -103,6 +103,7 @@ void UI::show_WAVE_FINISHED(int &_width, int &_height, size_t current_WAVE_id)
 void UI::show_PLAYER_WIN(int &_width, int &_height)
 {
     this->PLAYER_WIN.Label("CONGRATULATIONS, YOU WIN !", _width / 2, _height / 2, SimpleText::CENTER);
+    this->PLAYER_WIN.Label("Press > A < to continue!", _width / 2, _height / 2 + 200, SimpleText::CENTER);
     this->PLAYER_WIN.Render();
 }
 
@@ -134,18 +135,20 @@ void UI::show_CURSOR_on_MAP(Map &map, std::unordered_map<std::filesystem::path, 
     }
 }
 
-void UI::show_WALLET(int &_width, int &_height)
+void UI::show_WALLET(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     if (this->WALLET < 0)
         this->WALLET = 0;
-
-    if (this->WALLET == 0)
-        this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::RED);
-    else
-        this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::MAGENTA);
-    std::string WALLET_label{" ARGENT : " + std::to_string(this->WALLET) + " "};
-    this->WALLET_indicator.Label(WALLET_label.c_str(), _width / 2, _height - 50, SimpleText::CENTER);
-    this->WALLET_indicator.Render();
+    glPushMatrix();
+    glTranslatef(-0.6, 0, 0);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Money.png"], 0, -2, 2, 2, map);
+    std::string WALLET_string = std::to_string(this->WALLET);
+    for (float i{1}; i < WALLET_string.size(); i++)
+    {
+        std::string path = "images/textures/Numbers/" + std::string(1, WALLET_string[i]) + ".png";
+        draw_UI_ITEM(LoadedTextures[path], i * 2, -2, 2, 2, map);
+    }
+    glPopMatrix();
 }
 
 void UI::show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE)
@@ -200,6 +203,11 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);
 }
 
+void UI::show_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Pause.png"], 5, 6, 5, 3, map);
+}
+
 void UI::show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     // Left menu
@@ -232,5 +240,6 @@ void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::file
 // BONUS
 void UI::show_TEAM(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    draw_UI_ITEM(LoadedTextures["images/textures/Team/max.jpg"], 2, 2, 10, 10, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Team.png"], 5, 14, 5, 3, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Team/max.jpg"], 2, 2, 11, 11, map);
 }
