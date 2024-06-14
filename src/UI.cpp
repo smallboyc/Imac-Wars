@@ -82,7 +82,7 @@ void UI::setup_UI_Text()
 
 void UI::show_IMAC_WARS_TITLE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    draw_IMAC_WARS(LoadedTextures["images/textures/Start/IMAC_WARS.png"], this->TITLE_pos.x, this->TITLE_pos.y, this->TITLE_size.x, this->TITLE_size.y, map, this->UI_elapsedTime, this->UI_currentTime, this->UI_previous_Time);
+    draw_IMAC_WARS(LoadedTextures["images/textures/Start/IMAC_WARS_02.png"], this->TITLE_pos.x, this->TITLE_pos.y, this->TITLE_size.x, this->TITLE_size.y, map, this->UI_elapsedTime, this->UI_currentTime, this->UI_previous_Time);
 }
 
 void UI::show_MAIN_TITLE(int &_width, int &_height)
@@ -141,7 +141,7 @@ void UI::show_WALLET(Map &map, std::unordered_map<std::filesystem::path, GLuint>
         this->WALLET = 0;
     glPushMatrix();
     glTranslatef(-0.6, 0, 0);
-    draw_UI_ITEM(LoadedTextures["images/textures/Other/Money.png"], 0, -2, 2, 2, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Money_02.png"], 0, -2, 2, 2, map);
     std::string WALLET_string = std::to_string(this->WALLET);
     for (float i{1}; i < WALLET_string.size(); i++)
     {
