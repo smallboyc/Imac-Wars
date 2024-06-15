@@ -16,7 +16,7 @@ struct UI
     glm::vec2 TITLE_pos{7, 7};
     glm::vec2 TITLE_size{1, 1};
     // IN GAME
-    int WALLET{124};
+    int WALLET{24};
     SimpleText MAIN_TITLE{};
     SimpleText START_GAME{};
     SimpleText WAVE_FINISHED{};
@@ -49,6 +49,7 @@ struct UI
     // Elements de jeu
     void show_CURSOR_on_MAP(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_WALLET(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
+    void show_WAVE(Map &map, size_t current_WAVE_id, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_TOWER_to_select(Map &map, Tower const &tower);
     void show_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);

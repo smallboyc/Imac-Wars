@@ -157,14 +157,53 @@ void UI::show_WALLET(Map &map, std::unordered_map<std::filesystem::path, GLuint>
     if (this->WALLET < 0)
         this->WALLET = 0;
     glPushMatrix();
-    glTranslatef(-0.6, 0, 0);
-    draw_UI_ITEM(LoadedTextures["images/textures/Other/Money_02.png"], 0, -2, 2, 2, map);
+    glTranslatef(1.3, 1.05, 0);
+    draw_UI_ITEM(LoadedTextures["images/textures/Wallet/Wallet_Indicator.png"], 0, 0, 6, 3, map);
+    glPushMatrix();
+    glTranslatef(-0.13, 0.02, 0);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Money_02.png"], 0, 0, 2, 2, map);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0.08, 0.06, 0);
     std::string WALLET_string = std::to_string(this->WALLET);
-    for (float i{1}; i < WALLET_string.size(); i++)
+    if (WALLET_string.size() == 1)
     {
-        std::string path = "images/textures/Numbers/" + std::string(1, WALLET_string[i]) + ".png";
-        draw_UI_ITEM(LoadedTextures[path], i * 2, -2, 2, 2, map);
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/0.png"], 0, 0, 1, 1, map);
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/0.png"], 1, 0, 1, 1, map);
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/" + std::string(1, WALLET_string[0]) + ".png"], 2, 0, 1, 1, map);
     }
+    else if (WALLET_string.size() == 2)
+    {
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/0.png"], 0, 0, 1, 1, map);
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/" + std::string(1, WALLET_string[0]) + ".png"], 1, 0, 1, 1, map);
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/" + std::string(1, WALLET_string[1]) + ".png"], 2, 0, 1, 1, map);
+    }
+    else
+    {
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/" + std::string(1, WALLET_string[0]) + ".png"], 0, 0, 1, 1, map);
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/" + std::string(1, WALLET_string[1]) + ".png"], 1, 0, 1, 1, map);
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/" + std::string(1, WALLET_string[2]) + ".png"], 2, 0, 1, 1, map);
+    }
+
+    glPopMatrix();
+    glPopMatrix();
+}
+
+void UI::show_WAVE(Map &map, size_t current_WAVE_id, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    std::string WAVE_string = std::to_string(current_WAVE_id);
+    glPushMatrix();
+    glTranslatef(1.4, -0.25, 0);
+    draw_UI_ITEM(LoadedTextures["images/textures/Wave/Wave_Panel.png"], -2.5, 0, 3, 5, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Wave/Wave_Indicator.png"], 0, 0, 4, 8, map);
+    glPushMatrix();
+    glTranslatef(0.05, 0.08, 0);
+    for (float i{0}; i < WAVE_string.size(); i++)
+    {
+        std::string path = "images/textures/Numbers/" + std::string(1, WAVE_string[i]) + ".png";
+        draw_UI_ITEM(LoadedTextures[path], i, 4, 2, 2, map);
+    }
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -257,7 +296,7 @@ void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::file
 // BONUS
 void UI::show_TEAM(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    draw_UI_ITEM(LoadedTextures["images/textures/Other/Team.png"], 5, 14, 5, 3, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Team/Team_Panel.png"], 4, 14, 7, 3, map);
     draw_UI_ITEM(LoadedTextures["images/textures/Team/poke_Leo.jpg"], -8.5, 1, 8, 11, map);
     draw_UI_ITEM(LoadedTextures["images/textures/Team/poke_Max.jpg"], 3.5, 1, 8, 11, map);
     draw_UI_ITEM(LoadedTextures["images/textures/Team/poke_Anass_02.png"], 15.5, 1, 8, 11, map);

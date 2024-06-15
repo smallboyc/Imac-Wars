@@ -178,6 +178,6 @@ bool is_inside_MAP(float &x, float &y, Map &map)
 
 bool hover_ELEMENT_in_UI(glm::vec2 const &mouse_cursor, glm::vec2 const &element_pos, int const &UI_size)
 {
-    return (mouse_cursor.x >= std::round(element_pos.x) && mouse_cursor.x < std::round(element_pos.x) + UI_size &&
-            mouse_cursor.y >= std::round(element_pos.y) && mouse_cursor.y < std::round(element_pos.y) + UI_size);
+    return (mouse_cursor.x >= std::round(element_pos.x) && mouse_cursor.x <= std::round(element_pos.x) + UI_size &&
+            mouse_cursor.y >= std::round(element_pos.y) && mouse_cursor.y <= std::round(element_pos.y) + UI_size);
 }

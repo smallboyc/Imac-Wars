@@ -6,7 +6,8 @@ Waves 5
 #VAGUES (niveau, nombre d'entrée, nombre d'ennemi, 
 temps entre chaque spawn d'ennemi (en seconde), type de l'ennemi)
 
-level 0 4 2 3 0 1 2 3
+level 0 4 1 3 0 1 2 3
+level 1 4 1 3 0 1 2 3
 
 
 
