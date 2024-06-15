@@ -8,6 +8,7 @@
 #include "GLHelpers.hpp"
 #include "Enemy.hpp"
 #include "Bullet.hpp"
+#include "SoundEngine.hpp"
 
 struct TowerDefense;
 
@@ -32,6 +33,6 @@ struct Tower
     bool isSelectedinUI{false};
     bool showProperty{false};
     void setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 const &pixel_pos);
-    void update(TowerDefense*, const double &elapsedTime, const double &currentTime);
+    void update(TowerDefense *, const double &elapsedTime, const double &currentTime);
     void render(Map &map);
 };

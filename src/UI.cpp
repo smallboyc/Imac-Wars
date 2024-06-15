@@ -27,6 +27,12 @@ void UI::setup_UI_Text()
     this->MAIN_TITLE.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
     this->MAIN_TITLE.EnableBlending(true);
 
+    // START BUTTON
+    this->START_GAME.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
+    this->START_GAME.SetTextSize(SimpleText::FontSize::SIZE_32);
+    this->START_GAME.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
+    this->START_GAME.EnableBlending(true);
+
     // WAVE FINISHED
     this->WAVE_FINISHED.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
     this->WAVE_FINISHED.SetTextSize(SimpleText::FontSize::SIZE_32);
@@ -85,17 +91,28 @@ void UI::show_IMAC_WARS_TITLE(Map &map, std::unordered_map<std::filesystem::path
     draw_IMAC_WARS(LoadedTextures["images/textures/Start/IMAC_WARS_02.png"], this->TITLE_pos.x, this->TITLE_pos.y, this->TITLE_size.x, this->TITLE_size.y, map, this->UI_elapsedTime, this->UI_currentTime, this->UI_previous_Time);
 }
 
+void UI::show_PLAY_button(int &_width, int &_height, Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Start_Button.png"], 4.5, -2, 6, 2, map);
+
+    if (std::round(std::fmod(this->UI_currentTime, 2)) == 1)
+        this->START_GAME.Label("PRESS > S <", _width / 2, _height - 20, SimpleText::CENTER);
+
+    this->START_GAME.Render();
+}
+
 void UI::show_MAIN_TITLE(int &_width, int &_height)
 {
     this->MAIN_TITLE.Label("- IMAC WARS : Tower Defense -", _width / 2, 100, SimpleText::CENTER);
     this->MAIN_TITLE.Render();
 }
 
-void UI::show_WAVE_FINISHED(int &_width, int &_height, size_t current_WAVE_id)
+void UI::show_WAVE_FINISHED(Map &map, int &_width, int &_height, size_t current_WAVE_id, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    std::string text = "> WAVE " + std::to_string(current_WAVE_id) + " FINISHED! <";
+    // std::string text = "> WAVE " + std::to_string(current_WAVE_id) + " FINISHED! <";
 
-    this->WAVE_FINISHED.Label(text.c_str(), _width / 2, _height / 2, SimpleText::CENTER);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Wave_Finished_Pannel.png"], 4, 6, 7, 3, map);
+    // this->WAVE_FINISHED.Label(text.c_str(), _width / 2, _height / 2, SimpleText::CENTER);
     this->WAVE_FINISHED.Label("PRESS -ENTER- TO CONTINUE", _width / 2, _height / 2 + 150, SimpleText::CENTER);
     this->WAVE_FINISHED.Render();
 }
@@ -205,7 +222,7 @@ void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 
 void UI::show_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
-    draw_UI_ITEM(LoadedTextures["images/textures/Other/Pause.png"], 5, 6, 5, 3, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Pause_Pannel.png"], 4, 6, 7, 3, map);
 }
 
 void UI::show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
@@ -241,5 +258,7 @@ void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::file
 void UI::show_TEAM(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     draw_UI_ITEM(LoadedTextures["images/textures/Other/Team.png"], 5, 14, 5, 3, map);
-    draw_UI_ITEM(LoadedTextures["images/textures/Team/max.jpg"], 2, 2, 11, 11, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Team/poke_Leo.jpg"], -8.5, 1, 8, 11, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Team/poke_Max.jpg"], 3.5, 1, 8, 11, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Team/poke_Anass_02.png"], 15.5, 1, 8, 11, map);
 }

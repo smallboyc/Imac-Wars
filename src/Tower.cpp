@@ -9,7 +9,7 @@ void Tower::setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_IT
 }
 
 void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &currentTime)
-{
+{     
     if (currentTime - previousTimeTower >= 2) // On décrémente la vie de la tour toutes les 2 secondes.
     {
         this->age += 1;
@@ -20,7 +20,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
 
     for (auto &enemy : TD->current_ENEMIES_in_WAVE)
     {
-        if(enemy.second.isTarget)
+        if (enemy.second.isTarget)
         {
             // Distance de Chebyshev
             if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < this->portee && enemy.second.isMoving)
@@ -33,7 +33,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
         }
         else
         {
-            if(!enemy.second.reSpeedSet)
+            if (!enemy.second.reSpeedSet)
             {
                 enemy.second.reSpeed = currentTime;
                 enemy.second.reSpeedSet = true;
@@ -41,7 +41,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
 
             // std::cout << currentTime - enemy.second.reSpeed << "\n";
 
-            if(currentTime - enemy.second.reSpeed >= 2)
+            if (currentTime - enemy.second.reSpeed >= 2)
             {
                 enemy.second.speed *= 3;
 
