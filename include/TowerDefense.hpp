@@ -16,6 +16,7 @@
 #include "Draw.hpp"
 #include "SpriteSheet.hpp"
 #include "Tower.hpp"
+#include "SoundEngine.hpp"
 
 struct TowerDefense
 {
@@ -24,6 +25,7 @@ struct TowerDefense
     bool FINISHED_WAVE{false};
     bool GAME_OVER{false};
     bool PLAYER_WIN{false};
+    bool BONUS{false};
     Map map;
     UI ui;
     Base base;
@@ -45,6 +47,10 @@ struct TowerDefense
     int towerID{0};
     // Particules
     std::unordered_map<std::string, SpriteSheet> SPRITE_SHEETS_ITD; // stock tous les sprites sheets
+                                                                    // Sounds
+    std::unordered_map<std::string, ma_sound> ALL_SOUNDS;           // stock tous les sons
+    // SON
+    void Load_All_Sounds(std::vector<std::pair<std::string, ma_sound *>> &sounds);
     // TEXTURES
     void Load_All_Textures();
     // MAP

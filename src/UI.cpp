@@ -11,6 +11,13 @@
 #include "GLHelpers.hpp"
 #include "UI.hpp"
 #include "Draw.hpp"
+#include "SoundEngine.hpp"
+
+void UI::get_TIME_in_UI(const double &elapsedTime, const double &currentTime)
+{
+    this->UI_elapsedTime = elapsedTime;
+    this->UI_currentTime = currentTime;
+}
 
 void UI::setup_UI_Text()
 {
@@ -22,7 +29,7 @@ void UI::setup_UI_Text()
 
     // WAVE FINISHED
     this->WAVE_FINISHED.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::CYAN);
-    this->WAVE_FINISHED.SetTextSize(SimpleText::FontSize::SIZE_64);
+    this->WAVE_FINISHED.SetTextSize(SimpleText::FontSize::SIZE_32);
     this->WAVE_FINISHED.SetColorf(SimpleText::BACKGROUND_COLOR, 0.f, 0.f, 0.f, 0.f);
     this->WAVE_FINISHED.EnableBlending(true);
 
@@ -73,6 +80,11 @@ void UI::setup_UI_Text()
     this->ENEMY_property.EnableBlending(true);
 }
 
+void UI::show_IMAC_WARS_TITLE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    draw_IMAC_WARS(LoadedTextures["images/textures/Start/IMAC_WARS_02.png"], this->TITLE_pos.x, this->TITLE_pos.y, this->TITLE_size.x, this->TITLE_size.y, map, this->UI_elapsedTime, this->UI_currentTime, this->UI_previous_Time);
+}
+
 void UI::show_MAIN_TITLE(int &_width, int &_height)
 {
     this->MAIN_TITLE.Label("- IMAC WARS : Tower Defense -", _width / 2, 100, SimpleText::CENTER);
@@ -91,6 +103,7 @@ void UI::show_WAVE_FINISHED(int &_width, int &_height, size_t current_WAVE_id)
 void UI::show_PLAYER_WIN(int &_width, int &_height)
 {
     this->PLAYER_WIN.Label("CONGRATULATIONS, YOU WIN !", _width / 2, _height / 2, SimpleText::CENTER);
+    this->PLAYER_WIN.Label("Press > A < to continue!", _width / 2, _height / 2 + 200, SimpleText::CENTER);
     this->PLAYER_WIN.Render();
 }
 
@@ -122,18 +135,20 @@ void UI::show_CURSOR_on_MAP(Map &map, std::unordered_map<std::filesystem::path, 
     }
 }
 
-void UI::show_WALLET(int &_width, int &_height)
+void UI::show_WALLET(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     if (this->WALLET < 0)
         this->WALLET = 0;
-
-    if (this->WALLET == 0)
-        this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::RED);
-    else
-        this->WALLET_indicator.SetColor(SimpleText::TEXT_COLOR, SimpleText::Color::MAGENTA);
-    std::string WALLET_label{" ARGENT : " + std::to_string(this->WALLET) + " "};
-    this->WALLET_indicator.Label(WALLET_label.c_str(), _width / 2, _height - 50, SimpleText::CENTER);
-    this->WALLET_indicator.Render();
+    glPushMatrix();
+    glTranslatef(-0.6, 0, 0);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Money_02.png"], 0, -2, 2, 2, map);
+    std::string WALLET_string = std::to_string(this->WALLET);
+    for (float i{1}; i < WALLET_string.size(); i++)
+    {
+        std::string path = "images/textures/Numbers/" + std::string(1, WALLET_string[i]) + ".png";
+        draw_UI_ITEM(LoadedTextures[path], i * 2, -2, 2, 2, map);
+    }
+    glPopMatrix();
 }
 
 void UI::show_ENEMY_PROPERTIES(int const &current_WAVE_id, std::unordered_map<int, Enemy> &current_ENEMIES_in_WAVE)
@@ -174,15 +189,29 @@ void UI::show_ENEMY_PROPERTY(Map &map, std::unordered_map<std::filesystem::path,
     }
 }
 
+void UI::show_TOWER_PROPERTY(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures, std::unordered_map<int, Tower> &current_TOWERS_in_MAP)
+{
+    for (auto &tower : current_TOWERS_in_MAP)
+    {
+        if (tower.second.showProperty)
+            draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Allies.png"], -10, 1.5, 9, 12, map);
+    }
+}
+
 void UI::show_TOWER_to_select(Map &map, Tower const &tower)
 {
     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);
 }
 
+void UI::show_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Pause.png"], 5, 6, 5, 3, map);
+}
+
 void UI::show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     // Left menu
-    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Ennemies.png"], -11, 0.5, 9, 14, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Ennemies.png"], -10, 0.5, 9, 14, map);
 
     // Right menu
     draw_UI_ITEM(LoadedTextures["images/textures/Help/Help-Allies.png"], 16, 0.5, 9, 14, map);
@@ -206,4 +235,11 @@ void UI::show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::file
         }
         draw_UI_ITEM(texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);
     }
+}
+
+// BONUS
+void UI::show_TEAM(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
+{
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Team.png"], 5, 14, 5, 3, map);
+    draw_UI_ITEM(LoadedTextures["images/textures/Team/max.jpg"], 2, 2, 11, 11, map);
 }
