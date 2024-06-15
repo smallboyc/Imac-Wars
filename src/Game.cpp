@@ -110,7 +110,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         {
             if (!TD.FINISHED_WAVE)
             {
-                TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 150, SimpleText::CENTER);
+                TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PAUSE", _width / 2, 100, SimpleText::CENTER);
                 TD.render_ENEMIES_in_WAVE();
                 TD.render_TOWERS();
                 TD.render_BASE_health();
@@ -121,7 +121,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         {
             draw_BREAK_MENU(TD.map);
             TD.ui.show_PAUSE(TD.map, TD.LoadedTextures);
-            TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 150, SimpleText::CENTER);
+            TD.ui.PLAY_PAUSE.Label("PRESS -SPACE- TO PLAY", _width / 2, 100, SimpleText::CENTER);
             TD.ui.show_HELP_in_PAUSE(TD.map, TD.LoadedTextures);
             TD.ui.show_QUIT_GAME(_width, _height);
         }

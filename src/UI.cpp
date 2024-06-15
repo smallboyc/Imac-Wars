@@ -136,7 +136,7 @@ void UI::show_GAME_OVER(int &_width, int &_height, std::unordered_map<int, Tower
 
 void UI::show_QUIT_GAME(int &_width, int &_height)
 {
-    this->QUIT_GAME.Label("Press Q to Quit the game!", _width / 2, _height - 100, SimpleText::CENTER);
+    this->QUIT_GAME.Label("Press Q to Quit the game!", _width / 2, _height - 80, SimpleText::CENTER);
     this->QUIT_GAME.Render();
 }
 
