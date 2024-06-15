@@ -17,13 +17,15 @@ ma_sound imperialMarchSound;
 ma_sound cantinaSound;
 ma_sound throneRoomSound;
 ma_sound bonusSound;
+ma_sound clickSound;
 
 std::vector<std::pair<std::string, ma_sound *>> sounds = {
     {"../../sound/Main_Theme.mp3", &mainThemeSound},
     {"../../sound/Imperial_March.mp3", &imperialMarchSound},
     {"../../sound/Cantina.mp3", &cantinaSound},
     {"../../sound/Throne_Room.mp3", &throneRoomSound},
-    {"../../sound/Bonus.mp3", &bonusSound}};
+    {"../../sound/Bonus.mp3", &bonusSound},
+    {"../../sound/Click.mp3", &clickSound}};
 
 void Game::LOAD(TowerDefense &TD)
 {
@@ -36,7 +38,8 @@ void Game::LOAD(TowerDefense &TD)
 
     // On joue les sons en boucle
     for (auto &sound : sounds)
-        ma_sound_set_looping(sound.second, MA_TRUE);
+        if (sound.first != "../../sound/Click.mp3")
+            ma_sound_set_looping(sound.second, MA_TRUE);
 }
 
 void Game::SETUP(TowerDefense &TD, std::string const &MAP_SCHEMA_ITD_path, int const &pixel_UNIT)
@@ -99,7 +102,7 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         TD.ui.show_TEAM(TD.map, TD.LoadedTextures);
         TD.ui.show_QUIT_GAME(_width, _height);
     }
-    
+
     if (TD.GAME_IS_PLAYING)
     {
         TD.render_MAP();
@@ -127,13 +130,13 @@ void Game::RENDER(TowerDefense &TD, int &_width, int &_height)
         if (TD.FINISHED_WAVE)
         {
             draw_BREAK_MENU(TD.map);
-            TD.ui.show_WAVE_FINISHED(_width, _height, TD.current_WAVE_id);
+            TD.ui.show_WAVE_FINISHED(TD.map, _width, _height, TD.current_WAVE_id, TD.LoadedTextures);
         }
     }
     else if (!TD.GAME_IS_PLAYING && !TD.GAME_OVER && !TD.PLAYER_WIN && !TD.BONUS) // MENU START
     {
         TD.ui.show_IMAC_WARS_TITLE(TD.map, TD.LoadedTextures);
-        TD.ui.PLAY_PAUSE.Label("PRESS > S < TO START", _width / 2, _height - 100, SimpleText::CENTER);
+        TD.ui.show_PLAY_button(_width, _height, TD.map, TD.LoadedTextures);
     }
     TD.ui.PLAY_PAUSE.Render();
 }
@@ -191,7 +194,7 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
 
 void Game::active_MOUSE_CLICK_CALLBACK(TowerDefense &TD, GLFWwindow *window, float &_viewSize, int button, int action, int mods)
 {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && TD.GAME_IS_PLAYING)
     {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
@@ -210,8 +213,10 @@ void Game::active_MOUSE_CLICK_CALLBACK(TowerDefense &TD, GLFWwindow *window, flo
         // Si le joueur click sur une tour dans l'UI, la tour est sélectionnée !
         for (auto &tower : TD.TOWERS_ITD)
         {
+
             if (hover_ELEMENT_in_UI({mouseX, mouseY}, tower.second.UI_pos, tower.second.UI_size) && tower.second.can_be_Selected)
             {
+                ma_sound_start(&clickSound);
                 TD.current_TOWER_id = tower.second.type;
             }
         }
@@ -239,6 +244,7 @@ void Game::active_MOUSE_CLICK_CALLBACK(TowerDefense &TD, GLFWwindow *window, flo
             // Si le joueur click sur un pixel de map.
             if (pixel.x == mouseX && pixel.y == mouseY && pixel.is_VOID && !pixel.is_FORBIDDEN && !pixel.is_TOWER)
             {
+                ma_sound_start(&clickSound);
                 // Le joueur peut poser sa tour s'il dispose de l'argent nécessaire.
                 if (TD.ui.WALLET >= TD.TOWERS_ITD.at(TD.current_TOWER_id).price)
                 {

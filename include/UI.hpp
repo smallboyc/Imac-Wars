@@ -18,6 +18,7 @@ struct UI
     // IN GAME
     int WALLET{124};
     SimpleText MAIN_TITLE{};
+    SimpleText START_GAME{};
     SimpleText WAVE_FINISHED{};
     SimpleText PLAY_PAUSE{};
     SimpleText PLAYER_WIN{};
@@ -36,11 +37,11 @@ struct UI
 
     // START IMAC WARS
     void show_IMAC_WARS_TITLE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
-
+    void show_PLAY_button(int &_width, int &_height, Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     // Textes
     void setup_UI_Text();
     void show_MAIN_TITLE(int &_width, int &_height);
-    void show_WAVE_FINISHED(int &_width, int &_height, size_t current_WAVE_id);
+    void show_WAVE_FINISHED(Map &map, int &_width, int &_height, size_t current_WAVE_id, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_PLAYER_WIN(int &_width, int &_height);
     void show_GAME_OVER(int &_width, int &_height, std::unordered_map<int, Tower> current_TOWERS_in_MAP);
     void show_QUIT_GAME(int &_width, int &_height);
