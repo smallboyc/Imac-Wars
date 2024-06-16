@@ -48,6 +48,7 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
                 enemy.second.isTarget = true;
                 enemy.second.reSpeedSet = false;
             }
+            this->bullet.isBeingShot = false;
         }
     }
 
