@@ -254,9 +254,16 @@ void UI::show_TOWER_PROPERTY(Map &map, std::unordered_map<std::filesystem::path,
     }
 }
 
-void UI::show_TOWER_to_select(Map &map, Tower const &tower)
+void UI::show_TOWER_to_select(Map &map, Tower const &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)
 {
     draw_UI_ITEM(tower.texture, tower.UI_pos.x, tower.UI_pos.y, tower.UI_size, tower.UI_size, map);
+    std::string TOWER_price = std::to_string(tower.price);
+    glPushMatrix();
+    glTranslatef(-0.035, -0.03, 0);
+    draw_UI_ITEM(LoadedTextures["images/textures/Other/Money_02.png"], tower.UI_pos.x, tower.UI_pos.y - 1, tower.UI_size - 1, tower.UI_size - 1, map);
+    for (size_t i{0}; i < TOWER_price.size(); i++)
+        draw_UI_ITEM(LoadedTextures["images/textures/Numbers/" + std::string(1, TOWER_price[i]) + ".png"], tower.UI_pos.x + i + 1, tower.UI_pos.y - 1, tower.UI_size - 1, tower.UI_size - 1, map);
+    glPopMatrix();
 }
 
 void UI::show_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures)

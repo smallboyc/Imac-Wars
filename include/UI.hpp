@@ -50,7 +50,7 @@ struct UI
     void show_CURSOR_on_MAP(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_WALLET(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_WAVE(Map &map, size_t current_WAVE_id, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
-    void show_TOWER_to_select(Map &map, Tower const &tower);
+    void show_TOWER_to_select(Map &map, Tower const &tower,std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_HELP_in_PAUSE(Map &map, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);
     void show_CURSOR_select(Map &map, Tower &tower, std::unordered_map<std::filesystem::path, GLuint> &LoadedTextures);

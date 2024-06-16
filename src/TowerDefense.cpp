@@ -94,7 +94,7 @@ void TowerDefense::active_UI(int &_width, int &_height)
 {
     for (auto &tower : this->TOWERS_ITD)
     {
-        this->ui.show_TOWER_to_select(this->map, tower.second);
+        this->ui.show_TOWER_to_select(this->map, tower.second, this->LoadedTextures);
         this->ui.show_CURSOR_select(this->map, tower.second, this->LoadedTextures);
     }
     this->ui.show_CURSOR_on_MAP(this->map, this->LoadedTextures);
