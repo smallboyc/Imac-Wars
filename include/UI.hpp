@@ -16,7 +16,7 @@ struct UI
     glm::vec2 TITLE_pos{7, 7};
     glm::vec2 TITLE_size{1, 1};
     // IN GAME
-    int WALLET{24};
+    int WALLET{20};
     SimpleText MAIN_TITLE{};
     SimpleText START_GAME{};
     SimpleText WAVE_FINISHED{};

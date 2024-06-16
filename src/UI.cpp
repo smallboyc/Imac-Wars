@@ -156,6 +156,8 @@ void UI::show_WALLET(Map &map, std::unordered_map<std::filesystem::path, GLuint>
 {
     if (this->WALLET < 0)
         this->WALLET = 0;
+    else if (this->WALLET > 999)
+        this->WALLET = 999;
     glPushMatrix();
     glTranslatef(1.3, 1.05, 0);
     draw_UI_ITEM(LoadedTextures["images/textures/Wallet/Wallet_Indicator.png"], 0, 0, 6, 3, map);

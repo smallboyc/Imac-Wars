@@ -2,8 +2,8 @@
 
 **D'après le Template de [Enguerrand Desmet](https://github.com/dsmtE/OpenGL-Template).**
 
-🎓 _DE SANTIS Léo + DUPUIS Maxence + DOUBLAL Anass._
-:books: Librairie / Langage : **OpenGL / C++**
+🎓 _DE SANTIS Léo + DOUBLAL Anass + DUPUIS Maxence._\
+:books: Librairie / Langage : **OpenGL / C++**\
 :computer: Développé sur : **MacOS / Windows**
 <br />
 
@@ -84,7 +84,7 @@ Ce projet nous semblait extrêmement ambitieux à première vue. Heureusement, l
 
 ## :dart: Objectif du rapport
 
-Ce rapport a pour objectif de développer et d'illustrer notre raisonnement dans la conception du Tower Defense. Il ne s'agit pas de décrire dans les moindres détails le code du jeu, mais de comprendre le raisonnement et les principaux éléments implémentés. Si vous souhaitez des détails supplémentaires, n'hésitez pas à accéder au code via ce symbole : :paperclip:
+Ce rapport a pour objectif de développer et d'illustrer notre raisonnement dans la conception du Tower Defense. Il ne s'agit pas de décrire dans les moindres détails le code du jeu, mais de comprendre le raisonnement et les principaux éléments implémentés. Si vous souhaitez des détails supplémentaires, n'hésitez pas à regarder le code !
 
 Un [guide d'utilisation](doc/pdf/IMAC_WARS_Tutorial.pdf) est à votre disposition pour vous permettre d'accéder aux règles, caractéristiques et commandes du jeu.
 
@@ -114,23 +114,26 @@ Game
     └── UI
 
 ```
+> :warning: Ce rapport a été fait en parallèle de l'implémentation du jeu, il se peut que certains éléments du code n'apparaissent pas dans les captures. N'hésitez pas à vous référez au code si besoin.
 
-`Game` représente le **fichier principal** du jeu. Toutes ses fonctions possèdent un `TD` (structure TowerDefense)
+`Game` représente le **fichier principal** du jeu. Toutes ses fonctions possèdent un `TD` (structure TowerDefense).
 Seules les fonctions de `Game` sont utilisées dans `App` (Application).
 
 ![alt text](doc/images/Game_namespace.png)
 
 > Les 4 premières fonctions sont celles qui permettent de faire fonctionner l'affichage des éléments du jeu.
 
-**1. LOAD** : Charge toutes les textures une seule fois dans un tableau de texture appelé au tout début de l'application.
+**1. LOAD** : Charge toutes les textures une seule fois dans un tableau de texture appelé au tout début de l'application. Charge aussi tous les sons.
 
-![alt text](doc/images/LOAD.png)
+![alt text](doc/images/LOAD_02.png)
 
 **2. SETUP** : Appels successifs et ordonnés de méthodes permettant de récupérer et de traiter l'information pour :
 
 - Afficher la carte.
 - Stocker différentes données telles que les tours, ennemis et vagues.
 - Afficher l'interface utilisateur.
+
+Elle prend le chemin vers le fichier de la map en pixel, ainsi que la taille de la map en pixel (width ou height).
 
 ![alt text](doc/images/SETUP.png)
 
@@ -160,7 +163,6 @@ Nous ne rentrerons pas dans le détail des fonctions d'interactions. Retenez sim
 - **active_MOUSE_CLICK_CALLBACK(...)** : Déclenche des évênements lorsque le joueur clique sur sa souris (ou pad).
 - **active_MOUSE_POSITION_CALLBACK(...)** : Permet de garder en mémoire la position de la souris à chaque instant.
 
-//lien code
 
 ## :memo: Fichier ITD
 
@@ -181,8 +183,8 @@ Il faut cependant garder en tête que l'utilisateur peut commettre des erreurs d
 5. Existence d'au moins une zone d'entrée et de sortie (cette vérification pourra se faire implicitement lors de la recherche du chemin des ennemis).
 6. Existence d'au moins un chemin entre la zone d'entrée et de sortie (cette vérification pourra se faire implicitement lors de la recherche du chemin des ennemis).
 
-- Les vérifications 1, 2, 3 ont été effectuées dans le fichier ITD.cpp. //Lien code
-- Les vérifications 4, 5, 6 ont été effectuées dans le fichier Map.cpp. //Lien code
+- Les vérifications 1, 2, 3 ont été effectuées dans le fichier ITD.cpp.
+- Les vérifications 4, 5, 6 ont été effectuées dans le fichier Map.cpp.
 
 Nous avons réutilisé cette logique sur d'autres éléments de notre jeu tels que : les ennemis, vagues, tours, images animées. La volonté est de permettre à l'utilisateur de pouvoir entrer ses données en gérant simplement les fichiers itd ; notre application se charge dynamiquement de récupérer, traiter et afficher l'information. Voici deux exemples de fichiers itd implémentés.
 
@@ -232,7 +234,7 @@ Les fichiers itd optionnels implémentés n'ont cependant pas été "sécurisés
 
 | Schema : 15x15 px                                          | Carte : 240x240 px                                     |
 | ---------------------------------------------------------- | ------------------------------------------------------ |
-| <img src="doc/images/schema.png" alt="Schéma" width="250"> | <img src="doc/images/map.png" alt="Carte" width="250"> |
+| <img src="doc/images/schema.png" alt="Schéma" width="400"> | <img src="doc/images/map.png" alt="Carte" width="400"> |
 
 La logique de la carte est implémentée dans une structure `Map`.
 
@@ -267,9 +269,7 @@ Après avoir déterminé nos structures de base, on va analyser et attribuer à 
 
 Toute cette analyse se fait dans le `Game::SETUP(...)` et plus précisemment dans le `setup_MAP(...)` qui prend en paramètre le nom du fichier ITD et le nombre de pixels sur la largeur ou hauteur (peu importe car notre map est carré).
 
-![alt text](doc/images/Setup_MAP.png)
-
-//lien du code détaillé
+![alt text](doc/images/setup_MAP.png)
 
 Nous ne rentrerons pas dans le détail de ces fonctions, retenez juste que toutes les données sont stockées dans les `vector` ci-dessous grâce aux appels ordonnés et successifs des méthodes.
 
@@ -407,4 +407,18 @@ Cette partie a pour objectif de mentionner les améliorations effectuées par ra
 
 # :four: Conclusion
 
-[...] 
+Nous sommes tout d'abord **fiers** de ce projet.
+
+Ce jeu a été réalisé avec passion et nous avons tous les trois énormément appris. Nous ne pensions pas aller aussi loin dans l'implémentation, mais nous avions réellement envie de développer davantage ce projet. Nous tenons à **remercier notre professeur de programmation** [Enguerrand Desmet](https://github.com/dsmtE), qui a été là quand nous avions besoin d'aide, notamment pour l'utilisation de la librairie audio *miniaudio*, ainsi que pour les problèmes d'affichage liés à la librairie de texte (le jeu ayant principalement été développé sur MacOS avec un écran Retina).
+
+Évidemment, **beaucoup de choses peuvent encore être améliorées**. On peut notamment noter l'absence de vérifications sur les ITD des vagues, des ennemis, des tours et des spritesheets, bien que ces derniers soient une amélioration de notre part. Certaines fonctions mériteraient d'être optimisées, ou certains choix, comme le fait de ne pas intégrer directement un tableau d'ennemis dans la structure `Wave`, pourraient être repensés.
+
+Notre objectif a été de produire le code le plus propre possible dans le temps qui nous était imparti, mais surtout de créer un jeu agréable visuellement auquel on prend plaisir à jouer !
+
+Tout n'a pas été expliqué dans ce rapport car cela aurait pris une éternité. N'hésitez pas à explorer par vous-même ! ;)
+
+**Que la force soit avec vous !**
+
+[Léo DE SANTIS](https://github.com/LaitEauDS)\
+[Anass DOUBLAL](https://github.com/AnassDoublal)\
+[Maxence DUPUIS](https://github.com/smallboyc)
