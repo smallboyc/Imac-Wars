@@ -18,8 +18,8 @@
     Projet de fin d'année d'IMAC 1
 </div>
 
-:arrow_right: [Sujet du projet](doc/pdf/TDIMAC_SUBJECT.pdf)\
-:arrow_right: [Guide du jeu (PDF)](doc/pdf/IMAC_WARS_Tutorial.pdf)
+➡️ [Sujet du projet](doc/pdf/TDIMAC_SUBJECT.pdf)\
+➡️ [Guide du jeu (PDF)](doc/pdf/IMAC_WARS_Tutorial.pdf)
 
 ![alt text](doc/images/IMAC_WARS_Tutorial.png)
 
@@ -44,6 +44,7 @@
         <li><a href="#ocean-vagues">Vagues</a></li>
         <li><a href="#tokyo_tower-tours">Tours</a></li>
         <li><a href="#tv-ui">UI</a></li>
+        <li><a href="#notes-son">Son</a></li>
       </ul>
       </li>
    <li><a href="#three-améliorations">Améliorations</a>
@@ -172,9 +173,6 @@ Il faut cependant garder en tête que l'utilisateur peut effectuer des erreurs d
 Des contrôles ont été effectuées pour permettre la bonne lecture du fichier de map.
 Voilà les contrôles du sujet qui étaient nécessaires d'effectuer :
 
-Pour référencer toutes les données importantes du jeu, nous utilisons des fichiers texte avec l'extension .itd pour (Imac Tower Defense). Un fichier nous était imposé pour représenter les différents éléments de notre carte (expliqué plus loin dans le rapport). Ce fichier est lu et analysé par notre application. Ainsi, les fonctions implémentées sont capables de lire et de retranscrire à l'écran une importante quantité de données.
-
-Il faut cependant garder en tête que l'utilisateur peut commettre des erreurs de saisie et donc rendre la lecture impossible ou incorrecte. Des contrôles ont été effectués pour permettre la bonne lecture du fichier de carte. Voici les contrôles du sujet qui étaient nécessaires à effectuer :
 
 1. Toutes les lignes nécessaires sont présentes et dans le bon ordre.
 2. Triplet RGB valide pour les couleurs (compris entre 0 et 255).
@@ -398,6 +396,101 @@ Exemples d'intéractions :
 - Accès lors de la mise en pause aux caractéristiques des ennemis et tours.
 - Possibilité de sélectionner une tour spécifique en fonction de l'argent disponible et de placer celle-ci sur la carte si la case est valide.
 - Cliquer sur une tour ou un ennemi pour voir les caractéristiques.
+
+# :notes: Son
+
+Afin d'avoir la meilleur expérience utilisateur, il est manipuler l'ambiance sonore du jeu. Pour cela, voici comment on a procédé :
+
+<h3>CMakeLists.txt</h3>
+
+```txt
+# ---miniaudio---
+FetchContent_Declare(
+    miniaudio
+    GIT_REPOSITORY https://github.com/mackron/miniaudio
+)
+FetchContent_MakeAvailable(miniaudio)
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio SYSTEM INTERFACE ${miniaudio_SOURCE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE miniaudio)
+```
+
+- Pour gérer l'intégration de la bibliothèque **Mini-Audio** dans notre projet, nous avons décider de passer par CMake en téléchargeant la librairie depuis le dépôt **GitHub** et en configurant les directives d'inclusion et de liaison nécessaires.
+
+<h3>SoundEngine.hpp</h3>
+
+```cpp
+#pragma once
+
+#include "miniaudio.h"
+#include <vector>
+
+class SoundEngine {
+    public:
+        static SoundEngine& GetInstance();
+        static ma_engine& GetEngine();
+
+        SoundEngine(SoundEngine const& other) = delete;
+        SoundEngine& operator=(const SoundEngine &) = delete;
+
+    private:
+        SoundEngine();
+        ~SoundEngine();
+
+        ma_engine _sound_engine;
+};
+```
+
+- Utilisation d'un fichier **SoundEngine.hpp** qui définit la classe `SoudEngine` sous forme de singleton. Grâce à l'aide de notre professeur, nous avons pu utilisé ce singleton comme un outil. En effet, un singleton est un design pattern qui garantit qu'une classe n'aura qu'une seule instance à tout moment, offrant ainsi un point d'accès global à cette instance. Cela a été particulièrement utile pour les composants du moteur sonore qui ne nécessitent qu'une seule instance partagée dans tout le programme.
+
+
+<h3>SoundEngine.cpp</h3>
+
+```cpp
+#define MINIAUDIO_IMPLEMENTATION
+#include "SoundEngine.hpp"
+#include <iostream>
+
+SoundEngine::SoundEngine() {
+    ma_result const result { ma_engine_init(NULL, &_sound_engine) };
+    if (result != MA_SUCCESS) {
+        std::cerr << "Unable to init sound engine" << std::endl;
+    }
+}
+
+SoundEngine::~SoundEngine() {
+    ma_engine_uninit(&_sound_engine);
+}
+
+SoundEngine& SoundEngine::GetInstance() {
+    static SoundEngine instance;
+    return instance;
+}
+
+ma_engine& SoundEngine::GetEngine() {
+    return GetInstance()._sound_engine;
+}
+```
+
+- Utilisation d'un fichier **SoundEngine.cpp** qui implémente les méthodes de la classe. C'est lui qui permet l'instance du moteur sonore `ma_engine` de **Mini-Audio** lors de l'initialisation. De plus, il définit le rôle du destructeur du singleton qui se charge de désinitialiser correctement le moteur sonore.
+
+<h3>Exemple d'application</h3>
+
+```cpp
+ma_sound mainThemeSound;
+
+// Chargement et stockage des sons dans un vecteur
+std::vector<std::pair<std::string, ma_sound *>> sounds = {
+    {"../../sound/Main_Theme.mp3", &mainThemeSound}
+};
+
+// Initialisation du volume sonore
+ma_engine_set_volume(&SoundEngine::GetEngine(), 0.1f);
+
+// Démarrage de la lecture du son
+ma_sound_start(&mainThemeSound);
+```
+- Voici un exemple concret d'utilisation présent dans le fichier **Game.cpp**. Ici, on remarque que les sons sont lancés grâce aux méthodes déjà présentes dans la librairie, en manipulant particulièrement : `ma_sound` qui permet de gérer directement les sons sans toucher le moteur sonore qui s'initialise directement à l'appel du fichier.
 
 # :three: Améliorations
 
