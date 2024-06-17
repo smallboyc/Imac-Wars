@@ -5,11 +5,11 @@ map map_schema_15x15_02.png
 #Blanc
 path 255 255 255
 
-#Bleu
-in 77 109 243
-
 # Rouge
-out 153 0 48
+in 153 0 48
+
+#Bleu
+out 77 109 243
 
 # Violet
 forbidden 111 49 152

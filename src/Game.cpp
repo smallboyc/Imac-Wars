@@ -171,7 +171,7 @@ void Game::active_KEY_CALLBACK(TowerDefense &TD, int key, int scancode, int acti
             for (auto &tower : TD.current_TOWERS_in_MAP)
                 tower.second.showProperty = false;
         }
-
+        //Le joueur a terminé une vague. Il peut passer à la suivante.
         if (TD.FINISHED_WAVE)
         {
             if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)

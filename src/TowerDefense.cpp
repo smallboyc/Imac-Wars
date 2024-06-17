@@ -51,20 +51,22 @@ void TowerDefense::Load_All_Textures()
 // MAP
 void TowerDefense::setup_MAP(std::string const path_itd, int const pixels_in_LINE)
 {
-    this->map.NUMBER_OF_PIXELS_IN_LINE = pixels_in_LINE;
-    this->map.schema_ITD_file = path_itd;
-    this->map.check_order_elements_ITD();
-    this->map.get_SCHEMA_from_ITD();
-    this->map.get_NODES_from_ITD();
-    this->map.get_PIXELS_from_SCHEMA();
-    this->map.set_PIXELS_type();
-    this->map.set_PIXELS_connected();
-    this->map.check_if_PIXEL_is_NODE();
-    // Plus court chemin
-    this->map.create_GRAPH_from_NODES();
-    this->map.get_SHORTER_PATH_LIST();
-    this->map.get_TILES_path_from_PIXELS();
-    this->map.get_TILES_MAP(this->LoadedTextures);
+    this->map.NUMBER_OF_PIXELS_IN_LINE = pixels_in_LINE; //ex : 10x10 => 10
+    this->map.schema_ITD_file = path_itd; //Chemin de de l'itd contenant le schema.
+    this->map.check_order_elements_ITD(); //Vérfie l'ordre des clés (in,out...) de l'ITD.
+    this->map.get_SCHEMA_from_ITD(); //Récupère le schema depuis l'ITD + Vérifs.
+    this->map.get_NODES_from_ITD(); //Récupère les noeuds depuis l'ITD + Vérifs.
+    
+    this->map.get_PIXELS_from_SCHEMA(); //Récupère les pixels depuis le schema.
+    this->map.set_PIXELS_type(); //Attribue un type (path,in,void...) au pixel
+    this->map.set_PIXELS_connected(); //Connecte les pixels voisins.
+    this->map.check_if_PIXEL_is_NODE(); //Attribue le status de noeud au pixel + Vérifs.
+
+    this->map.create_GRAPH_from_NODES(); //Création du graph à partir des noeuds.
+    this->map.get_SHORTER_PATH_LIST(); //Détermine les plus courts chemins.
+
+    this->map.get_TILES_path_from_PIXELS(); //Déduit du pixel, le chemin de texture.
+    this->map.get_TILES_MAP(this->LoadedTextures); //Détermine la texture du pixel.
 }
 
 void TowerDefense::render_MAP()
@@ -76,7 +78,7 @@ void TowerDefense::render_MAP()
 void TowerDefense::setup_BASE()
 {
     for (Pixel &pixel : this->map.PIXELS)
-        if (pixel.is_START_POINT)
+        if (pixel.is_END_POINT)
             this->base.pos = {pixel.x, pixel.y};
 }
 
@@ -199,7 +201,7 @@ void TowerDefense::update_ENEMIES_in_WAVE(const double &elapsedTime, const doubl
 
         // Plus d'ennemis dans la vague actuelle ? On passe à la suivante
         if (this->current_ENEMIES_in_WAVE.empty())
-            this->FINISHED_WAVE = true;
+            this->FINISHED_WAVE = true; //=> Le joueur peut passer à la vague suivante et donc id de vague ++
     }
     else if (!this->GAME_OVER)
     {

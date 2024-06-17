@@ -114,6 +114,7 @@ Game
     └── UI
 
 ```
+
 > :warning: Ce rapport a été fait en parallèle de l'implémentation du jeu, il se peut que certains éléments du code n'apparaissent pas dans les captures. N'hésitez pas à vous référez au code si besoin.
 
 `Game` représente le **fichier principal** du jeu. Toutes ses fonctions possèdent un `TD` (structure TowerDefense).
@@ -162,7 +163,6 @@ Nous ne rentrerons pas dans le détail des fonctions d'interactions. Retenez sim
 - **active_KEY_CALLBACK(...)** : Déclenche des évênements grâce aux touches du clavier.
 - **active_MOUSE_CLICK_CALLBACK(...)** : Déclenche des évênements lorsque le joueur clique sur sa souris (ou pad).
 - **active_MOUSE_POSITION_CALLBACK(...)** : Permet de garder en mémoire la position de la souris à chaque instant.
-
 
 ## :memo: Fichier ITD
 
@@ -236,18 +236,27 @@ Les fichiers itd optionnels implémentés n'ont cependant pas été "sécurisés
 | ---------------------------------------------------------- | ------------------------------------------------------ |
 | <img src="doc/images/schema.png" alt="Schéma" width="400"> | <img src="doc/images/map.png" alt="Carte" width="400"> |
 
+> :arrow_right: Zones :\
+> :white_circle: = Chemin (path)\
+> :red_circle: = Entrée (in)\
+> :large_blue_circle: = Sortie (out)\
+> :purple_circle: = Interdit (forbidden)\
+> :black_circle: = Libre (void)
+
+> :warning: La carte finale est bien découpée en tiles. Nous avons fait le choix d'un point de vu esthétique, de rendre transparente les :purple_circle: & :black_circle: pour pouvoir afficher une map totalement designé en fonction de ces zones, et donc d'avoir un environnement plus détaillé et varié.
+
 La logique de la carte est implémentée dans une structure `Map`.
 
 Cette structure est d'une grande importance dans la suite du développement de notre jeu. En effet, le découpage des tiles constituant la carte représente une bonne base pour l'implémentation des déplacements des ennemis et le positionnement des tours. En d'autres termes, une structure `Map` solide et maintenable est indispensable.
 
-Notre Map se base sur une image de référence appelée par la suite schema. Cette image est composée de pixels de couleurs différentes, représentant chacun une information déterminante pour la suite.
+Notre carte se base sur une image de référence appelée par la suite `schema`. Cette image est composée de pixels de couleurs différentes, représentant chacun une information déterminante pour la suite.
 
-Par exemple : si vous voulez construire une `Map` de 15x15 cases, alors le schema à analyser sera de 15x15 (véritables) pixels.
+Par exemple : si vous voulez construire une `Map` de 15x15 cases, alors le `schema` à analyser sera de 15x15 (véritables) pixels.
 
-Ce schema est lu dans un fichier ITD (Image Tower Defense) du type : "mon_schema_15x15.itd". Ce fichier contient :
+Ce `schema` est lu dans un fichier ITD (Image Tower Defense) du type : "mon_schema_15x15.itd". Ce fichier contient :
 
-- Le chemin menant à l'image du schema
-- Les couleurs présentes sur l'image
+- Le chemin menant à l'image du `schema`.
+- Les couleurs présentes sur l'image.
 - Tous les nœuds des chemins (node) avec leur indice, position et connexions.
 
 L'objectif est maintenant de déterminer comment analyser ce fichier pour obtenir une véritable carte !
@@ -256,12 +265,12 @@ L'objectif est maintenant de déterminer comment analyser ce fichier pour obteni
 
 Une cellule ou case de la carte possède un "squelette" déterminé par `Pixel`.
 
-On détermine une structure `Pixel`. Un pixel possède :
+On détermine une structure `Pixel` qui possède :
 
-- Une position (x, y)
-- Une couleur (structure qui prend le triplet de couleur R, G, B)
-- Un ou plusieurs types ou états (booléens)
-- Des connexions (pointeurs sur les 4 voisins du pixel)
+- Une position (x, y).
+- Une couleur (structure qui prend le triplet de couleur R, G, B).
+- Un ou plusieurs types ou états (booléens).
+- Des connexions (pointeurs sur les 4 voisins du pixel).
 
 ![alt text](doc/images/Cell.png)
 
@@ -269,7 +278,7 @@ Après avoir déterminé nos structures de base, on va analyser et attribuer à 
 
 Toute cette analyse se fait dans le `Game::SETUP(...)` et plus précisemment dans le `setup_MAP(...)` qui prend en paramètre le nom du fichier ITD et le nombre de pixels sur la largeur ou hauteur (peu importe car notre map est carré).
 
-![alt text](doc/images/setup_MAP.png)
+![alt text](doc/images/setup_MAP_02.png)
 
 Nous ne rentrerons pas dans le détail de ces fonctions, retenez juste que toutes les données sont stockées dans les `vector` ci-dessous grâce aux appels ordonnés et successifs des méthodes.
 
@@ -305,13 +314,13 @@ Il existe dans notre jeu, 4 types d'ennemis différents :
 
 <img src="doc/images/Enemy_4.png" alt="Ennemis" width="500">
 
-Un ennemi est caractérisé par un structure : `Enemy`
+Un ennemi est caractérisé par une structure : `Enemy`
 
 ![alt text](doc/images/Enemy_struct.png)
 
 Celui-ci a pour objectif d'infliger des dégâts à la base impériale défendue par le joueur. Les ennemis ont des caractéristiques différentes en fonction de leur type (vitesse, dégâts, points de vie, récompense).
 
-Chaque ennemi parcourt le plus court chemin entre son point de spawn et la base à attaquer. Le spawn est déterminé aléatoirement (voir améliorations).
+Chaque ennemi parcourt le plus court chemin entre son point de spawn et la base à attaquer. Le spawn est déterminé aléatoirement.
 
 ### Déplacement
 
@@ -319,9 +328,9 @@ Chaque ennemi parcourt le plus court chemin entre son point de spawn et la base 
 
 ![alt text](doc/images/Enemy_move.png)
 
-L'idée, c'est de définir une `current position` qui représente le point de départ de l'ennemi. Ce point de départ représente le premier noeud du chemin. On définit également une `target position` qui sera la position ciblée par l'ennemi. Au départ, la position cible est le noeud qui suit le `current`.
+L'idée, c'est de définir une `current position` qui représente le point de départ de l'ennemi (au début). Ce point de départ représente le premier noeud du chemin. On définit également une `target position` qui sera la position ciblée par l'ennemi. Au départ, la position cible est le noeud qui suit le `current`.
 
-On définit également un `step` selon `x`et `y` d'une valeur de +1 ou -1. Ce `step` détermine si on se déplace vers la droite (`step_x` = 1) ou vers la gauche (`step_x` = -1), mais aussi si on se déplace vers le bas (`step_y` = -1) ou vers le haut (`step_y` = 1). Ces valeurs permettent également de déclencher la `texture` correspondant à l'orientation de l'ennemi.
+On définit également un `step` selon `x` et `y` d'une valeur de +1 ou -1. Ce `step` détermine si on se déplace vers la droite (`step_x` = 1) ou vers la gauche (`step_x` = -1), mais aussi si on se déplace vers le bas (`step_y` = -1) ou vers le haut (`step_y` = 1). Ces valeurs permettent également de déclencher la `texture` correspondant à l'orientation de l'ennemi.
 
 On doit garder à l'esprit que la fonction ci-dessus est appelée en boucle dans `App`. Ainsi, nous n'avons pas besoin d'utiliser de boucle, les conditions suffisent car le rappel successif de notre fonction nous donne un effet de récursion. Si on arrive à mettre à jour nos positions `current` et `target`, c'est gagné.
 
@@ -333,11 +342,11 @@ Si l'ennemi atteint la `target`, alors il est au noeud suivant, `current` devien
 
 Ainsi, notre ennemi arrive à se déplacer correctement !
 
-L'ennemi inflige des dégats à la `Base` s'il arrive à l'atteindre. Il suffit simplement de comparer si les positions respective de l'ennemi et de la base coincident. On décrémente alors la vie de la base en fonction des dégats causés par l'ennemi et on fait disparaitre ce dernier.
+L'ennemi inflige des dégats à la `Base` s'il arrive à l'atteindre. Il suffit simplement de comparer si les positions respectives de l'ennemi et de la base coincident. On décrémente alors la vie de la base en fonction des dégats causés par l'ennemi et on fait disparaitre ce dernier.
 
 # :ocean: Vagues
 
-Une vague possède un certain nombre d'ennemis. Plus les vagues s'enchaînent et plus la difficulté doit augmenter. Ainsi, le nombre d'ennemi augmente, le temps écoulé entre chaque spawn ennemi diminue. Ces paramètres sont évidemment ajustable des le fichier `ITD`.
+Une vague possède un certain nombre d'ennemis. Plus les vagues s'enchaînent et plus la difficulté doit augmenter. Ainsi, le nombre d'ennemi augmente, le temps écoulé entre chaque spawn ennemi diminue. Ces paramètres sont évidemment ajustables dans le fichier `ITD`.
 
 On utilise une structure : `Wave`
 
@@ -354,7 +363,7 @@ Comme vous pouvez le constater, ce n'est pas dans la structure `Wave` que nous r
 
 ![alt text](doc/images/Wave_in_TD.png)
 
-C'est ici que sont stockés les différentes vagues et les différents ennemis dépendants eux même d'une vague.
+C'est ici que sont stockés les différentes vagues et les différents ennemis dépendants eux-mêmes d'une vague.
 
 ![alt text](doc/images/Wave_TD_cpp.png)
 
@@ -385,8 +394,8 @@ Elements visibles à l'écran :
 
 Exemples d'intéractions :
 
-- Possibilité de lancer l'application, de mettre en pause et de quitter.
-- Accès lors de la mise en pause et avant le lancement du jeu aux informations essentielles du jeu.
+- Possibilité de lancer le jeu, de mettre en pause et de quitter.
+- Accès lors de la mise en pause aux caractéristiques des ennemis et tours.
 - Possibilité de sélectionner une tour spécifique en fonction de l'argent disponible et de placer celle-ci sur la carte si la case est valide.
 - Cliquer sur une tour ou un ennemi pour voir les caractéristiques.
 
@@ -401,17 +410,19 @@ Cette partie a pour objectif de mentionner les améliorations effectuées par ra
 :white_check_mark: Différents types de tours avec des caractéristiques différentes.\
 :white_check_mark: Visualisation des tirs des tours sur les ennemis.\
 :white_check_mark: Créer une zone de sortie ayant des points de vie, encaissant les dégâts des ennemies avant de perdre la partie.\
-:eight_spoked_asterisk: Créations de tous les design de texture du jeu.\
-:eight_spoked_asterisk: Créations d'ITD supplémentaires (enemy, wave, tower, sprite_sheets).\
-:eight_spoked_asterisk: Utilisations de musiques et effets sonores pour renforcer l'ambiance.
+:eight_spoked_asterisk: Créations de toutes les textures du jeu.\
+:heavy_plus_sign: Créations d'ITD supplémentaires (enemy, wave, tower, sprite_sheets).\
+:heavy_plus_sign: Utilisations de musiques et effets sonores pour renforcer l'ambiance.
 
 # :four: Conclusion
 
 Nous sommes tout d'abord **fiers** de ce projet.
 
-Ce jeu a été réalisé avec passion et nous avons tous les trois énormément appris. Nous ne pensions pas aller aussi loin dans l'implémentation, mais nous avions réellement envie de développer davantage ce projet. Nous tenons à **remercier notre professeur de programmation** [Enguerrand Desmet](https://github.com/dsmtE), qui a été là quand nous avions besoin d'aide, notamment pour l'utilisation de la librairie audio *miniaudio*, ainsi que pour les problèmes d'affichage liés à la librairie de texte (le jeu ayant principalement été développé sur MacOS avec un écran Retina).
+Ce jeu a été réalisé avec passion et nous avons tous les trois énormément appris. Nous ne pensions pas aller aussi loin dans l'implémentation, mais nous avions réellement envie de développer davantage ce projet. Nous tenons à **remercier notre professeur de programmation** [Enguerrand Desmet](https://github.com/dsmtE), qui a été là quand nous avions besoin d'aide, notamment pour l'utilisation de la librairie audio _miniaudio_, ainsi que pour les problèmes d'affichage liés à la librairie de texte (le jeu ayant principalement été développé sur MacOS avec un écran Retina).
 
 Évidemment, **beaucoup de choses peuvent encore être améliorées**. On peut notamment noter l'absence de vérifications sur les ITD des vagues, des ennemis, des tours et des spritesheets, bien que ces derniers soient une amélioration de notre part. Certaines fonctions mériteraient d'être optimisées, ou certains choix, comme le fait de ne pas intégrer directement un tableau d'ennemis dans la structure `Wave`, pourraient être repensés.
+
+Les principales difficultés rencontrées ont été liées à l'organisation des différents fichiers. Comment s'organiser pour que tout soit bien interconnecté et que la structure du projet reste cohérente ? Gérer l'affichage n'a pas été simple, car entre macOS et Windows, ce dernier était différent (lié à la densité de pixels).
 
 Notre objectif a été de produire le code le plus propre possible dans le temps qui nous était imparti, mais surtout de créer un jeu agréable visuellement auquel on prend plaisir à jouer !
 

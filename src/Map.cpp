@@ -18,52 +18,52 @@ void Map::create_GRAPH_from_NODES()
 // Détermine tous les plus courts chemins du GRAPH en les stockant dans un vector
 void Map::get_SHORTER_PATH_LIST()
 {
-    std::vector<int> END_POINTS;    // Spawns ennemi (plusieurs)
-    bool START_POINT_exists{false}; // Bases à défendre (unique)
-    int START_POINT{0};             // id de la Base
+    std::vector<int> START_POINTS; // Spawns ennemi (plusieurs)
+    bool END_POINT_exists{false};  // Bases à défendre (unique)
+    int END_POINT{0};              // id de la Base
 
     for (Node &node : this->NODES)
     {
-        // On va chercher les END POINTS
+        // On va chercher les START POINTS
         if (node.connected_to.empty())
-            END_POINTS.push_back(node.id);
+            START_POINTS.push_back(node.id);
     }
 
     for (Pixel &pixel : this->PIXELS)
     {
-        if (pixel.is_START_POINT)
-            START_POINT_exists = true;
+        if (pixel.is_END_POINT)
+            END_POINT_exists = true;
     }
 
-    // On check s'il existe des END_POINTS. Sinon : erreur
-    if (END_POINTS.empty())
+    // On check s'il existe des START_POINTS. Sinon : erreur
+    if (START_POINTS.empty())
     {
-        std::cout << "ERREUR : Aucun spawn d'ennemi (End points) trouvé..." << std::endl;
+        std::cout << "ERREUR : Aucun spawn d'ennemi (Start Points) trouvé..." << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    else if (!START_POINT_exists) // On check s'il existe un START POINT. Sinon : erreur
+    else if (!END_POINT_exists) // On check s'il existe un END POINT. Sinon : erreur
     {
-        std::cout << "ERREUR : Aucune Base à défendre (Start point) trouvée..." << std::endl;
+        std::cout << "ERREUR : Aucune Base à défendre (End point) trouvée..." << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
-    // Pour chaque END POINTS, on leur attribue un plus court chemin par rapport à l'entrée (START POINT)
-    for (int end_point : END_POINTS)
+    // Pour chaque START POINTS, on leur attribue un plus court chemin par rapport à la sortie (END POINT)
+    for (int start_point : START_POINTS)
     {
-        std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(START_POINT, end_point)};
+        std::unordered_map<int, std::pair<float, int>> DISTANCES{this->GRAPH.dijkstra(END_POINT, start_point)};
         std::vector<int> SHORTER_PATH_ID;
         std::vector<Node> SHORTER_PATH;
-        auto finalEdge{DISTANCES.at(end_point)};
+        auto finalEdge{DISTANCES.at(start_point)};
         // std::cout << "Distance minimale : " << finalEdge.first << std::endl;
         // std::cout << end << " -> ";
-        SHORTER_PATH_ID.push_back(end_point);
-        while (finalEdge.second != START_POINT)
+        SHORTER_PATH_ID.push_back(start_point);
+        while (finalEdge.second != END_POINT)
         {
             SHORTER_PATH_ID.push_back(finalEdge.second);
             // std::cout << finalEdge.second << " -> ";
             finalEdge = DISTANCES.at(finalEdge.second);
         }
-        SHORTER_PATH_ID.push_back(START_POINT);
+        SHORTER_PATH_ID.push_back(END_POINT);
 
         // Du tableau d'id, on en déduit les nodes composants le chemin le plus court dans l'ordre.
         for (int shorter_node_id : SHORTER_PATH_ID)
@@ -99,24 +99,24 @@ void Map::set_PIXELS_type()
 {
     for (Pixel &pixel : this->PIXELS)
     {
-        if (pixel.color == get_colors_from_ITD("in"))
+        if (pixel.color == get_colors_from_ITD("in")) // Spawn ennemi
         {
             pixel.is_START_POINT = true;
             pixel.is_PATH = true;
         }
-        else if (pixel.color == get_colors_from_ITD("out"))
+        else if (pixel.color == get_colors_from_ITD("out")) // Base à défendre
         {
             pixel.is_END_POINT = true;
             pixel.is_PATH = true;
         }
-        else if (pixel.color == get_colors_from_ITD("forbidden"))
+        else if (pixel.color == get_colors_from_ITD("forbidden")) // Zone interdite (construction)
         {
             pixel.is_FORBIDDEN = true;
             pixel.is_VOID = true;
         }
-        else if (pixel.color == get_colors_from_ITD("path"))
+        else if (pixel.color == get_colors_from_ITD("path")) // Chemin
             pixel.is_PATH = true;
-        else
+        else // Void = zone constructible
             pixel.is_VOID = true;
     }
 }
@@ -181,15 +181,15 @@ void Map::get_TILES_path_from_PIXELS()
         std::vector<std::filesystem::path> TILE_path_list;
         Connections &NEIGHBOUR{pixel.PIXEL_connection};
 
-        if (pixel.is_START_POINT)
+        if (pixel.is_END_POINT)
         {
-            // Point d'entrée
+            // Base à défendre
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
             TILE_path_list.push_back("images/textures/Map/Logo_Empire.png");
         }
-        else if (pixel.is_END_POINT)
+        else if (pixel.is_START_POINT)
         {
-            // Point de sortie
+            // Spawn ennemi
             set_IN_OUT_orientation_texture(NEIGHBOUR, TILE_path_list);
             TILE_path_list.push_back("images/textures/Map/Logo_Alliance.png");
         }
