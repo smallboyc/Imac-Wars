@@ -375,7 +375,65 @@ C'est ici que sont stockés les différentes vagues et les différents ennemis d
 
 # :tokyo_tower: Tours
 
-[...] Anass
+Il y a 3 types de tours que le joueur peut placer dans les endroits alloués :
+
+- Tour de base : pas chère, peu puissante mais avec une bonne cadence
+- Tour de ralentissement : moyennement chère, ralentit les ennemis
+- Tour destructrice : chère, puissante mais avec une cadence inférieure
+
+Dans la structure `Tower`, on retrouve une autre structure membre `Bullet`. En effet, chaque tour a une balle qui reçoit les propriétés de la tour pour adopter un certain comportement.
+
+Mais à quel moment tirer les balles ?
+
+On boucle sur les ennemis, et dès qu'un ennemi rentre dans la zone de la portée de la tour, calculée avec la **distance de Chebyshev**, la balle s'active.
+
+```cpp
+for (auto &enemy : TD->current_ENEMIES_in_WAVE)
+{
+    if (enemy.second.isTarget)
+    {
+        // Distance de Chebyshev
+        if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < this->portee && enemy.second.isMoving)
+        {
+            this->bullet.update(enemy.second, elapsedTime, currentTime, this);
+            this->bullet.isBeingShot = true;
+            break;
+        }
+        this->bullet.isBeingShot = false;
+    }
+}
+```
+
+# :bullet: Bullets
+
+Le comportement des balles est principalement régi par les vec2 `direction` et `pos`.
+
+Expliquons leur utilisation :
+
+`direction` : calcule les coordonnées du vecteur entre la tour mère et l'ennemi le plus proche. Pour cela, on fait simplement **{x2-x1, y2-y1}**. On a aussi un booléen `fixedDirection` qui régule le fait de ne calculer la `direction` que toutes les n secondes relatives à la cadence de tir de la tour.
+
+```cpp
+if (!fixedDirection)
+{
+    direction = {enemy.pos.x - pos.x, enemy.pos.y - pos.y};
+    fixedDirection = true;
+}
+```
+
+`pos` : une fois la `direction` calculée, on update la position de la balle en lui ajoutant les coordonnées du vec2 `direction` et en lui multipliant une constante vitesse.
+
+```cpp
+this->pos.x += direction.x * elapsedTime * 4;
+this->pos.y += direction.y * elapsedTime * 4;
+```
+
+Par ailleurs, quand la balle touche un ennemi, sa valeur `pos` devient quelque part hors écran, en attendant d'être réinitialisée dans la position de la tour et tirée à nouveau.
+
+```cpp
+pos = {1000, 1000};
+```
+
+PS : parce qu'on avait besoin d'inclure les structures `Tower` et `Bullet` les unes dans les autres, nous avons utilisé la méthode de la **déclaration anticipée** pour pallier les problèmes de link.
 
 # :tv: UI
 
