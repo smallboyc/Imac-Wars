@@ -430,17 +430,15 @@ if(closest_enemy_dist < this->portee)
 À la fin des n secondes relatives à la cadence de tir, on réinitialise toutes les variables à l'état initial pour pouvoir tirer une nouvelle balle sur l'ennemi le plus proche recalculé.
 
 ```cpp
+if (cadence < 0)
 {
-  if (cadence < 0)
-  {
-      this->bullet.pos = this->pos;
-      cadence = 3;
-      this->bullet.fixedDirection = false;
-      this->bullet.hitEnemy = false;
-      this->bullet.isBeingShot = false;
-      lockedEnemy = false;
-      closest_enemy_dist = 100;
-  }
+    this->bullet.pos = this->pos;
+    cadence = 3;
+    this->bullet.fixedDirection = false;
+    this->bullet.hitEnemy = false;
+    this->bullet.isBeingShot = false;
+    lockedEnemy = false;
+    closest_enemy_dist = 100;
 }
 ```
 
