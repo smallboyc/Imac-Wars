@@ -276,7 +276,7 @@ Après avoir déterminé nos structures de base, on va analyser et attribuer à 
 
 Toute cette analyse se fait dans le `Game::SETUP(...)` et plus précisemment dans le `setup_MAP(...)` qui prend en paramètre le nom du fichier ITD et le nombre de pixels sur la largeur ou hauteur (peu importe car notre map est carré).
 
-![alt text](doc/images/setup_MAP_02.png)
+![alt text](doc/images/Setup_MAP_02.png)
 
 Nous ne rentrerons pas dans le détail de ces fonctions, retenez juste que toutes les données sont stockées dans les `vector` ci-dessous grâce aux appels ordonnés et successifs des méthodes.
 
