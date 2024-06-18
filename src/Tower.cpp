@@ -57,13 +57,16 @@ void Tower::update(TowerDefense *TD, const double &elapsedTime, const double &cu
         }
     }
     
-    if(closest_enemy->isMoving && closest_enemy_dist < this->portee && closest_enemy != nullptr)
+    if(closest_enemy_dist < this->portee)
     {
-        this->bullet.update(*closest_enemy, elapsedTime, currentTime, this);
-        this->bullet.isBeingShot = true;
+        if(closest_enemy->isMoving && closest_enemy != nullptr)
+        {
+            this->bullet.update(*closest_enemy, elapsedTime, currentTime, this);
+            this->bullet.isBeingShot = true;
+        }
+        else
+            this->bullet.isBeingShot = false;
     }
-    else
-        this->bullet.isBeingShot = false;
 
     // Réinitialise l'état du laser si le laser termine son trajet.
     if (cadence < 0)
