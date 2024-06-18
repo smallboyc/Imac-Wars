@@ -435,6 +435,31 @@ pos = {1000, 1000};
 
 PS : parce qu'on avait besoin d'inclure les structures `Tower` et `Bullet` les unes dans les autres, nous avons utilisé la méthode de la **déclaration anticipée** pour pallier les problèmes de link.
 
+```cpp
+struct Tower;
+
+struct Bullet
+{
+    // GLuint texture;
+    SpriteSheet sprite;
+    glm::vec2 pos;
+    glm::vec2 direction;
+    bool fixedDirection{false};
+    bool isBeingShot{false};
+    bool hitEnemy{false};
+    void setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, Tower*);
+    void update(Enemy&, const double &elapsedTime, const double &currentTime, Tower*);
+    void render(Map &);
+};
+```
+
+`Tower.hpp` est ensuite inclu dans `Bullet.cpp` (implicitement derrière `TowerDefense.hpp`).
+
+```cpp
+#include "Bullet.hpp"
+#include "TowerDefense.hpp"
+```
+
 # :tv: UI
 
 Le joueur a la possibilité d'intéragir avec l'application, grâce notamment aux 3 fonctions de callback mentionnées au début du rapport. Il a aussi de nombreuses informations à sa disposition lui permettant de comprendre le fonctionnement et déroulement du jeu.
