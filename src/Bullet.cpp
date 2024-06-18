@@ -26,7 +26,6 @@ void Bullet::update(Enemy& enemy, const double &elapsedTime, const double &curre
     // Si le laser touche l'ennemi
     if (std::round(enemy.pos.x) == std::round(this->pos.x) && std::round(enemy.pos.y) == std::round(this->pos.y) && !(this->hitEnemy))
     {
-        // std::cout << "HIT" << std::endl;
         if(tower->type != 1)
         {
             enemy.hit += tower->degats;

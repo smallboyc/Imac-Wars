@@ -32,6 +32,9 @@ struct Tower
     bool hover{false};
     bool isSelectedinUI{false};
     bool showProperty{false};
+    float closest_enemy_dist{100};
+    bool lockedEnemy{false};
+    Enemy* closest_enemy;
     void setup(std::unordered_map<std::string, SpriteSheet> &SPRITE_SHEETS_ITD, glm::vec2 const &pixel_pos);
     void update(TowerDefense *, const double &elapsedTime, const double &currentTime);
     void render(Map &map);
