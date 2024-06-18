@@ -4,7 +4,7 @@
 
 🎓 _DE SANTIS Léo + DOUBLAL Anass + DUPUIS Maxence._\
 :books: Librairie / Langage : **OpenGL / C++**\
-:computer: Développé sur : **MacOS / Windows**
+:computer: Développé sur : **macOS / Windows**
 <br />
 
 <div align="center">
@@ -43,6 +43,7 @@
         <li><a href="#rocket-ennemis">Ennemis</a></li>
         <li><a href="#ocean-vagues">Vagues</a></li>
         <li><a href="#tokyo_tower-tours">Tours</a></li>
+         <li><a href="#red_circle-bullets">Bullets</a></li>
         <li><a href="#tv-ui">UI</a></li>
         <li><a href="#notes-son">Son</a></li>
       </ul>
@@ -69,19 +70,17 @@ Nous sommes trois à avoir travaillés sur ce projet.
 
 L'objectif principal était de concevoir un jeu fonctionnel. Cependant, nous avions à cœur de rendre ce projet plus ouvert et accessible, permettant à chacun de personnaliser le jeu et adapter la difficulté.
 
-Nous souhaitons vous offrir la possibilité de jouer facilement vous-même à votre propre version d'IMAC WARS Tower Defense. Le jeu a été conçu de manière à ce que, muni d'une carte, d'un fichier d'informations, et de quelques fonctions, vous puissiez créer votre propre carte et adapter les niveaux en jouant sur les paramètres des vagues.
+Nous souhaitons vous offrir la possibilité de jouer facilement vous-même à votre propre version d'Imac Wars Tower Defense. Le jeu a été conçu de manière à ce que, muni d'une carte, d'un fichier d'informations, et de quelques fonctions, vous puissiez créer votre propre carte et adapter les niveaux en jouant sur les paramètres des vagues.
 
 Ainsi, notre projet vise non seulement à fournir une expérience de jeu captivante, mais également à donner aux utilisateurs les outils nécessaires pour personnaliser et enrichir leur propre version du jeu, rendant l'aventure encore plus engageante et personnelle.
-
-Il s'agit finalement pour l'utilisateur, de suivre un guide d'utilisation simple, pour lui permettre de créer son propre jeu !
 
 ## :mahjong: Thème
 
 Avant de nous lancer dans le développement du code, nous avons d'abord réfléchi à un thème qui se prêterait au mieux au style du Tower Defense. Nous avons choisi d'adapter la scène finale de l'épisode IV de Star Wars "Un Nouvel Espoir". Cette scène emblématique montre des escadrons de l'Alliance Rebelle tentant désespérément de détruire l'Étoile de la Mort.
 
-Dans notre adaptation, le joueur incarne les forces de l'Empire. Sa mission sera de défendre l'Étoile de la Mort contre les vagues de Rebelles en plaçant des tourelles de différents types pour empêcher les vaisseaux rebelles d'atteindre le réacteur et de le faire exploser.
+Dans notre adaptation, le joueur incarne les forces de l'Empire. Sa mission sera de défendre l'Étoile de la Mort contre les vagues de rebelles en plaçant des tourelles de différents types pour empêcher les vaisseaux ennemis d'atteindre le réacteur et de le faire exploser.
 
-Ce projet nous semblait extrêmement ambitieux à première vue. Heureusement, la Force était avec nous !
+Ce projet nous semblait extrêmement ambitieux au départ. Heureusement, la Force était avec nous !
 
 ## :dart: Objectif du rapport
 
@@ -91,7 +90,7 @@ Un [guide d'utilisation](doc/pdf/IMAC_WARS_Tutorial.pdf) est à votre dispositio
 
 :two: Nous expliquerons dans un premier temps l'implémentation des différents éléments essentiels au bon déroulement du jeu.\
 :three: Ensuite, nous présenterons les diverses améliorations apportées pour rendre le jeu plus immersif et captivant.\
-:four: Enfin, nous conclurons en portant un regard critique sur le travail accompli et sur les potentielles améliorations à apporter.\
+:four: Enfin, nous conclurons en portant un regard critique sur le travail accompli et sur les potentielles améliorations à apporter.
 
 <!-- GETTING STARTED -->
 
@@ -155,7 +154,7 @@ Les 3 fonctions restantes permettent de détecter l'intéraction avec l'utilisat
 
 > :warning: Pour les transformations et affichages d'objets : OpenGL utilise des coordonnées normalisées. C'est à dire que notre fenêtre en pixel, doit être transformée de sorte à ce que ses coordonnées se trouvent sur la plage [-1,1].
 
-Ci-dessous, une partie du code permettant passer des coordonnées de pixels en coordonnées normalisées, puis en coordonnées de carte.
+Ci-dessous, une partie du code permettant de passer des coordonnées de pixels en coordonnées normalisées, puis en coordonnées de carte.
 
 ![alt text](doc/images/PIXEL_CONVERSION.png)
 
@@ -167,8 +166,8 @@ Nous ne rentrerons pas dans le détail des fonctions d'interactions. Retenez sim
 
 ## :memo: Fichier ITD
 
-Pour référencer toutes les données importantes du jeu, nous utilisons des fichier texte avec l'extension `.itd` pour (Imac Tower Defense).
-Un fichier nous était imposé pour représenter les différents éléments de notre carte (expliqué plus loin dans le rapport). Ce fichier est lu et analysé par notre application. Ainsi, les fonctions implémentés sont capables de lire et retranscrire à l'écran une importante quantité de données.
+Pour référencer toutes les données importantes du jeu, nous utilisons des fichiers txt avec l'extension `.itd` pour (Imac Tower Defense).
+Un fichier nous était imposé pour représenter les différents éléments de notre carte (expliqué plus loin dans le rapport). Ce fichier est lu et analysé par notre application. Ainsi, les fonctions implémentées sont capables de lire et retranscrire à l'écran une importante quantité de données.
 Il faut cependant garder en tête que l'utilisateur peut effectuer des erreurs de saisies et donc rendre la lecture impossible ou incorrecte.
 Des contrôles ont été effectuées pour permettre la bonne lecture du fichier de map.
 Voilà les contrôles du sujet qui étaient nécessaires d'effectuer :
@@ -181,8 +180,8 @@ Voilà les contrôles du sujet qui étaient nécessaires d'effectuer :
 5. Existence d'au moins une zone d'entrée et de sortie (cette vérification pourra se faire implicitement lors de la recherche du chemin des ennemis).
 6. Existence d'au moins un chemin entre la zone d'entrée et de sortie (cette vérification pourra se faire implicitement lors de la recherche du chemin des ennemis).
 
-- Les vérifications 1, 2, 3 ont été effectuées dans le fichier ITD.cpp.
-- Les vérifications 4, 5, 6 ont été effectuées dans le fichier Map.cpp.
+- Les vérifications 1, 2, 3 ont été effectuées dans le fichier `ITD.cpp`.
+- Les vérifications 4, 5, 6 ont été effectuées dans le fichier `Map.cpp`.
 
 Nous avons réutilisé cette logique sur d'autres éléments de notre jeu tels que : les ennemis, vagues, tours, images animées. La volonté est de permettre à l'utilisateur de pouvoir entrer ses données en gérant simplement les fichiers itd ; notre application se charge dynamiquement de récupérer, traiter et afficher l'information. Voici deux exemples de fichiers itd implémentés.
 
@@ -245,7 +244,7 @@ Les fichiers itd optionnels implémentés n'ont cependant pas été "sécurisés
 
 La logique de la carte est implémentée dans une structure `Map`.
 
-Cette structure est d'une grande importance dans la suite du développement de notre jeu. En effet, le découpage des tiles constituant la carte représente une bonne base pour l'implémentation des déplacements des ennemis et le positionnement des tours. En d'autres termes, une structure `Map` solide et maintenable est indispensable.
+Cette structure est d'une grande importance dans la suite du développement de notre jeu. En effet, le découpage des tiles sur la carte représente une bonne base pour l'implémentation des déplacements des ennemis et le positionnement des tours. En d'autres termes, une structure `Map` solide et maintenable est indispensable.
 
 Notre carte se base sur une image de référence appelée par la suite `schema`. Cette image est composée de pixels de couleurs différentes, représentant chacun une information déterminante pour la suite.
 
@@ -272,7 +271,7 @@ On détermine une structure `Pixel` qui possède :
 
 ![alt text](doc/images/Cell.png)
 
-Après avoir déterminé nos structures de base, on va analyser et attribuer à chaque pixel sur le `schéma` (présent dans l'ITD) une structure `Pixel`. Pour ce faire, on va récupérer les données concernant les couleurs et les nodes de l'ITD, pour déterminer le type du pixel !
+Après avoir déterminé nos structures de base, on va analyser et attribuer à chaque pixel sur le `schema` (présent dans l'ITD) une structure `Pixel`. Pour ce faire, on va récupérer les données concernant les couleurs et les nodes de l'ITD, pour déterminer le type du pixel !
 
 Toute cette analyse se fait dans le `Game::SETUP(...)` et plus précisemment dans le `setup_MAP(...)` qui prend en paramètre le nom du fichier ITD et le nombre de pixels sur la largeur ou hauteur (peu importe car notre map est carré).
 
@@ -305,6 +304,8 @@ Comment convertir les 4 coins de notre `quad` ?
 ![alt text](doc/images/show_map.png)
 
 Une fois les formules de conversions obtenues, on peut utiliser `glVertex` et dessiner la tile en bouclant sur le tableau `TILES` contenu par notre structure `Map`.
+
+On obtient finalement notre carte !
 
 # :rocket: Ennemis
 
@@ -377,9 +378,9 @@ C'est ici que sont stockés les différentes vagues et les différents ennemis d
 
 Il y a 3 types de tours que le joueur peut placer dans les endroits alloués :
 
-- Tour de base : pas chère, peu puissante mais avec une bonne cadence
-- Tour de ralentissement : moyennement chère, ralentit les ennemis
-- Tour destructrice : chère, puissante mais avec une cadence inférieure
+- Tour de base : pas chère, peu puissante mais avec une bonne cadence.
+- Tour de ralentissement : moyennement chère, ralentit les ennemis.
+- Tour destructrice : chère, puissante mais avec une cadence inférieure.
 
 Dans la structure `Tower`, on retrouve une autre structure membre `Bullet`. En effet, chaque tour a une balle qui reçoit les propriétés de la tour pour adopter un certain comportement.
 
@@ -491,7 +492,7 @@ struct Bullet
 };
 ```
 
-`Tower.hpp` est ensuite inclu dans `Bullet.cpp` (implicitement derrière `TowerDefense.hpp`).
+`Tower.hpp` est ensuite inclus dans `Bullet.cpp` (implicitement derrière `TowerDefense.hpp`).
 
 ```cpp
 #include "Bullet.hpp"
@@ -536,7 +537,7 @@ target_include_directories(miniaudio SYSTEM INTERFACE ${miniaudio_SOURCE_DIR})
 target_link_libraries(${PROJECT_NAME} PRIVATE miniaudio)
 ```
 
-- Pour gérer l'intégration de la bibliothèque **Mini-Audio** dans notre projet, nous avons décider de passer par CMake en téléchargeant la librairie depuis le dépôt **GitHub** et en configurant les directives d'inclusion et de liaison nécessaires.
+- Pour gérer l'intégration de la bibliothèque **Mini-Audio** dans notre projet, nous avons décidé de passer par CMake en téléchargeant la librairie depuis le dépôt **GitHub** et en configurant les directives d'inclusion et de liaison nécessaires.
 
 <h3>SoundEngine.hpp</h3>
 
@@ -562,7 +563,7 @@ class SoundEngine {
 };
 ```
 
-- Utilisation d'un fichier **SoundEngine.hpp** qui définit la classe `SoudEngine` sous forme de singleton. Grâce à l'aide de notre professeur, nous avons pu utilisé ce singleton comme un outil. En effet, un singleton est un design pattern qui garantit qu'une classe n'aura qu'une seule instance à tout moment, offrant ainsi un point d'accès global à cette instance. Cela a été particulièrement utile pour les composants du moteur sonore qui ne nécessitent qu'une seule instance partagée dans tout le programme.
+- Utilisation d'un fichier **SoundEngine.hpp** qui définit la classe `SoudEngine` sous forme de singleton. Grâce à l'aide de notre professeur, nous avons pu utiliser ce singleton comme un outil. En effet, un singleton est un design pattern qui garantit qu'une classe n'aura qu'une seule instance à tout moment, offrant ainsi un point d'accès global à cette instance. Cela a été particulièrement utile pour les composants du moteur sonore qui ne nécessitent qu'une seule instance partagée dans tout le programme.
 
 
 <h3>SoundEngine.cpp</h3>
@@ -619,12 +620,12 @@ Cette partie a pour objectif de mentionner les améliorations effectuées par ra
 
 :white_check_mark: Zones constructibles pour les tours.\
 :white_check_mark: Placement intelligent des sprites de chemin.\
-:white_check_mark: Sprite animé\
-:white_check_mark: Différents types de ennemies avec des caractéristiques différentes.\
+:white_check_mark: Sprites animées.\
+:white_check_mark: Différents types d'ennemis avec des caractéristiques différentes.\
 :white_check_mark: Différents types de tours avec des caractéristiques différentes.\
 :white_check_mark: Visualisation des tirs des tours sur les ennemis.\
-:white_check_mark: Créer une zone de sortie ayant des points de vie, encaissant les dégâts des ennemies avant de perdre la partie.\
-:eight_spoked_asterisk: Créations de toutes les textures du jeu.\
+:white_check_mark: Créer une zone de sortie ayant des points de vie, encaissant les dégâts des ennemis avant de perdre la partie.\
+:heavy_plus_sign: Créations de toutes les textures du jeu.\
 :heavy_plus_sign: Créations d'ITD supplémentaires (enemy, wave, tower, sprite_sheets).\
 :heavy_plus_sign: Utilisations de musiques et effets sonores pour renforcer l'ambiance.
 
@@ -632,7 +633,7 @@ Cette partie a pour objectif de mentionner les améliorations effectuées par ra
 
 Nous sommes tout d'abord **fiers** de ce projet.
 
-Ce jeu a été réalisé avec passion et nous avons tous les trois énormément appris. Nous ne pensions pas aller aussi loin dans l'implémentation, mais nous avions réellement envie de développer davantage ce projet. Nous tenons à **remercier notre professeur de programmation** [Enguerrand Desmet](https://github.com/dsmtE), qui a été là quand nous avions besoin d'aide, notamment pour l'utilisation de la librairie audio _miniaudio_, ainsi que pour les problèmes d'affichage liés à la librairie de texte (le jeu ayant principalement été développé sur MacOS avec un écran Retina).
+Ce jeu a été réalisé avec passion et nous avons tous les trois énormément appris. Nous ne pensions pas aller aussi loin dans l'implémentation, mais nous avions réellement envie de développer davantage ce projet. Nous tenons à **remercier notre professeur de programmation** [Enguerrand Desmet](https://github.com/dsmtE), qui a été là quand nous avions besoin d'aide, notamment pour l'utilisation de la librairie _miniaudio_, ainsi que pour les problèmes d'affichage liés à la librairie de texte (le jeu ayant principalement été développé sur macOS avec un écran Retina).
 
 Évidemment, **beaucoup de choses peuvent encore être améliorées**. On peut notamment noter l'absence de vérifications sur les ITD des vagues, des ennemis, des tours et des spritesheets, bien que ces derniers soient une amélioration de notre part. Certaines fonctions mériteraient d'être optimisées, ou certains choix, comme le fait de ne pas intégrer directement un tableau d'ennemis dans la structure `Wave`, pourraient être repensés.
 
