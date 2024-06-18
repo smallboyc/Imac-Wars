@@ -420,7 +420,7 @@ if (!fixedDirection)
 }
 ```
 
-`pos` : une fois la `direction` calculée, on update la position de la balle en lui ajoutant les coordonnées du vec2 `direction` et en lui multipliant une constante vitesse.
+`pos` : une fois la `direction` calculée, on update la position de la balle en lui ajoutant les coordonnées du vec2 `direction` et en lui multipliant une constante qui représente la vitesse.
 
 ```cpp
 this->pos.x += direction.x * elapsedTime * 4;
