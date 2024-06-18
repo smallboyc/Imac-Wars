@@ -399,7 +399,7 @@ Exemples d'intéractions :
 
 # :notes: Son
 
-Afin d'avoir la meilleur expérience utilisateur, il est manipuler l'ambiance sonore du jeu. Pour cela, voici comment on a procédé :
+Afin d'avoir la meilleure expérience utilisateur, il est nécessaire de manipuler l'ambiance sonore du jeu. Pour cela, voici comment on a procédé :
 
 <h3>CMakeLists.txt</h3>
 
