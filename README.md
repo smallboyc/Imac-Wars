@@ -385,22 +385,62 @@ Dans la structure `Tower`, on retrouve une autre structure membre `Bullet`. En e
 
 Mais à quel moment tirer les balles ?
 
-On boucle sur les ennemis, et dès qu'un ennemi rentre dans la zone de la portée de la tour, calculée avec la **distance de Chebyshev**, la balle s'active.
+On boucle une fois sur les ennemis (grâce au booléen `lockedEnemy`) pour calculer la distance entre la tour et chaque ennemi (en **Distance de Chebyshev**). La variable `closest_enemy_dist` stockera la plus petite distance et `closest_enemy` l'ennemi associé (donc le plus proche) sous la forme d'un pointeur.
 
 ```cpp
-for (auto &enemy : TD->current_ENEMIES_in_WAVE)
+if(!lockedEnemy)
 {
-    if (enemy.second.isTarget)
+  lockedEnemy = true;
+
+  for (auto &enemy : TD->current_ENEMIES_in_WAVE)
+  {
+      if (enemy.second.isTarget)
+      {
+          // Distance de Chebyshev
+          float dist_to_enemy = std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y));
+
+          if (dist_to_enemy < this->portee)
+          {
+              if(dist_to_enemy < closest_enemy_dist)
+              {
+                  closest_enemy_dist = dist_to_enemy;
+                  closest_enemy = &enemy.second;
+              }
+          }
+      }
+  }
+}
+```
+
+Plus bas, on update la balle en lui donnant en paramètre la valeur déréférencée de `closest_enemy`, alias l'ennemi le plus proche.
+
+```cpp
+if(closest_enemy_dist < this->portee)
+{
+    if(closest_enemy->isMoving && closest_enemy != nullptr)
     {
-        // Distance de Chebyshev
-        if (std::max(std::abs(pos.x - enemy.second.pos.x), std::abs(pos.y - enemy.second.pos.y)) < this->portee && enemy.second.isMoving)
-        {
-            this->bullet.update(enemy.second, elapsedTime, currentTime, this);
-            this->bullet.isBeingShot = true;
-            break;
-        }
-        this->bullet.isBeingShot = false;
+        this->bullet.update(*closest_enemy, elapsedTime, currentTime, this);
+        this->bullet.isBeingShot = true;
     }
+    else
+        this->bullet.isBeingShot = false;
+}
+```
+
+À la fin des n secondes relatives à la cadence de tir, on réinitialise toutes les variables à l'état initial pour pouvoir tirer une nouvelle balle sur l'ennemi le plus proche recalculé.
+
+```cpp
+{
+  if (cadence < 0)
+  {
+      this->bullet.pos = this->pos;
+      cadence = 3;
+      this->bullet.fixedDirection = false;
+      this->bullet.hitEnemy = false;
+      this->bullet.isBeingShot = false;
+      lockedEnemy = false;
+      closest_enemy_dist = 100;
+  }
 }
 ```
 
@@ -410,7 +450,7 @@ Le comportement des balles est principalement régi par les vec2 `direction` et 
 
 Expliquons leur utilisation :
 
-`direction` : calcule les coordonnées du vecteur entre la tour mère et l'ennemi le plus proche. Pour cela, on fait simplement **{x2-x1, y2-y1}**. On a aussi un booléen `fixedDirection` qui régule le fait de ne calculer la `direction` que toutes les n secondes relatives à la cadence de tir de la tour.
+- `direction` : calcule les coordonnées du vecteur entre la tour mère et l'ennemi le plus proche. Pour cela, on fait simplement **{x2-x1, y2-y1}**. On a aussi un booléen `fixedDirection` qui régule le fait de ne calculer la `direction` que toutes les n secondes relatives à la cadence de tir de la tour.
 
 ```cpp
 if (!fixedDirection)
@@ -420,7 +460,7 @@ if (!fixedDirection)
 }
 ```
 
-`pos` : une fois la `direction` calculée, on update la position de la balle en lui ajoutant les coordonnées du vec2 `direction` et en lui multipliant une constante qui représente la vitesse.
+- `pos` : une fois la `direction` calculée, on update la position de la balle en lui ajoutant les coordonnées du vec2 `direction` et en lui multipliant une constante qui représente la vitesse.
 
 ```cpp
 this->pos.x += direction.x * elapsedTime * 4;
