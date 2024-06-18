@@ -404,7 +404,7 @@ for (auto &enemy : TD->current_ENEMIES_in_WAVE)
 }
 ```
 
-# :bullet: Bullets
+# :red_circle: Bullets
 
 Le comportement des balles est principalement régi par les vec2 `direction` et `pos`.
 
